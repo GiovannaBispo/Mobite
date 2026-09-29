@@ -1,0 +1,758 @@
+/* =========================================================
+   1. VARIÁVEIS E CONFIGURAÇÕES GERAIS
+   ========================================================= */
+
+:root {
+    /* Cores principais do site */
+    --sage: #a2ad91; /* Verde/sálvia */
+    --dark: #3a2d32; /* Marrom escuro */
+    --soft: #ffe3dc; /* Rosa claro */
+
+    /* Faz o box-sizing ser herdado pelos elementos */
+    box-sizing: border-box;
+
+    /* Respeita áreas seguras de dispositivos, como celulares */
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+
+/* Faz todos os elementos calcularem largura e altura
+   incluindo padding e borda */
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+
+/* =========================================================
+   2. CONFIGURAÇÕES DO HTML
+   ========================================================= */
+
+html {
+    /* Deixa a rolagem da página suave */
+    scroll-behavior: smooth;
+
+    /* Espaço superior ao navegar para uma seção,
+       evitando que o header cubra o conteúdo */
+    scroll-padding-top: 80px;
+}
+
+
+/* =========================================================
+   3. CONFIGURAÇÕES DO BODY
+   ========================================================= */
+
+body {
+    /* Remove a margem padrão do navegador */
+    margin: 0;
+
+    /* Define a fonte utilizada no site */
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+    /* Cor de fundo */
+    background: var(--soft);
+
+    /* Cor padrão dos textos */
+    color: var(--dark);
+
+    /* Espaçamento entre linhas */
+    line-height: 1.5;
+
+    /* Tamanho padrão da fonte */
+    font-size: 1.05rem;
+}
+
+
+/* Aparência do foco quando o usuário navega
+   usando teclado */
+:focus-visible {
+    outline: 3px solid var(--dark);
+    outline-offset: 3px;
+}
+
+
+/* Faz botões, inputs e selects utilizarem
+   a mesma fonte e cor do restante do site */
+button,
+input,
+select {
+    font: inherit;
+    color: inherit;
+}
+
+
+/* =========================================================
+   4. HEADER / CABEÇALHO
+   ========================================================= */
+
+header {
+    /* Mantém o header visível durante a rolagem */
+    position: sticky;
+
+    /* Fica no topo da tela */
+    top: env(safe-area-inset-top, 0px);
+
+    /* Mantém o header acima dos outros elementos */
+    z-index: 10;
+
+    /* Cor de fundo */
+    background: var(--sage);
+
+    /* Linha inferior */
+    border-bottom: 3px solid var(--dark);
+
+    /* Coloca os elementos lado a lado */
+    display: flex;
+
+    /* Centraliza verticalmente */
+    align-items: center;
+
+    /* Espaçamento entre os elementos */
+    gap: 12px;
+
+    /* Espaçamento interno */
+    padding: 10px 16px;
+}
+
+
+/* Logo do MOBITE */
+.logo {
+    font-size: 1.6rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    margin: 0;
+}
+
+
+/* =========================================================
+   5. BOTÕES
+   ========================================================= */
+
+.btn {
+    /* Mostra a mãozinha ao passar o mouse */
+    cursor: pointer;
+
+    /* Borda */
+    border: 2px solid var(--dark);
+
+    /* Arredondamento */
+    border-radius: 12px;
+
+    /* Espaçamento interno */
+    padding: 10px 16px;
+
+    /* Cor do botão */
+    background: var(--dark);
+
+    /* Cor do texto */
+    color: var(--soft);
+
+    /* Texto em negrito */
+    font-weight: 700;
+
+    /* Altura mínima */
+    min-height: 44px;
+}
+
+
+/* Versão alternativa do botão */
+.btn.alt {
+    background: var(--soft);
+    color: var(--dark);
+}
+
+
+/* Efeito quando passa o mouse */
+.btn:hover {
+    background: var(--sage);
+    color: var(--dark);
+}
+
+
+/* Botões que possuem apenas um ícone */
+.icon-btn {
+    min-width: 44px;
+    padding: 8px 12px;
+    font-size: 1.3rem;
+    line-height: 1;
+}
+
+
+/* Empurra o botão do menu para a direita */
+#menuBtn {
+    margin-left: auto;
+}
+
+
+/* =========================================================
+   6. MENU / ABAS
+   ========================================================= */
+
+nav.tabs {
+    /* Coloca os itens lado a lado */
+    display: flex;
+
+    /* Espaço entre os itens */
+    gap: 8px;
+
+    /* Espaçamento interno */
+    padding: 12px 16px;
+
+    /* Largura máxima */
+    max-width: 960px;
+
+    /* Centraliza */
+    margin: auto;
+
+    /* Permite quebrar linha em telas pequenas */
+    flex-wrap: wrap;
+}
+
+
+/* Indica qual página/aba está selecionada */
+.tabs button[aria-current="page"] {
+    background: var(--sage);
+    color: var(--dark);
+}
+
+
+/* =========================================================
+   7. CONTEÚDO PRINCIPAL
+   ========================================================= */
+
+main {
+    /* Limita a largura do conteúdo */
+    max-width: 960px;
+
+    /* Centraliza horizontalmente */
+    margin: auto;
+
+    /* Espaçamento interno */
+    padding: 0 16px 40px;
+}
+
+
+/* Títulos h2 */
+h2 {
+    margin: 0.6em 0 0.3em;
+}
+
+
+/* =========================================================
+   8. LOCALIZAÇÃO
+   ========================================================= */
+
+.loc {
+    background: var(--sage);
+
+    border: 2px solid var(--dark);
+    border-radius: 14px;
+
+    padding: 12px 16px;
+
+    /* Organiza os elementos em linha */
+    display: flex;
+
+    /* Permite quebrar linha */
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    /* Centraliza verticalmente */
+    align-items: center;
+
+    /* Distribui os elementos */
+    justify-content: space-between;
+}
+
+
+/* =========================================================
+   9. GRID DE RESTAURANTES
+   ========================================================= */
+
+.grid {
+    /* Cria uma grade */
+    display: grid;
+
+    /* Espaçamento entre os cards */
+    gap: 16px;
+
+    margin-top: 16px;
+
+    /* Cria colunas automaticamente */
+    grid-template-columns: repeat(
+        auto-fill,
+        minmax(280px, 1fr)
+    );
+
+    /* Remove estilo de lista */
+    list-style: none;
+
+    padding: 0;
+}
+
+
+/* =========================================================
+   10. CARD DOS RESTAURANTES
+   ========================================================= */
+
+.card {
+    border: 2px solid var(--dark);
+    border-radius: 16px;
+
+    padding: 16px;
+
+    /* Organiza o conteúdo verticalmente */
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+
+    background: var(--soft);
+}
+
+
+/* Card desativado ou com informação incompleta */
+.card.dim {
+    border-style: dashed;
+    opacity: 0.85;
+}
+
+
+/* Título dentro do card */
+.card h3 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+
+/* Informações secundárias do restaurante */
+.meta {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   11. TAGS DE ACESSIBILIDADE
+   ========================================================= */
+
+.tags {
+    display: flex;
+
+    /* Permite que as tags quebrem linha */
+    flex-wrap: wrap;
+
+    gap: 6px;
+
+    padding: 0;
+    margin: 0;
+
+    list-style: none;
+}
+
+
+/* Cada tag individual */
+.tag {
+    background: var(--sage);
+
+    border: 1.5px solid var(--dark);
+
+    /* Deixa a tag arredondada */
+    border-radius: 999px;
+
+    padding: 2px 10px;
+
+    font-size: 0.88rem;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   12. BOTÕES DE AÇÃO
+   ========================================================= */
+
+.actions {
+    display: flex;
+
+    gap: 8px;
+
+    /* Empurra os botões para o final do card */
+    margin-top: auto;
+
+    flex-wrap: wrap;
+}
+
+
+/* Faz os botões ocuparem o espaço disponível */
+.actions .btn {
+    flex: 1;
+}
+
+
+/* Estado "ativado" */
+.on {
+    background: var(--dark) !important;
+    color: var(--soft) !important;
+}
+
+
+/* =========================================================
+   13. FORMULÁRIOS
+   ========================================================= */
+
+/* Estilo dos textos dos campos */
+label {
+    display: block;
+    font-weight: 700;
+
+    margin: 14px 0 4px;
+}
+
+
+/* Campos de texto, número e select */
+input[type="text"],
+input[type="number"],
+select {
+    width: 100%;
+
+    padding: 10px;
+
+    border: 2px solid var(--dark);
+
+    border-radius: 10px;
+
+    background: var(--soft);
+}
+
+
+/* =========================================================
+   14. CHECKBOX / FIELDSET
+   ========================================================= */
+
+fieldset {
+    border: 2px solid var(--dark);
+    border-radius: 12px;
+
+    margin: 14px 0;
+}
+
+
+/* Labels dentro do fieldset */
+fieldset label {
+    display: flex;
+
+    gap: 10px;
+
+    align-items: center;
+
+    font-weight: 500;
+
+    margin: 6px 0;
+}
+
+
+/* Checkbox */
+input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+
+    /* Define a cor do checkbox */
+    accent-color: var(--dark);
+}
+
+
+/* =========================================================
+   15. PAINÉIS
+   ========================================================= */
+
+.panel {
+    border: 2px solid var(--dark);
+
+    border-radius: 16px;
+
+    padding: 16px;
+
+    max-width: 560px;
+}
+
+
+/* Mensagem quando não existe conteúdo */
+.empty {
+    text-align: center;
+
+    padding: 32px;
+
+    border: 2px dashed var(--dark);
+
+    border-radius: 16px;
+
+    margin-top: 16px;
+}
+
+
+/* =========================================================
+   16. AVALIAÇÃO POR ESTRELAS
+   ========================================================= */
+
+.stars {
+    display: flex;
+    gap: 4px;
+}
+
+
+/* Cada estrela */
+.star {
+    font-size: 1.8rem;
+
+    background: none;
+
+    border: 2px solid transparent;
+
+    cursor: pointer;
+
+    line-height: 1;
+
+    padding: 2px 6px;
+
+    border-radius: 8px;
+}
+
+
+/* Estrela selecionada */
+.star[aria-checked="true"] {
+    border-color: var(--dark);
+    background: var(--sage);
+}
+
+
+/* =========================================================
+   17. JANELA DE DIÁLOGO / MODAL
+   ========================================================= */
+
+dialog {
+    border: 3px solid var(--dark);
+
+    border-radius: 16px;
+
+    background: var(--soft);
+
+    color: var(--dark);
+
+    max-width: 560px;
+
+    width: calc(100% - 24px);
+
+    padding: 20px;
+}
+
+
+/* Fundo escuro atrás do modal */
+dialog::backdrop {
+    background: rgba(58, 45, 50, 0.6);
+}
+
+
+/* =========================================================
+   18. MENU LATERAL / DRAWER
+   ========================================================= */
+
+#drawer {
+    /* Fixa o menu na tela */
+    position: fixed;
+
+    /* Ocupa toda a altura */
+    inset: 0 auto 0 0;
+
+    /* Largura do menu */
+    width: min(380px, 92vw);
+
+    background: var(--soft);
+
+    border-right: 3px solid var(--dark);
+
+    /* Mantém acima da página */
+    z-index: 30;
+
+    /* Começa escondido para fora da tela */
+    transform: translateX(-105%);
+
+    /* Animação ao abrir */
+    transition: transform 0.25s;
+
+    /* Permite rolagem */
+    overflow-y: auto;
+
+    padding: 16px;
+
+    /* Também fica invisível enquanto fechado */
+    visibility: hidden;
+}
+
+
+/* Estado aberto do menu */
+#drawer.open {
+    transform: none;
+    visibility: visible;
+}
+
+
+/* =========================================================
+   19. FUNDO ESCURO ATRÁS DO MENU
+   ========================================================= */
+
+#scrim {
+    position: fixed;
+
+    /* Ocupa a tela inteira */
+    inset: 0;
+
+    background: rgba(58, 45, 50, 0.6);
+
+    /* Fica abaixo do menu, mas acima do conteúdo */
+    z-index: 20;
+
+    /* Começa escondido */
+    display: none;
+}
+
+
+/* Mostra o fundo quando o menu está aberto */
+#scrim.show {
+    display: block;
+}
+
+
+/* =========================================================
+   20. LINKS DO MENU LATERAL
+   ========================================================= */
+
+#drawer ol {
+    padding-left: 0;
+
+    list-style: none;
+
+    margin: 12px 0 0;
+}
+
+
+/* Cada link do menu */
+#drawer li a {
+    display: block;
+
+    padding: 12px;
+
+    border-bottom: 2px solid var(--sage);
+
+    color: var(--dark);
+
+    font-weight: 700;
+
+    /* Remove o sublinhado */
+    text-decoration: none;
+}
+
+
+/* Efeito ao passar o mouse */
+#drawer li a:hover {
+    background: var(--sage);
+}
+
+
+/* =========================================================
+   21. ÁREA DE BOAS-VINDAS
+   ========================================================= */
+
+.welcome {
+    background: var(--sage);
+
+    border: 2px solid var(--dark);
+
+    border-radius: 12px;
+
+    padding: 12px;
+
+    font-size: 0.95rem;
+}
+
+
+/* =========================================================
+   22. SEÇÕES DE INFORMAÇÕES
+   ========================================================= */
+
+.info section {
+    border: 2px solid var(--dark);
+
+    border-radius: 16px;
+
+    padding: 16px;
+
+    margin-top: 16px;
+}
+
+
+/* Remove margem superior do primeiro h2 */
+.info h2 {
+    margin-top: 0;
+}
+
+
+/* =========================================================
+   23. TOAST / NOTIFICAÇÃO
+   ========================================================= */
+
+.toast {
+    /* Fixa a mensagem na tela */
+    position: fixed;
+
+    /* Centraliza horizontalmente */
+    left: 50%;
+
+    /* Distância do fundo */
+    bottom: 20px;
+
+    /* Corrige o posicionamento para ficar centralizado */
+    transform: translateX(-50%);
+
+    background: var(--dark);
+
+    color: var(--soft);
+
+    padding: 12px 20px;
+
+    border-radius: 12px;
+
+    /* Mantém a mensagem acima de outros elementos */
+    z-index: 50;
+}
+
+
+/* =========================================================
+   24. ACESSIBILIDADE
+   ========================================================= */
+
+/* Classe usada para esconder visualmente um elemento,
+   mas mantê-lo disponível para leitores de tela */
+.sr {
+    position: absolute;
+    left: -9999px;
+}
+
+
+/* =========================================================
+   25. REDUÇÃO DE ANIMAÇÕES
+   ========================================================= */
+
+/* Se o usuário configurou o dispositivo para
+   reduzir movimentos, removemos as animações */
+
+@media (prefers-reduced-motion: reduce) {
+
+    * {
+        transition: none !important;
+        scroll-behavior: auto !important;
+    }
+}

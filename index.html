@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <!-- Define a codificação de caracteres -->
+    <meta charset="UTF-8">
+
+    <!-- Faz o site se adaptar a celulares e tablets -->
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover"
+    >
+
+    <!-- Título que aparece na aba do navegador -->
+    <title>MOBITE – Restaurantes acessíveis</title>
+
+    <!-- Conecta o HTML ao arquivo CSS -->
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+    <!-- =====================================================
+         1. LINK "PULAR PARA O CONTEÚDO"
+         ===================================================== -->
+
+    <!--
+        Esse link é voltado principalmente para acessibilidade.
+
+        Usuários que navegam pelo teclado ou leitores de tela
+        podem pular diretamente para o conteúdo principal.
+    -->
+
+    <a class="sr" href="#main">
+        Pular para o conteúdo
+    </a>
+
+
+
+    <!-- =====================================================
+         2. CABEÇALHO / HEADER
+         ===================================================== -->
+
+    <header>
+
+        <!-- Nome/logo do projeto -->
+        <h1 class="logo">
+            MOBITE
+        </h1>
+
+
+        <!--
+            Botão que abre o menu lateral.
+
+            aria-label:
+            explica para leitores de tela o que o botão faz.
+
+            aria-expanded:
+            informa se o menu está aberto ou fechado.
+
+            aria-controls:
+            informa qual elemento esse botão controla.
+        -->
+
+        <button
+            id="menuBtn"
+            class="btn icon-btn"
+            aria-label="Abrir menu"
+            aria-expanded="false"
+            aria-controls="drawer"
+        >
+            ☰
+        </button>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         3. FUNDO ESCURO DO MENU LATERAL
+         ===================================================== -->
+
+    <!--
+        Quando o menu lateral abrir,
+        esse elemento será usado como uma camada escura
+        sobre o restante da página.
+
+        O JavaScript controla quando ele aparece.
+    -->
+
+    <div id="scrim"></div>
+
+
+
+    <!-- =====================================================
+         4. MENU LATERAL
+         ===================================================== -->
+
+    <aside
+        id="drawer"
+        aria-label="Menu lateral"
+        tabindex="-1"
+    >
+
+
+        <!-- Botão para fechar o menu -->
+
+        <button
+            id="closeBtn"
+            class="btn icon-btn"
+            style="float:right"
+            aria-label="Fechar menu"
+        >
+            ✕
+        </button>
+
+
+
+        <!-- =================================================
+             4.1 APRESENTAÇÃO DO MOBITE
+             ================================================= -->
+
+        <div
+            class="welcome"
+            style="clear:both"
+        >
+
+            <!-- Título de boas-vindas -->
+
+            <strong>
+                Seja bem-vindo ao MOBITE! 💜
+            </strong>
+
+
+            <!--
+                Explicação rápida sobre o projeto.
+            -->
+
+            <p>
+                O MOBITE é um aplicativo/site criado para
+                facilitar a busca por restaurantes acessíveis
+                para pessoas com mobilidade reduzida, como
+                cadeirantes, idosos, gestantes, pessoas com
+                deficiência nos membros inferiores e mães
+                com crianças de colo.
+            </p>
+
+
+            <!--
+                Explica o que o usuário encontra na plataforma.
+            -->
+
+            <p>
+                Aqui você encontra locais próximos ordenados
+                por nível de acessibilidade, vê os recursos
+                disponíveis (rampas, banheiro adaptado,
+                elevador, corrimão, cadeiras infantis) e ajuda
+                a comunidade avaliando se as informações
+                realmente correspondem à realidade.
+            </p>
+
+
+            <!--
+                Missão do MOBITE.
+            -->
+
+            <p>
+                Nossa missão é que sair para comer seja
+                simples, seguro e digno para todas as pessoas.
+            </p>
+
+        </div>
+
+
+
+        <!-- =================================================
+             4.2 LINKS DO MENU
+             ================================================= -->
+
+        <nav aria-label="Seções do site">
+
+            <!--
+                A lista começa vazia.
+
+                O JavaScript irá adicionar automaticamente:
+
+                - Início
+                - Sobre o MOBITE
+                - Para quem é
+                - Como funciona
+                - Recursos
+                - Equipe
+                - FAQ
+                - Contato
+                etc.
+            -->
+
+            <ol id="menuList"></ol>
+
+        </nav>
+
+    </aside>
+
+
+
+    <!-- =====================================================
+         5. MENU PRINCIPAL / ABAS
+         ===================================================== -->
+
+    <nav
+        class="tabs"
+        aria-label="Navegação principal"
+        id="tabs"
+    >
+
+
+        <!--
+            Botão da página inicial.
+
+            data-view="home"
+            será utilizado pelo JavaScript
+            para mostrar a seção correspondente.
+        -->
+
+        <button
+            class="btn"
+            data-view="home"
+            aria-current="page"
+        >
+            📍 Início
+        </button>
+
+
+        <!-- Botão do perfil -->
+
+        <button
+            class="btn"
+            data-view="perfil"
+        >
+            👤 Perfil
+        </button>
+
+
+        <!--
+            Botão dos favoritos.
+
+            favCount será preenchido pelo JavaScript
+            com a quantidade de restaurantes favoritos.
+        -->
+
+        <button
+            class="btn"
+            data-view="fav"
+        >
+            ❤️ Favoritos
+
+            <span id="favCount"></span>
+
+        </button>
+
+    </nav>
+
+
+
+    <!-- =====================================================
+         6. CONTEÚDO PRINCIPAL
+         ===================================================== -->
+
+    <main
+        id="main"
+        tabindex="-1"
+    >
+
+
+
+        <!-- =================================================
+             6.1 PÁGINA INICIAL
+             ================================================= -->
+
+        <section id="v-home">
+
+
+            <!--
+                Área que mostra a localização atual.
+            -->
+
+            <div class="loc">
+
+                <!--
+                    Localização inicial.
+
+                    O JavaScript pode alterar esse texto.
+                -->
+
+                <span id="locText">
+                    📍 Av. Paulista, São Paulo (simulada)
+                </span>
+
+
+                <!--
+                    Botão que simula uma nova localização.
+
+                    IMPORTANTE:
+                    no protótipo, isso não usa GPS real.
+                -->
+
+                <button
+                    class="btn alt"
+                    id="relocate"
+                >
+                    Simular nova localização
+                </button>
+
+            </div>
+
+
+
+            <!-- Título da lista de restaurantes -->
+
+            <h2>
+                Restaurantes perto de você
+            </h2>
+
+
+            <!--
+                Mensagem personalizada do perfil.
+
+                O JavaScript pode colocar algo como:
+
+                "Olá, Giovanna! Priorizamos os locais
+                mais acessíveis e próximos."
+            -->
+
+            <p id="perfilMsg"></p>
+
+
+            <!--
+                Lista onde os cards dos restaurantes
+                serão inseridos pelo JavaScript.
+
+                aria-live="polite":
+                informa aos leitores de tela que o conteúdo
+                pode ser atualizado dinamicamente.
+            -->
+
+            <ul
+                class="grid"
+                id="feed"
+                aria-live="polite"
+            ></ul>
+
+        </section>
+
+
+
+        <!-- =================================================
+             6.2 PERFIL DO USUÁRIO
+             ================================================= -->
+
+        <!--
+            hidden significa que essa seção começa escondida.
+
+            O JavaScript mostra quando o usuário
+            clica em "Perfil".
+        -->
+
+        <section
+            id="v-perfil"
+            hidden
+        >
+
+            <h2>
+                Meu perfil
+            </h2>
+
+
+            <!-- Formulário do usuário -->
+
+            <form
+                id="perfilForm"
+                class="panel"
+            >
+
+
+                <!-- Nome -->
+
+                <label for="nome">
+                    Nome
+                </label>
+
+                <input
+                    type="text"
+                    id="nome"
+                    autocomplete="name"
+                >
+
+
+
+                <!-- Idade -->
+
+                <label for="idade">
+                    Idade
+                </label>
+
+                <input
+                    type="number"
+                    id="idade"
+                    min="0"
+                    max="120"
+                >
+
+
+
+                <!-- =================================================
+                     NECESSIDADES DE ACESSIBILIDADE
+                     ================================================= -->
+
+                <fieldset>
+
+                    <legend>
+                        Tipo de necessidade / acessibilidade
+                    </legend>
+
+
+                    <!-- Cadeirante -->
+
+                    <label>
+                        <input
+                            type="checkbox"
+                            name="need"
+                            value="Cadeirante"
+                        >
+
+                        Cadeirante
+                    </label>
+
+
+                    <!-- Idoso -->
+
+                    <label>
+                        <input
+                            type="checkbox"
+                            name="need"
+                            value="Idoso"
+                        >
+
+                        Idoso
+                    </label>
+
+
+                    <!-- Gestante -->
+
+                    <label>
+                        <input
+                            type="checkbox"
+                            name="need"
+                            value="Gestante"
+                        >
+
+                        Gestante
+                    </label>
+
+
+                    <!-- Deficiência nos membros inferiores -->
+
+                    <label>
+                        <input
+                            type="checkbox"
+                            name="need"
+                            value="Membros inferiores"
+                        >
+
+                        Deficiência em membros inferiores
+                    </label>
+
+
+                    <!-- Carrinho de bebê -->
+
+                    <label>
+                        <input
+                            type="checkbox"
+                            name="need"
+                            value="Carrinho de bebê"
+                        >
+
+                        Mãe/Pai com carrinho de bebê
+                    </label>
+
+
+                    <!-- Outra necessidade -->
+
+                    <label>
+                        <input
+                            type="checkbox"
+                            name="need"
+                            value="Outro"
+                        >
+
+                        Outro
+                    </label>
+
+                </fieldset>
+
+
+
+                <!-- Botão para salvar o perfil -->
+
+                <button
+                    class="btn"
+                    type="submit"
+                >
+                    Salvar Perfil
+                </button>
+
+            </form>
+
+        </section>
+
+
+
+        <!-- =================================================
+             6.3 FAVORITOS
+             ================================================= -->
+
+        <section
+            id="v-fav"
+            hidden
+        >
+
+            <h2>
+                Meus favoritos
+            </h2>
+
+
+            <!--
+                Aqui o JavaScript coloca os restaurantes
+                que o usuário favoritou.
+            -->
+
+            <ul
+                class="grid"
+                id="favList"
+            ></ul>
+
+
+            <!--
+                Mensagem exibida quando não existem favoritos.
+            -->
+
+            <div
+                class="empty"
+                id="favEmpty"
+            >
+                Você ainda não favoritou nenhum restaurante. 💜
+            </div>
+
+        </section>
+
+
+
+        <!-- =================================================
+             6.4 INFORMAÇÕES INSTITUCIONAIS
+             ================================================= -->
+
+        <!--
+            Essa área começa vazia.
+
+            O JavaScript vai criar aqui:
+
+            - Sobre o MOBITE
+            - Para quem é
+            - Como funciona
+            - Recursos de acessibilidade
+            - Nossa proposta
+            - Comunidade
+            - Equipe
+            - FAQ
+            - Contato
+        -->
+
+        <div
+            class="info"
+            id="info"
+        ></div>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         7. JANELA DE DETALHES DO RESTAURANTE
+         ===================================================== -->
+
+    <!--
+        <dialog> cria uma janela/modal.
+
+        Ela aparece quando o usuário clica em
+        "Detalhes" em um restaurante.
+    -->
+
+    <dialog
+        id="detail"
+        aria-labelledby="dTitle"
+    >
+
+
+        <!-- Botão para fechar o modal -->
+
+        <button
+            class="btn icon-btn"
+            style="float:right"
+            id="dClose"
+            aria-label="Fechar detalhes"
+        >
+            ✕
+        </button>
+
+
+        <!-- Nome do restaurante -->
+
+        <h2
+            id="dTitle"
+            style="margin-top:0"
+        ></h2>
+
+
+        <!--
+            Nota, quantidade de avaliações
+            e distância.
+
+            O JavaScript preenche.
+        -->
+
+        <p id="dMeta"></p>
+
+
+        <!-- Título dos recursos -->
+
+        <h3>
+            Recursos de acessibilidade
+        </h3>
+
+
+        <!--
+            Lista de recursos.
+
+            Exemplo:
+
+            ♿ Rampas
+            🚻 Banheiro acessível
+            🛗 Elevador
+        -->
+
+        <ul
+            class="tags"
+            id="dTags"
+        ></ul>
+
+
+
+        <!-- Linha separadora -->
+
+        <hr
+            style="
+                border:1px solid var(--sage);
+                margin:16px 0
+            "
+        >
+
+
+
+        <!-- =================================================
+             7.1 FORMULÁRIO DE AVALIAÇÃO
+             ================================================= -->
+
+        <form id="rateForm">
+
+
+            <!-- Pergunta da avaliação -->
+
+            <h3 id="rq">
+                Como foi a sua experiência de
+                acessibilidade neste local?
+            </h3>
+
+
+            <!--
+                Área onde o JavaScript cria as estrelas
+                de avaliação.
+            -->
+
+            <div
+                class="stars"
+                role="radiogroup"
+                aria-labelledby="rq"
+                id="stars"
+            ></div>
+
+
+
+            <!-- =================================================
+                 CONFIRMAÇÃO DOS RECURSOS
+                 ================================================= -->
+
+            <fieldset>
+
+                <legend>
+                    Estes recursos estavam mesmo disponíveis?
+                </legend>
+
+
+                <!--
+                    O JavaScript cria os checkboxes aqui.
+
+                    Exemplo:
+
+                    ☑ Rampa
+                    ☑ Banheiro acessível
+                    ☐ Elevador
+                -->
+
+                <div id="dChecks"></div>
+
+            </fieldset>
+
+
+
+            <!-- Envia a avaliação -->
+
+            <button
+                class="btn"
+                type="submit"
+            >
+                Enviar Avaliação
+            </button>
+
+        </form>
+
+    </dialog>
+
+
+
+    <!-- =====================================================
+         8. NOTIFICAÇÕES
+         ===================================================== -->
+
+    <!--
+        Essa div é utilizada pelo JavaScript
+        para mostrar mensagens temporárias.
+
+        Exemplos:
+
+        "Perfil salvo! 💜"
+        "Avaliação enviada. Obrigado!"
+        "Restaurante movido para o fim da lista."
+    -->
+
+    <div
+        class="toast"
+        id="toast"
+        role="status"
+        hidden
+    ></div>
+
+
+
+    <!-- =====================================================
+         9. JAVASCRIPT
+         ===================================================== -->
+
+    <!--
+        Conecta o HTML ao arquivo JavaScript.
+
+        É aqui que entram as funcionalidades:
+        - favoritos
+        - avaliações
+        - perfil
+        - menu
+        - localização simulada
+        - restaurantes
+        - etc.
+    -->
+
+    <script src="script.js"></script>
+
+
+</body>
+
+</html>
