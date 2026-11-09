@@ -1,0 +1,58 @@
+/* style.css – variáveis globais, base, cabeçalho/menu, botões, cards e formulários.
+   Para mudar a identidade visual, altere apenas as variáveis em :root. */
+/* Paleta: verde-menta e grafite (logotipo), azul institucional nos títulos, fundos claros */
+:root {
+  --azul: #193D75; --menta: #5fd6a0; --menta-t: #17795a; --grafite: #37424d;
+  --fundo: #fff; --card: #fff; --claro: #f3f6f9; --txt: #1d2433; --suave: var(--suave); --borda: #d5dde8;
+  --laranja: #c77700; --raio: 16px; --sombra: 0 4px 18px rgba(25, 61, 117, .10);
+}
+* { box-sizing: border-box }
+body { margin: 0; font: 1.05rem/1.55 system-ui, "Segoe UI", Roboto, sans-serif; color: var(--txt); background: var(--fundo) }
+h1, h2, h3 { color: var(--azul); line-height: 1.2 }
+a { color: var(--azul) }
+small, .meta { color: var(--suave) }
+:focus-visible { outline: 3px solid var(--menta-t); outline-offset: 2px }
+[hidden] { display: none !important }
+.sr, .pular:not(:focus) { position: absolute; left: -9999px }
+.pular:focus { position: fixed; top: 8px; left: 8px; background: var(--card); padding: 8px; z-index: 99 }
+
+/* Cabeçalho e menu hambúrguer */
+header { position: sticky; top: 0; z-index: 20; display: flex; justify-content: space-between; align-items: center; padding: .6rem 1rem; background: var(--card); box-shadow: var(--sombra) }
+.logo { font-size: 1.7rem; font-weight: 800; color: var(--azul); text-decoration: none }
+#burger { position: relative; z-index: 2; font-size: 1.6rem; width: 48px; height: 48px; border: 0; border-radius: 12px; background: var(--claro); color: var(--azul); cursor: pointer }
+#menu { position: fixed; top: 0; right: 0; z-index: 1; height: 100vh; width: min(310px, 85%); background: var(--card); padding: 4.5rem 1rem 1rem; display: flex; flex-direction: column; gap: .3rem;
+  box-shadow: var(--sombra); transform: translateX(100%); visibility: hidden; transition: transform .3s, visibility .3s }
+#menu.aberto { transform: none; visibility: visible }
+#menu a { padding: .8rem 1rem; border-radius: 12px; text-decoration: none; font-weight: 600 }
+#menu a:hover { background: var(--claro) }
+#menu a[aria-current] { background: var(--azul); color: #fff }
+
+/* Botões */
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: .6rem 1.3rem; border: 0; border-radius: 999px; background: var(--azul); color: #fff; font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; transition: transform .2s, background .2s }
+.btn:hover { background: var(--menta-t); transform: translateY(-1px) }
+.btn.sec { background: var(--claro); color: var(--azul) }
+.btn.claro { background: var(--card); color: var(--azul) }
+.ic { width: 48px; height: 48px; border-radius: 50%; border: 2px solid var(--claro); background: var(--card); font-size: 1.3rem; cursor: pointer }
+.ic.on { color: #c2255c; border-color: #c2255c }
+
+/* Cards e indicadores */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 1.2rem }
+.card { background: var(--card); border-radius: var(--raio); box-shadow: var(--sombra); overflow: hidden; transition: transform .2s }
+.card:hover { transform: translateY(-3px) }
+.foto { height: 150px; display: grid; place-items: center; font-size: 3.5rem; color: #fff }
+.foto.grande { height: 220px; border-radius: var(--raio); font-size: 5rem }
+.corpo { padding: 1rem }
+.corpo h3 { margin: .2rem 0 }
+.corpo p { margin: .3rem 0 }
+.est { color: var(--laranja) }
+.tags, .acoes, .chips { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin: .5rem 0 }
+.tag { padding: .25rem .65rem; border-radius: 999px; font-size: .85rem; font-weight: 600 }
+.chip { padding: .6rem 1.1rem; min-height: 44px; border: 0; border-radius: 999px; background: var(--claro); color: var(--azul); font: inherit; font-weight: 600; text-decoration: none; cursor: pointer }
+.chip:hover { background: var(--menta-t); color: #fff }
+
+/* Formulários */
+input, select, textarea { width: 100%; min-height: 48px; padding: .6rem .8rem; border: 2px solid var(--borda); border-radius: 12px; font: inherit; background: var(--card) }
+label { display: block; margin: .6rem 0; font-weight: 600 }
+fieldset { border: 2px solid var(--claro); border-radius: 12px; margin: .7rem 0 }
+.check { display: inline-flex; align-items: center; gap: .5rem; margin-right: 1rem; font-weight: 400 }
+input[type=radio], input[type=checkbox] { width: 22px; min-height: 22px }

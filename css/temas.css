@@ -1,0 +1,76 @@
+/* temas.css – tema claro/escuro, alto contraste, campos de formulário, indicadores de acessibilidade,
+   botões da marca e páginas novas (Mapa e Configurações). Carregado por último: ajusta style.css e paginas.css. */
+html { color-scheme: light }
+html[data-tema=escuro] { color-scheme: dark; --fundo: #12171d; --card: #1b232c; --claro: #222c37; --txt: #e8edf3; --suave: #b3bdc9; --borda: #3a4756; --azul: #a9c4f5; --menta-t: #5fd6a0; --sombra: 0 4px 18px rgba(0, 0, 0, .45) }
+html[data-contraste=true] { --txt: #000; --suave: #1a1a1a; --borda: #000; --azul: #0b2a5c }
+html[data-tema=escuro][data-contraste=true] { --txt: #fff; --suave: #fff; --borda: #fff; --azul: #d4e3ff }
+html[data-anim=true] *, html[data-anim=true] *::before { transition: none !important; animation: none !important }
+body { background: var(--fundo); color: var(--txt) }
+
+/* Logotipo oficial (imagem original, sem alterar cores nem proporção) */
+.logo, .logo-menu { background: #fff; border-radius: 12px; padding: 2px 8px; display: inline-block }
+.logo img, .logo-menu { height: 44px; width: auto; display: block }
+.topo-acoes { display: flex; gap: .5rem; align-items: center }
+#btn-tema { background: var(--claro) }
+
+/* Marca: verde-menta (botões e destaques), grafite (texto sobre menta) e azul #193D75 (títulos) */
+:root { --on-menta: #1f2933 }
+.btn { background: var(--menta); color: var(--on-menta) }
+.btn:hover { background: var(--menta-t); color: #fff }
+.btn.sec { background: var(--claro); color: var(--azul); border: 1px solid var(--borda) }
+.btn.sec:hover { background: var(--menta); color: var(--on-menta) }
+.ic { background: var(--card); border-color: var(--borda); color: var(--txt) }
+.ic.on { color: #d6336c; border-color: #d6336c }
+#menu a[aria-current] { background: var(--menta); color: var(--on-menta) }
+.chip { background: var(--claro); color: var(--azul); border: 1px solid var(--borda) }
+.chip[aria-pressed=true] { background: var(--menta); color: var(--on-menta); border-color: var(--menta-t) }
+.chip:hover { background: var(--menta-t); color: #fff }
+.hero { background: var(--claro); color: var(--txt); border: 1px solid var(--borda) }
+.hero h1 { color: var(--azul) }
+.card, dialog, .cfg-grupo { background: var(--card); color: var(--txt); border: 1px solid var(--borda) }
+#toast { background: #2b3640; color: #fff }
+.voltar { margin: .5rem 0 1rem }
+.foto { display: block; width: 100%; height: 160px; object-fit: cover }
+.foto.grande { height: 240px; border-radius: var(--raio) }
+.avatar { background: var(--menta); color: var(--on-menta) }
+body::before { background: var(--fundo) }
+
+/* Campos: fundo e texto sempre com contraste (inclui select/option, placeholder e preenchimento automático) */
+input, select, textarea { background: var(--card); color: var(--txt); -webkit-text-fill-color: var(--txt); caret-color: var(--txt); border: 2px solid var(--borda); appearance: auto }
+input::placeholder, textarea::placeholder { color: var(--suave); opacity: 1; -webkit-text-fill-color: var(--suave) }
+select option, select optgroup { background: var(--card); color: var(--txt) }
+select option:hover, select option:checked { background: var(--menta); color: var(--on-menta) }
+input:focus, select:focus, textarea:focus { border-color: var(--menta-t); outline: 3px solid var(--menta) }
+input:-webkit-autofill { -webkit-text-fill-color: var(--txt); box-shadow: 0 0 0 40px var(--card) inset }
+input[type=radio], input[type=checkbox] { accent-color: var(--menta-t) }
+
+/* Indicadores: forma + cor + texto (círculo, triângulo, losango, quadrado) */
+.ind { display: inline-flex; align-items: center; gap: .4rem; padding: .2rem .65rem; border-radius: 8px; border: 2px solid currentColor; font-weight: 700; font-size: .9rem }
+.ind i { font-style: normal }
+.s-ok { color: #0f6b4a; background: #e6f6ef }
+.s-warn { color: #7a4f00; background: #fff3dc }
+.s-bar { color: #a12626; background: #fde8e8 }
+.s-nd { color: #46515c; background: #eef0f3; border-style: dashed }
+html[data-tema=escuro] .s-ok { color: #7fe3b4; background: #123a2b }
+html[data-tema=escuro] .s-warn { color: #ffd17a; background: #3f3010 }
+html[data-tema=escuro] .s-bar { color: #ff9d96; background: #44181a }
+html[data-tema=escuro] .s-nd { color: #c3ccd6; background: #2a343f }
+.crit { grid-template-columns: 2fr 1.6fr 2fr; background: var(--claro) }
+.destaque { outline: 2px solid var(--menta-t) }
+
+/* Mapa */
+#mapa-mini { height: 260px; border-radius: var(--raio) }
+#mapa-grande { height: 62vh; min-height: 380px; border-radius: var(--raio) }
+.leaflet-container { background: var(--claro); font: inherit }
+.leaflet-popup-content-wrapper, .leaflet-popup-tip { background: var(--card); color: var(--txt) }
+html[data-tema=escuro] .leaflet-tile { filter: invert(1) hue-rotate(180deg) brightness(.9) contrast(.9) }
+.pin span { display: block; width: 28px; height: 28px; background: #17795a; border: 3px solid #fff; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); box-shadow: 0 2px 6px rgba(0, 0, 0, .4) }
+.zoom-btns { display: flex; gap: .5rem; align-items: center; margin: .6rem 0; flex-wrap: wrap }
+.zoom-btns .btn { min-width: 48px; font-size: 1.4rem }
+
+/* Configurações (estilo de apps modernos) */
+.cfg-grupo { border-radius: var(--raio); padding: .5rem 1.2rem 1rem; margin: 1rem 0; max-width: 720px }
+.cfg-linha { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; padding: .7rem 0; border-top: 1px solid var(--borda) }
+.cfg-linha:first-of-type { border-top: 0 }
+.cfg-linha .acoes { margin: 0 }
+.cfg-linha input[type=checkbox] { width: 26px; min-height: 26px }

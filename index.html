@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MoBite – Restaurantes acessíveis</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/paginas.css">
+  <link rel="stylesheet" href="css/temas.css">
+</head>
+<body>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<!-- ===== HEADER E NAVEGAÇÃO (menu hambúrguer) ===== -->
+<header>
+  <a class="logo" href="#inicio"><img src="assets/images/logo.png" alt="MoBite – ir para o início"></a>
+  <div class="topo-acoes">
+    <button id="btn-tema" class="ic" data-cfg="tema" aria-label="Alternar entre tema claro e escuro">🌙</button>
+    <button id="burger" aria-expanded="false" aria-controls="menu" aria-label="Menu">☰</button>
+  </div>
+  <nav id="menu" aria-label="Menu principal">
+    <img class="logo-menu" src="assets/images/logo.png" alt="MoBite">
+    <a href="#inicio" data-nav="inicio">Início</a>
+    <a href="#restaurantes" data-nav="restaurantes">Encontrar restaurantes</a>
+    <a href="#favoritos" data-nav="favoritos">Favoritos</a>
+    <a href="#avaliacoes" data-nav="avaliacoes">Minhas avaliações</a>
+    <a href="#perfil" data-nav="perfil">Meu perfil</a>
+    <a href="#sobre" data-nav="sobre">Sobre o MoBite</a>
+    <a href="#faq" data-nav="faq">Perguntas frequentes</a>
+    <a href="#configuracoes" data-nav="configuracoes">Configurações</a>
+    <a href="#mapa" data-nav="mapa">Mapa</a>
+  </nav>
+</header>
+
+<main id="conteudo" tabindex="-1">
+<a id="voltar" class="btn sec voltar" href="#inicio" hidden>← Voltar ao início</a>
+
+<!-- ===== PÁGINA: INÍCIO ===== -->
+<section data-page="inicio">
+  <div class="hero">
+    <h1>Mais acessibilidade, mais liberdade para escolher onde aproveitar seus momentos.</h1>
+    <p>Descubra restaurantes e veja a resposta de acessibilidade para o seu perfil de mobilidade.</p>
+    <form id="form-cep">
+      <label class="sr" for="cep">CEP</label>
+      <input id="cep" inputmode="numeric" pattern="\d{5}-?\d{3}" placeholder="Digite seu CEP" required>
+      <button class="btn">Encontrar restaurantes</button>
+      <button type="button" class="btn sec" id="btn-loc">📍 Usar minha localização</button>
+    </form>
+  </div>
+  <form id="form-busca" role="search" class="busca">
+    <label class="sr" for="busca">Buscar por nome, localização ou CEP</label>
+    <input id="busca" type="search" placeholder="Buscar restaurantes, endereço ou CEP">
+    <button class="btn">Buscar</button>
+  </form>
+  <h2>Descubra restaurantes</h2>
+  <div class="chips" id="chips-h" role="group" aria-label="Opções de visualização"></div>
+  <p id="aviso-loc" class="meta" hidden>Permita a localização para ordenar por distância.</p>
+  <div class="grid" id="descoberta"></div>
+</section>
+
+<!-- ===== PÁGINA: ENCONTRAR RESTAURANTES ===== -->
+<section data-page="restaurantes" hidden>
+  <h1>Encontrar restaurantes</h1>
+  <div class="layout">
+    <details class="filtros" id="caixa-filtros" open>
+      <summary>Filtros</summary>
+      <form id="filtros">
+        <label>Buscar<input name="q" type="search" placeholder="Nome ou local"></label>
+        <label>Nota mínima de atendimento
+          <select name="nota"><option value="0">Qualquer</option><option value="4">4,0+</option><option value="4.5">4,5+</option></select></label>
+        <label>Distância (exige localização)
+          <select name="dist"><option value="0">Qualquer</option><option value="1">Até 1 km</option><option value="3">Até 3 km</option><option value="5">Até 5 km</option></select></label>
+        <label>Categoria<select name="cat"></select></label>
+        <label>Item do checklist que funciona<select name="acess"></select></label>
+        <label class="check"><input type="checkbox" name="fav">Só favoritos</label>
+        <button type="reset" class="btn sec">Limpar filtros</button>
+      </form>
+    </details>
+    <div>
+      <div class="grid" id="lista-rest"></div>
+      <div id="ocultos" hidden><h2></h2><div class="grid" id="lista-ocultos"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PÁGINA: DETALHES DO RESTAURANTE (preenchida por app.js) ===== -->
+<section data-page="detalhes" hidden>
+  <div id="det"></div>
+</section>
+
+<!-- ===== PÁGINA: FAVORITOS ===== -->
+<section data-page="favoritos" hidden>
+  <h1>Favoritos</h1>
+  <div class="grid" id="lista-favs"></div>
+</section>
+
+<!-- ===== PÁGINA: MINHAS AVALIAÇÕES ===== -->
+<section data-page="avaliacoes" hidden>
+  <h1>Minhas avaliações</h1>
+  <div class="grid" id="lista-av"></div>
+</section>
+
+<!-- ===== PÁGINA: MEU PERFIL ===== -->
+<section data-page="perfil" hidden>
+  <h1>Meu perfil</h1>
+  <form id="form-perfil" class="caixa">
+    <label>Nome completo<input name="nome" autocomplete="name"></label>
+    <label>Idade<input name="idade" type="number" min="0" max="120"></label>
+    <fieldset><legend>Necessidades de acessibilidade (uma ou mais)</legend><div id="needs"></div></fieldset>
+    <label>Alguma necessidade específica?<textarea name="outra" rows="2"></textarea></label>
+    <button class="btn">Salvar perfil</button>
+  </form>
+  <h2>Meus favoritos</h2>
+  <div class="chips" id="perfil-favs"></div>
+</section>
+
+<!-- ===== PÁGINA: SOBRE O MOBITE ===== -->
+<section data-page="sobre" hidden>
+  <h1>Sobre o MoBite</h1>
+  <p class="lead"><em>Um mapa colaborativo para responder uma pergunta só: dá para chegar, entrar e usar o banheiro deste restaurante com a minha mobilidade?</em></p>
+  <p>A lei já garante o acesso. O que falta é a informação chegar antes da pessoa sair de casa. Hoje isso se resolve por telefone, por foto do Google ou descobrindo na porta.</p>
+  <h2>Para quem é</h2>
+  <p>Cinco perfis, e a resposta de cada lugar muda conforme o que você escolhe lá em cima:</p>
+  <ul><li>Cadeira de rodas.</li><li>Muleta, andador ou bengala.</li><li>Carrinho de bebê.</li><li>Dificuldade com escada.</li><li>Assento largo ou sem braço.</li><li>E quem acompanha essas pessoas: família, cuidador, amigo que escolhe o lugar.</li></ul>
+  <h2>Como funciona</h2>
+  <ol><li><b>Você escolhe o seu perfil.</b> Fica guardado só no seu aparelho, porque é informação de saúde. Ninguém precisa contar isso para a gente.</li>
+  <li><b>A lista mostra os lugares mais perto primeiro.</b> Cada um já vem com a resposta para o seu perfil: funciona, funciona com ressalva, tem barreira ou falta informação.</li>
+  <li><b>Quem vai confere até cinco itens.</b> Perguntas de sim ou não, sem trena e sem laudo. Dá para pular qualquer uma. É assim que o bairro fica completo.</li></ol>
+  <p class="legenda"><span class="ind s-ok"><i aria-hidden="true">●</i>Funciona</span> <span class="ind s-warn"><i aria-hidden="true">▲</i>Funciona com ressalva</span> <span class="ind s-bar"><i aria-hidden="true">◆</i>Tem barreira</span> <span class="ind s-nd"><i aria-hidden="true">■</i>Falta informação</span></p>
+  <h2>O que a gente confere</h2>
+  <p>Dez itens, retirados dos pontos da ABNT NBR 9050 que dá para conferir a olho. Nem mais, nem menos, para a avaliação não virar um formulário que ninguém termina.</p>
+  <p><b>Chegada</b></p><ul><li>Vaga reservada.</li></ul>
+  <p><b>Entrada</b></p><ul><li>Entrada sem degrau.</li><li>Porta larga.</li><li>Corrimão.</li></ul>
+  <p><b>Interior</b></p><ul><li>Circulação entre mesas.</li><li>Mesa que encaixa.</li><li>Tudo no térreo.</li><li>Cadeira sem braço.</li></ul>
+  <p><b>Banheiro</b></p><ul><li>Banheiro acessível.</li><li>Banheiro sem escada.</li></ul>
+  <h2>Duas notas que não se misturam</h2>
+  <p><b>Acessibilidade é fato.</b></p><p>Vem dos dez itens conferidos no lugar, com data de quando foi visto, e muda de resposta conforme o perfil de quem está olhando.</p>
+  <p><b>Estrela é atendimento.</b></p><p>Opinião sobre como as pessoas do lugar trataram você. Fica num bloco à parte e não entra no resultado de acessibilidade.</p>
+  <h2>Comunidade e direito de resposta</h2>
+  <p>Consultar não pede conta. Avaliar, favoritar e esconder um lugar da sua lista, sim: é o que evita que um lugar seja premiado ou afundado por avaliação em massa.</p>
+  <p>O restaurante pode responder a um item, e a resposta aparece junto dele. Serve para os dois lados: se a rampa foi feita depois da avaliação, é o lugar que avisa; e a gente não fica publicando algo que o dono não teve chance de corrigir. <small>(Funcionalidade planejada: depende de backend e não existe neste protótipo.)</small></p>
+  <h2>Quanto custa</h2>
+  <p>Para quem usa, nada, sempre. Cobrar de quem já é excluído contradiz o projeto. Depois de validar o uso, quem pode pagar é o restaurante, por perfil verificado e por saber quantas pessoas consultaram o lugar. Sem anúncio na tela.</p>
+  <h2>Equipe</h2>
+  <div class="grid equipe">
+    <div class="card corpo"><div class="avatar" aria-hidden="true">JG</div><h3>José Henrique Guimarães Galvão Silva</h3><p class="meta">Produto e desenvolvimento</p></div>
+    <div class="card corpo"><div class="avatar" aria-hidden="true">GB</div><h3>Giovanna Bispo Da Silva</h3><p class="meta">Front-end e design</p></div>
+    <div class="card corpo"><div class="avatar" aria-hidden="true">GP</div><h3>Gabriella Pereira Rodrigues</h3><p class="meta">Qualidade e testes</p></div>
+    <div class="card corpo"><div class="avatar" aria-hidden="true">DA</div><h3>Diego Azevedo Dias Inacio</h3><p class="meta">Dados e pesquisa</p></div>
+  </div>
+  <h2>Perguntas frequentes</h2>
+  <p>Veja as respostas na página <a href="#faq">Perguntas frequentes</a>.</p>
+  <p><b>Contato:</b> <a href="mailto:contato@mobite.example">contato@mobite.example</a></p>
+</section>
+
+<!-- ===== PÁGINA: PERGUNTAS FREQUENTES (accordion) ===== -->
+<section data-page="faq" hidden>
+  <h1>Perguntas frequentes</h1>
+  <div id="lista-faq"></div>
+</section>
+
+<!-- ===== PÁGINA: CONFIGURAÇÕES ===== -->
+<section data-page="configuracoes" hidden>
+  <h1>Configurações</h1>
+  <div class="cfg-grupo"><h2>Aparência</h2>
+    <div class="cfg-linha"><span>Tema: <b id="tema-val"></b></span><button class="btn sec" data-cfg="tema">Alternar claro/escuro</button></div>
+    <div class="cfg-linha"><span>Tamanho da fonte: <b id="fonte-val"></b></span>
+      <span class="acoes"><button class="btn sec" data-cfg="menos" aria-label="Diminuir fonte">A−</button><button class="btn sec" data-cfg="padrao">Restaurar</button><button class="btn sec" data-cfg="mais" aria-label="Aumentar fonte">A+</button></span></div></div>
+  <div class="cfg-grupo"><h2>Acessibilidade da interface</h2>
+    <div class="cfg-linha"><label for="p-contraste">Alto contraste</label><input id="p-contraste" type="checkbox" data-pref="contraste"></div>
+    <div class="cfg-linha"><label for="p-anim">Reduzir animações</label><input id="p-anim" type="checkbox" data-pref="anim"></div></div>
+  <div class="cfg-grupo"><h2>Preferências</h2>
+    <div class="cfg-linha"><label for="p-prio">Priorizar o meu perfil na ordem das listas</label><input id="p-prio" type="checkbox" data-pref="prio"></div>
+    <div class="cfg-linha"><label for="p-datas">Mostrar data de verificação nos cards</label><input id="p-datas" type="checkbox" data-pref="datas"></div></div>
+  <div class="cfg-grupo"><h2>Precisa de ajuda?</h2>
+    <p>Fale com a equipe: <a href="mailto:contato@mobite.example">contato@mobite.example</a></p>
+    <a class="btn" href="mailto:contato@mobite.example?subject=Ajuda%20com%20o%20MoBite">Entrar em contato</a></div>
+</section>
+
+<!-- ===== PÁGINA: MAPA ===== -->
+<section data-page="mapa" hidden>
+  <h1>Mapa de restaurantes</h1>
+  <p id="aviso-mapa" class="meta">Sem localização, o mapa mostra o centro de São Paulo como referência. Use o botão abaixo ou informe o CEP na <a href="#inicio">página inicial</a>.</p>
+  <div class="zoom-btns"><button class="btn" data-zoom="in" aria-label="Aproximar o mapa">+</button><button class="btn" data-zoom="out" aria-label="Afastar o mapa">−</button>
+    <button class="btn sec" id="btn-loc2">📍 Usar minha localização</button></div>
+  <div id="mapa-grande" aria-label="Mapa com os restaurantes"></div>
+</section>
+</main>
+
+<footer><p>Protótipo acadêmico: restaurantes, avaliações e endereços são fictícios.</p></footer>
+
+<!-- ===== JANELA DE AVALIAÇÃO E AVISOS ===== -->
+<dialog id="dlg" aria-label="Avaliar acessibilidade"><form id="form-av"></form></dialog>
+<div id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="js/dados.js"></script>
+<script src="js/app.js"></script>
+<script src="js/tema.js"></script>
+<script src="js/mapa.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
