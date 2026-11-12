@@ -6,4 +6,5 @@ $("#filtros").acess.innerHTML = '<option value="">Qualquer</option>' + CRIT.map(
 $("#needs").innerHTML = Object.entries(NEC).map(([k, n]) => `<label class="check"><input type="checkbox" name="need" value="${k}">${n.nome}</label>`).join("");
 $("#lista-faq").innerHTML = FAQ.map(([q, a]) => `<details><summary>${q}</summary><p>${a}</p></details>`).join("");
 if (innerWidth < 800) $("#caixa-filtros").open = false;
-aplicarCfg(); syncCfg(); rota();
+aplicarCfg(); syncCfg();
+carregarRestaurantes().then(rota);

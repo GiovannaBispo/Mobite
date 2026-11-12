@@ -31,8 +31,10 @@ const NEC = {
 const CATS = ["Restaurantes", "Cafeterias", "Lanchonetes", "Padarias"];
 
 /* s = resposta de cada item na ordem de CRIT (0 = sem informação; 1–2 barreira; 3 ressalva; 4–5 funciona)
-   v = visitas registradas · d = data da última verificação · nota = estrelas de ATENDIMENTO (não entra na acessibilidade) */
-const RESTAURANTES = [
+   v = visitas registradas · d = data da última verificação · nota = estrelas de ATENDIMENTO (não entra na acessibilidade)
+   Esta lista é a RESERVA: se o Supabase falhar, o site usa estes dados. Normalmente ela é substituída
+   pelos dados do banco, por carregarRestaurantes() (no final deste arquivo). */
+let RESTAURANTES = [
   { id: 1, nome: "Sabor & Cia", tipo: "Restaurantes", s: "5555545555", v: 48, d: "21/10/2026", nota: 4.8, lat: -23.5614, lng: -46.6559, end: "Rua Exemplo, 100", hor: "11h–23h" },
   { id: 2, nome: "Sabores do Mundo", tipo: "Restaurantes", s: "4435432335", v: 31, d: "12/10/2026", nota: 4.6, lat: -23.5575, lng: -46.6620, end: "Av. Modelo, 250", hor: "12h–22h" },
   { id: 3, nome: "Bistrô da Praça", tipo: "Restaurantes", s: "0415320254", v: 22, d: "03/09/2026", nota: 4.5, lat: -23.5650, lng: -46.6500, end: "Praça Fictícia, 12", hor: "10h–21h" },
@@ -44,6 +46,26 @@ const RESTAURANTES = [
   { id: 9, nome: "Forno da Vila", tipo: "Padarias", s: "0000000000", v: 0, d: "", nota: 0, lat: -23.5660, lng: -46.6650, end: "Rua da Vila, 21", hor: "6h–19h" },
   { id: 10, nome: "Cantina Nonna Rosa", tipo: "Restaurantes", s: "5525555255", v: 35, d: "25/10/2026", nota: 4.9, lat: -23.5600, lng: -46.6420, end: "Rua Imaginária, 5", hor: "12h–23h" }
 ].map(r => ({ ...r, img: `assets/images/restaurantes/r${r.id}.svg` }));
+
+// Busca os restaurantes no Supabase e substitui a lista de reserva. Se der erro, mantém os dados locais.
+async function carregarRestaurantes() {
+  try {
+    const { data, error } = await supabaseClient.from("restaurantes").select("*").order("id");
+    if (error || !data?.length) {
+      console.warn("Supabase indisponível, usando dados locais.", error);
+      return;
+    }
+    RESTAURANTES = data.map(r => ({
+      id: r.id, nome: r.nome, tipo: r.tipo, s: r.s,
+      v: r.visitas, nota: Number(r.nota),
+      d: r.verificado_em ? new Date(r.verificado_em + "T00:00:00").toLocaleDateString("pt-BR") : "",
+      lat: r.lat, lng: r.lng, end: r.endereco, hor: r.horario,
+      img: `assets/images/restaurantes/r${r.id}.svg`
+    }));
+  } catch (e) {
+    console.warn("Falha ao carregar do Supabase, usando dados locais.", e);
+  }
+}
 
 const FAQ = [
   ["Preciso criar conta?", "Não para consultar: a lista, o mapa e o checklist ficam abertos. Conta só para avaliar, favoritar e esconder lugares."],
