@@ -1,13 +1,16 @@
 /* app.js – núcleo do MoBite: estado, regras de acessibilidade por perfil, cards, páginas, navegação,
    ações (favoritar, dislike, avaliar), perfil e filtros. Depende de dados.js.
-   Tema/fonte: tema.js · Mapas: mapa.js · Inicialização: main.js */
+   Login e gravação no Supabase: auth.js · Tema/fonte: tema.js · Mapas: mapa.js · Inicialização: main.js */
 
 /* ===== 1. Utilitários e estado ===== */
 const $ = (s, e = document) => e.querySelector(s), $$ = (s, e = document) => [...e.querySelectorAll(s)];
 const S = { cfg: { tema: "claro", fonte: 100, contraste: false, anim: false, prio: true, datas: true },
-  perfil: { nome: "", idade: "", needs: [], outra: "" }, favs: [], ocultos: [], avals: [], cep: "", pos: null }; // só "cfg" é salvo
+  perfil: { nome: "", idade: "", needs: [], outra: "" }, favs: [], ocultos: [], avals: [], cep: "", pos: null, user: null };
+// cfg e perfil ficam só no aparelho (localStorage). favs, ocultos e avals ficam na conta (Supabase). A posição nunca é salva.
 try { Object.assign(S.cfg, JSON.parse(localStorage.getItem("mobite_cfg"))) } catch { }
+try { Object.assign(S.perfil, JSON.parse(localStorage.getItem("mobite_perfil"))) } catch { }
 const persist = () => { try { localStorage.setItem("mobite_cfg", JSON.stringify(S.cfg)) } catch { } };
+const persistPerfil = () => { try { localStorage.setItem("mobite_perfil", JSON.stringify(S.perfil)) } catch { } };
 let F = { q: "", nota: 0, dist: 0, cat: "", acess: "", fav: false }; // filtros da página de restaurantes
 let H = "todos"; // opção ativa da descoberta na página inicial
 const toggle = (arr, id) => arr.includes(id) ? arr.filter(x => x != id) : [...arr, id];
@@ -18,7 +21,7 @@ const ROT = { ok: "Funciona", warn: "Funciona com ressalva", bar: "Tem barreira"
 const FORMA = { ok: "●", warn: "▲", bar: "◆", nd: "■" }; // círculo, triângulo, losango, quadrado
 const ind = s => `<span class="ind s-${s}"><i aria-hidden="true">${FORMA[s]}</i>${ROT[s]}</span>`;
 
-// Resposta de um item = dado de exemplo + avaliações feitas neste protótipo
+// Resposta de um item = dado de exemplo + as avaliações da sua conta
 function crit(r, k) {
   const d = +r.s[CRIT.findIndex(c => c.k == k)], mine = S.avals.filter(a => a.rid == r.id && PONTOS[a.resp[k]]);
   let m = d, n = d ? Math.ceil(r.v / 2) || 1 : 0;
@@ -47,6 +50,8 @@ function atend(r) { // estrelas = SOMENTE atendimento
 const estrelas = m => `<span class="est" role="img" aria-label="${m.toFixed(1)} de 5">${"★".repeat(Math.round(m))}${"☆".repeat(5 - Math.round(m))}</span>`;
 
 /* ===== 3. Cards e listas ===== */
+// Mensagem com botão de entrar, para as páginas que dependem da conta
+const pedeLogin = txt => `<p class="vazio">${txt} <button class="btn" data-a="login">Entrar</button></p>`;
 function card(r) {
   const f = S.favs.includes(r.id), o = S.ocultos.includes(r.id), d = dist(r), res = resultado(r), a = atend(r);
   return `<article class="card"><img class="foto" src="${r.img}" alt="Ilustração de ${r.nome}" loading="lazy">
@@ -78,10 +83,14 @@ const PAGES = {
     const o = RESTAURANTES.filter(r => S.ocultos.includes(r.id));
     $("#ocultos").hidden = !o.length; $("#ocultos h2").textContent = `Ocultados por você (${o.length})`; lista(o, $("#lista-ocultos"));
   },
-  favoritos() { lista(RESTAURANTES.filter(r => S.favs.includes(r.id)), $("#lista-favs")) },
+  favoritos() {
+    if (!S.user) return $("#lista-favs").innerHTML = pedeLogin("Entre na sua conta para ver os seus favoritos.");
+    lista(RESTAURANTES.filter(r => S.favs.includes(r.id)), $("#lista-favs"));
+  },
   avaliacoes() {
+    if (!S.user) return $("#lista-av").innerHTML = pedeLogin("Entre na sua conta para ver e gerenciar as suas avaliações.");
     const O = Object.fromEntries(OPC);
-    $("#lista-av").innerHTML = S.avals.map(a => { const r = RESTAURANTES.find(x => x.id == a.rid);
+    $("#lista-av").innerHTML = S.avals.map(a => { const r = RESTAURANTES.find(x => x.id == a.rid); if (!r) return "";
       return `<article class="card corpo"><h3>${r.nome}</h3><p class="meta">Avaliado em ${a.data}</p>
       <ul>${Object.entries(a.resp).filter(([, v]) => v != "nv").map(([k, v]) => `<li>${NOME[k]}: <b>${O[v]}</b></li>`).join("")}</ul>
       ${a.atend ? `<p>Atendimento: ${estrelas(a.atend)}</p>` : ""}<div class="acoes"><button class="btn sec" data-a="edit" data-id="${r.id}" data-av="${a.id}">Editar</button>
@@ -90,7 +99,8 @@ const PAGES = {
   perfil(_, keep) {
     const p = S.perfil, f = $("#form-perfil");
     if (!keep) { f.nome.value = p.nome; f.idade.value = p.idade; f.outra.value = p.outra; $$("[name=need]", f).forEach(i => i.checked = p.needs.includes(i.value)) }
-    $("#perfil-favs").innerHTML = S.favs.map(id => `<a class="chip" href="#detalhes-${id}">♥ ${RESTAURANTES.find(r => r.id == id).nome}</a>`).join("") || "Nenhum favorito ainda.";
+    $("#perfil-favs").innerHTML = S.favs.map(id => RESTAURANTES.find(r => r.id == id)).filter(Boolean)
+      .map(r => `<a class="chip" href="#detalhes-${r.id}">♥ ${r.nome}</a>`).join("") || (S.user ? "Nenhum favorito ainda." : "Entre na sua conta para ver os seus favoritos.");
   },
   detalhes(id) {
     quitarMapa("mapa-mini");
@@ -130,21 +140,38 @@ const fecharMenu = () => { $("#menu").classList.remove("aberto"); $("#burger").s
 $("#burger").onclick = () => $("#burger").setAttribute("aria-expanded", $("#menu").classList.toggle("aberto"));
 document.addEventListener("keydown", e => e.key == "Escape" && fecharMenu());
 
-/* ===== 6. Ações: favoritar, dislike (com desfazer), avaliar, excluir ===== */
+/* ===== 6. Ações: favoritar, dislike (com desfazer), avaliar, excluir (gravam na conta, via auth.js) ===== */
 function toast(msg, undoId) {
   const t = $("#toast"); t.innerHTML = msg + (undoId ? ` <button class="btn sec" data-a="dis" data-id="${undoId}">Desfazer</button>` : "");
   t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 6000);
 }
-document.addEventListener("click", e => {
+document.addEventListener("click", async e => {
   const h = e.target.closest("[data-h]"); if (h) { H = h.dataset.h; return rota(true) }
   const b = e.target.closest("button[data-a]"); if (!b) return;
   const a = b.dataset.a, id = +b.dataset.id, av = +b.dataset.av;
   if (a == "ver") return location.hash = "detalhes-" + id;
-  if (a == "aval" || a == "edit") return abrirAvaliacao(id, av);
-  if (a == "fav") S.favs = toggle(S.favs, id);
-  if (a == "dis") { S.ocultos = toggle(S.ocultos, id); toast(S.ocultos.includes(id) ? "Restaurante ocultado." : "Restaurante restaurado.", S.ocultos.includes(id) && id) }
-  if (a == "del") S.avals = S.avals.filter(x => x.id != av);
-  rota(true);
+  if (a == "login") return abrirLogin();
+  if (a == "aval" || a == "edit") { if (exigirLogin("avaliar um lugar")) abrirAvaliacao(id, av); return }
+  if (a == "fav") {
+    if (!exigirLogin("favoritar")) return;
+    const on = !S.favs.includes(id);
+    S.favs = toggle(S.favs, id); rota(true);
+    if (!await dbMarcar("favoritos", id, on)) { S.favs = toggle(S.favs, id); rota(true) }
+    return;
+  }
+  if (a == "dis") {
+    if (!exigirLogin("ocultar um lugar")) return;
+    const on = !S.ocultos.includes(id);
+    S.ocultos = toggle(S.ocultos, id); rota(true);
+    if (!await dbMarcar("ocultos", id, on)) { S.ocultos = toggle(S.ocultos, id); rota(true); return }
+    toast(on ? "Restaurante ocultado." : "Restaurante restaurado.", on && id);
+    return;
+  }
+  if (a == "del") {
+    const { error } = await supabaseClient.from("avaliacoes").delete().eq("id", av);
+    if (error) { console.warn(error); return toast("Não foi possível excluir a avaliação.") }
+    S.avals = S.avals.filter(x => x.id != av); rota(true);
+  }
 });
 
 /* ===== 7. Filtros ===== */
@@ -163,21 +190,27 @@ function localizar() {
 }
 $$("#btn-loc, #btn-loc2").forEach(b => b.onclick = localizar);
 
-/* ===== 9. Perfil (seleção múltipla de necessidades) ===== */
+/* ===== 9. Perfil (seleção múltipla de necessidades) – fica só no aparelho, não vai para a conta ===== */
 $("#form-perfil").onsubmit = e => { e.preventDefault(); const f = e.target;
   S.perfil = { nome: f.nome.value, idade: f.idade.value, outra: f.outra.value, needs: $$("[name=need]:checked", f).map(i => i.value) };
-  toast("Perfil salvo! Os resultados agora seguem o seu perfil."); rota(true) };
+  persistPerfil();
+  toast("Perfil salvo neste aparelho! Os resultados agora seguem o seu perfil."); rota(true) };
 
 /* ===== 10. Avaliação: checklist de acessibilidade (separado) + estrelas de atendimento (opcional) ===== */
 function abrirAvaliacao(rid, avId) {
   const r = RESTAURANTES.find(x => x.id == rid), a = S.avals.find(x => x.id == avId) || { resp: {}, atend: 0 }, f = $("#form-av");
-  f.innerHTML = `<h2>Avaliar acessibilidade</h2><p>${r.nome} <small>(protótipo: nada é enviado a um servidor)</small></p>` +
+  f.innerHTML = `<h2>Avaliar acessibilidade</h2><p>${r.nome} <small>(a avaliação fica salva na sua conta)</small></p>` +
     CRIT.map(c => `<fieldset><legend>${c.q}</legend>${OPC.map(([v, t]) => `<label class="check"><input type="radio" name="${c.k}" value="${v}" ${(a.resp[c.k] || "nv") == v ? "checked" : ""}>${t}</label>`).join("")}</fieldset>`).join("") +
     `<fieldset><legend>Atendimento (opcional, separado da acessibilidade)</legend>${[0, 1, 2, 3, 4, 5].map(n => `<label class="check"><input type="radio" name="atend" value="${n}" ${a.atend == n ? "checked" : ""}>${n ? n + " ★" : "Não avaliar"}</label>`).join("")}</fieldset>
     <div class="acoes"><button class="btn">Enviar avaliação</button><button type="button" class="btn sec" onclick="$('#dlg').close()">Cancelar</button></div>`;
   f.dataset.rid = rid; f.dataset.av = avId || ""; $("#dlg").showModal();
 }
-$("#form-av").onsubmit = e => { e.preventDefault(); const f = e.target, fd = new FormData(f), resp = {}, id = +f.dataset.av || Date.now();
+$("#form-av").onsubmit = async e => { e.preventDefault();
+  const f = e.target, fd = new FormData(f), resp = {}, btn = $(".btn", f);
   CRIT.forEach(c => resp[c.k] = fd.get(c.k));
-  S.avals = S.avals.filter(x => x.id != id).concat({ id, rid: +f.dataset.rid, data: new Date().toLocaleDateString("pt-BR"), resp, atend: +fd.get("atend") });
+  btn.disabled = true;
+  const nova = await dbSalvarAval(+f.dataset.av || null, +f.dataset.rid, resp, +fd.get("atend"));
+  btn.disabled = false;
+  if (!nova) return;
+  S.avals = S.avals.filter(x => x.id != nova.id).concat(nova);
   $("#dlg").close(); toast("Obrigado pela contribuição! 💜 Sua avaliação ajuda toda a comunidade."); rota(true) };

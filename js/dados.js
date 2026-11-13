@@ -74,6 +74,6 @@ const FAQ = [
   ["As estrelas contam na acessibilidade?", "Não. Estrela é só atendimento. Acessibilidade é item conferido, e a resposta ainda muda conforme o perfil."],
   ["E se o restaurante discordar?", "Ele tem direito de resposta, que aparece junto do item (funcionalidade planejada: exige backend). Se o lugar corrigiu a barreira, uma nova visita atualiza o item."],
   ["Vocês avaliam a calçada?", "Não nesta etapa. A calçada não é do restaurante e muda de quadra em quadra. A gente começa na vaga e na porta, e vai até a mesa e o banheiro."],
-  ["Este protótipo guarda o que eu marco?", "Não. É demonstração de telas com dados fictícios: ao recarregar a página tudo volta ao começo. Só a escolha de tema e as configurações ficam salvas."],
+  ["Este protótipo guarda o que eu marco?", "Sim, se você estiver com a conta: favoritos, lugares ocultados e avaliações ficam salvos nela. O perfil de mobilidade fica só no seu aparelho."],
   ["De onde vem o checklist?", "Da ABNT NBR 9050, a norma de acessibilidade em edificações. A gente usou os pontos que uma pessoa comum consegue verificar sem equipamento."]
 ];

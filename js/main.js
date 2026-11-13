@@ -7,4 +7,4 @@ $("#needs").innerHTML = Object.entries(NEC).map(([k, n]) => `<label class="check
 $("#lista-faq").innerHTML = FAQ.map(([q, a]) => `<details><summary>${q}</summary><p>${a}</p></details>`).join("");
 if (innerWidth < 800) $("#caixa-filtros").open = false;
 aplicarCfg(); syncCfg();
-carregarRestaurantes().then(rota);
+carregarRestaurantes().then(iniciarAuth).then(() => rota());
