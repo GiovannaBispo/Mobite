@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% load mobite %}
+{% block titulo %}Editar dados – {{ r.nome }}{% endblock %}
+{% block voltar %}<a id="voltar" class="btn sec voltar" href="{% url 'detalhes' r.pk %}">{% icone "arrow-left" %} Voltar ao restaurante</a>{% endblock %}
+{% block conteudo %}
+<section>
+  <h1>Telefone e horário de {{ r.nome }}</h1>
+  <form method="post" class="caixa">{% csrf_token %}
+    {% for f in form %}<label for="{{ f.id_for_label }}">{{ f.label }}</label>{{ f }}{% for e in f.errors %}<p class="erro">{{ e }}</p>{% endfor %}{% endfor %}
+    <div class="acoes"><button class="btn">Salvar</button><a class="btn sec" href="{% url 'detalhes' r.pk %}">Cancelar</a></div>
+  </form>
+</section>
+{% endblock %}

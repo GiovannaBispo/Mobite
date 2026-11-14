@@ -1,0 +1,97 @@
+{% load static mobite %}<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}Restaurantes acessíveis{% endblock %} – MoBite</title>
+  <meta name="description" content="Veja se dá para chegar, entrar e usar o banheiro de um restaurante com a sua mobilidade.">
+  <meta name="theme-color" content="#5fd6a0">
+  <link rel="icon" href="{% static 'img/favicon.ico' %}" sizes="48x48">
+  <link rel="icon" href="{% static 'img/icone-192.png' %}" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="{% static 'img/apple-touch-icon.png' %}">
+  <link rel="manifest" href="{% url 'manifest' %}">
+  <script>/* aplica tema e fonte antes de desenhar, para não piscar */
+    try { const c = JSON.parse(localStorage.getItem("mobite_cfg")) || {}, h = document.documentElement;
+      h.dataset.tema = c.tema || "claro"; h.dataset.contraste = !!c.contraste; h.dataset.anim = !!c.anim;
+      if (c.fonte) h.style.fontSize = c.fonte + "%"; } catch (e) { }
+  </script>
+  {% include "_carregando_head.html" with abertura=True %}
+  {% block css_extra %}{% endblock %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link rel="stylesheet" href="{% static 'css/paginas.css' %}">
+  <link rel="stylesheet" href="{% static 'css/temas.css' %}">
+  <link rel="stylesheet" href="{% static 'css/funcional.css' %}">
+</head>
+<body data-logado="{{ user.is_authenticated|yesno:'1,0' }}" data-login="{% url 'account_login' %}" data-dev="{{ MODO_DEV|yesno:'1,0' }}"
+      class="{% block classe_body %}{% endblock %}{% if anuncios_rodape %} com-anuncio{% endif %}">
+{% include "icones.html" %}
+{% include "_carregando.html" %}
+{% if not user.is_authenticated %}{% include "_entrar.html" %}{% endif %}
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<!-- ===== HEADER E NAVEGAÇÃO (menu hambúrguer) ===== -->
+<header>
+  <a class="logo" href="{% url 'inicio' %}"><img class="so-claro" src="{% static 'img/logo-mobite.png' %}" alt="MoBite – ir para o início" width="145" height="44"><img class="so-escuro" src="{% static 'img/logo-mobite-escuro.png' %}" alt="MoBite – ir para o início" width="145" height="44"></a>
+  <div class="topo-acoes">
+    {% if user.is_authenticated %}
+    <a class="conta-topo logado" href="{% url 'perfil' %}" aria-label="Conectado como {{ user.apelido|default:user.email }}. Ir para Meu perfil" title="Conectado como {{ user.apelido|default:user.email }}">
+      <span class="avatar-mini" aria-hidden="true">{{ user.apelido|default:user.email|first|upper }}</span><span class="conta-nome">{{ user.apelido|default:user.email|truncatechars:18 }}</span></a>
+    {% else %}
+    <a class="conta-topo" href="{% url 'account_login' %}?next={{ request.get_full_path|urlencode }}">{% icone "log-in" %}<span class="conta-nome">Entrar</span></a>
+    {% endif %}
+    <button id="btn-tema" class="ic" data-cfg="tema" aria-label="Alternar entre tema claro e escuro">{% icone "moon" "so-claro" %}{% icone "sun" "so-escuro" %}</button>
+    <button id="burger" aria-expanded="false" aria-controls="menu" aria-label="Menu">{% icone "menu" %}</button>
+  </div>
+  <nav id="menu" aria-label="Menu principal">
+    <img class="logo-menu so-claro" src="{% static 'img/logo-mobite.png' %}" alt="MoBite" width="145" height="44">
+    <img class="logo-menu so-escuro" src="{% static 'img/logo-mobite-escuro.png' %}" alt="MoBite" width="145" height="44">
+    {% if user.is_authenticated %}<p class="menu-conta">{% icone "user-round" %} Conectado como <b>{{ user.apelido|default:user.email }}</b></p>{% endif %}
+    {% url 'inicio' as u %}<a href="{{ u }}" {% if request.path == u %}aria-current="page"{% endif %}>Início</a>
+    {% url 'favoritos' as u %}<a href="{{ u }}" {% if request.path == u %}aria-current="page"{% endif %}>Favoritos</a>
+    {% url 'avaliacoes' as u %}<a href="{{ u }}" {% if request.path == u %}aria-current="page"{% endif %}>Minhas avaliações</a>
+    {% url 'perfil' as u %}<a href="{{ u }}" {% if request.path == u %}aria-current="page"{% endif %}>Meu perfil</a>
+    {% url 'sobre' as u %}<a href="{{ u }}" {% if request.path == u %}aria-current="page"{% endif %}>Sobre o MoBite</a>
+    {% url 'faq' as u %}<a href="{{ u }}" {% if request.path == u %}aria-current="page"{% endif %}>Perguntas frequentes</a>
+    {% url 'configuracoes' as u %}<a href="{{ u }}" {% if request.path == u %}aria-current="page"{% endif %}>Configurações</a>
+    {% for rd in restaurantes_do_dono %}<a href="{% url 'detalhes' rd.pk %}">{% icone "store" %} {{ rd.nome }}</a>{% endfor %}
+    <span class="menu-sep" role="presentation"></span>
+    {% if user.is_authenticated %}
+      {% if user.is_staff %}<a href="{% url 'admin:index' %}">{% icone "shield-check" %} Painel da equipe</a>{% endif %}
+      <form method="post" action="{% url 'account_logout' %}">{% csrf_token %}<button class="link-menu">{% icone "log-out" %} Sair</button></form>
+    {% else %}
+      <a href="{% url 'account_login' %}?next={{ request.get_full_path|urlencode }}">{% icone "log-in" %} Entrar ou criar conta</a>
+    {% endif %}
+  </nav>
+</header>
+
+<main id="conteudo" tabindex="-1">
+{% block voltar %}<a id="voltar" class="btn sec voltar" href="{% url 'inicio' %}">{% icone "arrow-left" %} Voltar ao início</a>{% endblock %}
+{% if messages %}<div class="avisos" role="status">{% for m in messages %}<p class="aviso aviso-{{ m.tags }}">{{ m }}</p>{% endfor %}</div>{% endif %}
+{% block conteudo %}{% endblock %}
+</main>
+
+<footer>
+  <p>Projeto acadêmico do Grupo 01 · Laboratório de Software e Projetos · FMU.</p>
+  <p class="meta">Mapa e endereços: © <a href="https://www.openstreetmap.org/copyright" rel="noopener">colaboradores do OpenStreetMap</a> (ODbL).{% if demo_visivel %} Os lugares marcados como demonstração são fictícios.{% endif %}</p>
+</footer>
+
+{% with anuncios=anuncios_rodape %}{% if anuncios %}
+<!-- Faixa de anúncio para quem não entrou na conta (RN06.3). O anúncio é escolhido aqui no aparelho pelo perfil (RN01.3). -->
+<aside class="faixa-anuncio" aria-label="Publicidade" hidden>
+  <span class="selo-pub">Publicidade</span>
+  {% for x in anuncios %}<a class="anuncio" href="{% url 'anuncio' x.a.pk %}" rel="sponsored noopener" target="_blank" data-perfis="{{ x.perfis }}" hidden>
+    {% if x.a.imagem %}<img src="{{ x.a.imagem.url }}" alt="" width="48" height="48">{% endif %}
+    <span><b>{{ x.a.titulo }}</b></span>
+  </a>{% endfor %}
+</aside>
+{% endif %}{% endwith %}
+
+<div id="toast" role="status" aria-live="polite" hidden></div>
+{{ dados_publicos|json_script:"dados-mobite" }}
+{{ prefs_js|json_script:"prefs-mobite" }}
+{% csrf_token %}
+<script src="{% static 'js/comum.js' %}"></script>
+<script src="{% static 'js/tema.js' %}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

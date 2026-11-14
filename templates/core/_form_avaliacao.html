@@ -1,0 +1,37 @@
+{% load mobite %}
+<form id="form-av" method="post" action="{% url 'avaliar' r.pk %}" enctype="multipart/form-data" novalidate>
+  {% csrf_token %}
+  <h2 id="titulo-aval">Avaliar acessibilidade</h2>
+  <p><b>{{ r.nome }}</b></p>
+  <p class="meta" id="fila-explica">Responda o que você viu. Se não souber, pode pular.</p>
+  {% if form.non_field_errors %}<div class="aviso aviso-error" role="alert">{% for e in form.non_field_errors %}<p>{{ e }}</p>{% endfor %}</div>{% endif %}
+  {% for p in perguntas %}{% with v=p.campo.value %}
+  <fieldset class="pergunta" data-codigo="{{ p.item.codigo }}" data-estado="{{ p.estado }}" {% if not p.visivel %}hidden disabled{% endif %}>
+    <legend>{{ p.item.pergunta }}</legend>
+    {% if p.item.ajuda %}<p class="meta">{{ p.item.ajuda }}</p>{% endif %}
+    <div class="opcoes">
+      <label class="opcao"><input type="radio" name="r_{{ p.item.codigo }}" value="SIM" {% if v == "SIM" %}checked{% endif %}>Sim</label>
+      <label class="opcao"><input type="radio" name="r_{{ p.item.codigo }}" value="NAO" {% if v == "NAO" %}checked{% endif %}>Não</label>
+      <label class="opcao"><input type="radio" name="r_{{ p.item.codigo }}" value="NAO_SEI" {% if v == "NAO_SEI" %}checked{% endif %}>Não sei</label>
+      <label class="opcao pular"><input type="radio" name="r_{{ p.item.codigo }}" value="" {% if not v %}checked{% endif %}>Pular</label>
+    </div>
+  </fieldset>{% endwith %}{% endfor %}
+
+  <fieldset class="foto-campo"><legend>{% icone "camera" %} Foto da entrada (opcional)</legend>
+    <p class="meta">Tire na porta do restaurante. Vamos pedir sua localização para confirmar que você está lá.</p>
+    <input type="file" name="foto" id="foto" accept="image/*" capture="environment" aria-describedby="erro-foto">
+    <p class="erro" id="erro-foto" role="alert">{% for e in form.foto.errors %}{{ e }} {% endfor %}</p>
+    <input type="hidden" name="lat"><input type="hidden" name="lon">
+  </fieldset>
+
+  <fieldset class="estrelas-campo"><legend>Como foi o atendimento? (opcional)</legend>
+    {% with v=form.estrelas.value|default:"0" %}
+    <label class="check"><input type="radio" name="estrelas" value="0" {% if v|stringformat:"s" == "0" %}checked{% endif %}>Não avaliar</label>
+    {% for n in "12345" %}<label class="check"><input type="radio" name="estrelas" value="{{ n }}" {% if v|stringformat:"s" == n %}checked{% endif %}>{{ n }} {% icone "star" "cheia est" %}<span class="sr"> estrela{% if n != "1" %}s{% endif %}</span></label>{% endfor %}
+    {% endwith %}
+  </fieldset>
+
+  <div class="acoes"><button class="btn" id="enviar-av">Enviar avaliação</button>
+    {% if modal %}<button type="button" class="btn sec" data-fechar>Cancelar</button>
+    {% else %}<a class="btn sec" href="{% url 'detalhes' r.pk %}">Cancelar</a>{% endif %}</div>
+</form>

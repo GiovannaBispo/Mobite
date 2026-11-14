@@ -1,38 +1,66 @@
 # MoBite
 
-Protótipo front-end de um mapa colaborativo de acessibilidade em restaurantes. Ele ajuda pessoas com mobilidade reduzida a responder uma pergunta: **dá para chegar, entrar e usar o banheiro deste restaurante com a minha mobilidade?**
+Mapa colaborativo de acessibilidade em restaurantes. Ele ajuda pessoas com mobilidade reduzida a responder uma pergunta: **dá para chegar, entrar e usar o banheiro deste restaurante com a minha mobilidade?**
 
-> **Projeto acadêmico.** Todos os restaurantes, notas, endereços, datas e contagens são **fictícios**. Nada é enviado a um servidor.
+Projeto acadêmico do Grupo 01, Laboratório de Software e Projetos, FMU.
+
+Site: <https://mobite.pythonanywhere.com>
 
 ---
 
 ## Como executar
 
-O projeto é HTML, CSS e JavaScript puro (Vanilla JS). Não precisa instalar nada.
+Precisa do Python 3.11.
 
-1. Abra a pasta `mobite` no VS Code.
-2. Instale a extensão **Live Server**.
-3. Clique com o botão direito em `index.html` e escolha **Open with Live Server**.
+```bat
+cd Mobite
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py dados_demo
+python manage.py importar_osm --arquivo dados/osm-liberdade.json
+python manage.py runserver
+```
 
-É necessária conexão com a internet, porque o **Leaflet** (biblioteca do mapa) e os **mapas do OpenStreetMap** são carregados pela internet. Sem conexão, o site funciona, mas o mapa mostra um aviso.
+Abra <http://127.0.0.1:8000>. O painel da equipe fica em <http://127.0.0.1:8000/equipe/>.
+
+Sem o arquivo `.env`, os e-mails aparecem no terminal e o login com Google não aparece. Para configurar, copie `.env.exemplo` para `.env` e preencha.
+
+Para rodar os testes: `python manage.py test`.
 
 ---
 
-## Funcionalidades
+## Contas de teste
 
-- **Página inicial:** CEP, busca rápida e uma área de descoberta com filtros (Todos, Restaurantes, Cafeterias, Lanchonetes, Padarias, Mais bem avaliados e Mais próximos) que atualizam a lista sem trocar de página.
-- **Encontrar restaurantes:** lista com filtros (nota de atendimento, distância, categoria, item do checklist e favoritos), favoritar e "não recomendar" com opção de desfazer.
-- **Detalhes do restaurante:** resultado para o seu perfil, os 10 itens do checklist com data de verificação e número de respostas, "Quem já foi", atendimento em estrelas e mini mapa.
-- **Avaliar acessibilidade:** checklist com as respostas Sim, Parcialmente, Não, Não se aplica e Não consegui verificar, além de estrelas de atendimento opcionais.
-- **Favoritos, Minhas avaliações e Meu perfil** (seleção de uma ou mais necessidades de mobilidade).
-- **Mapa:** todos os restaurantes, com zoom pelos botões **+** e **−** e popup com resumo e acesso aos detalhes.
-- **Configurações:** tema claro/escuro, tamanho da fonte (80% a 140%), alto contraste, redução de animações, preferências da lista e contato de suporte.
-- **Sobre o MoBite e Perguntas frequentes.**
-- **Botão "Voltar ao início"** em todas as páginas internas.
+O `dados_demo` cria os 10 restaurantes fictícios do protótipo (marcados como "demonstração") e estas contas. A senha aparece no terminal quando o comando termina:
 
-### Indicadores de acessibilidade
+| Conta | Para testar |
+|---|---|
+| `mobite@mobite.example` | Avaliador que aparece com apelido e selo |
+| `equipe@mobite.example` | Painel da equipe |
+| `restaurante@mobite.example` | Responsável pelo "Sabores do Mundo", que responde às pendências |
+| `avaliador1@mobite.example`, `avaliador2@mobite.example` | Avaliadores anônimos |
 
-Cada resultado usa **forma, cor e texto**, para não depender só da cor:
+Os e-mails são de mentira e só servem para entrar. No site publicado, as senhas são outras e ficam com a equipe.
+
+No painel da equipe, o botão "Esconder do público" tira os fictícios do app sem apagar. Para apagar de vez: `python manage.py dados_demo --apagar`.
+
+---
+
+## Restaurantes reais
+
+Os restaurantes reais vêm do OpenStreetMap: são os que ficam a até 500 m do campus Taguá da FMU, na Liberdade, incluindo lanchonetes e redes como McDonald's e Habib's. A lista está em `dados/osm-liberdade.json`. Para buscar de novo:
+
+```bat
+python manage.py importar_osm --perto=-23.5612,-46.6366,500 --salvar dados/osm-liberdade.json
+```
+
+Eles entram sem informação de acessibilidade. As respostas aparecem depois que alguém visita o lugar: a equipe registra a visita no painel, em "Auditorias (Concierge)".
+
+---
+
+## Como o resultado é calculado
 
 | Símbolo | Significado |
 |---|---|
@@ -41,111 +69,42 @@ Cada resultado usa **forma, cor e texto**, para não depender só da cor:
 | ◆ Losango | Tem barreira |
 | ■ Quadrado | Falta informação |
 
-### Como o resultado muda conforme o perfil
+Para cada perfil, um item do checklist pode bloquear ou só importar. O resultado segue esta ordem:
 
-Cada perfil de mobilidade (`NEC` em `dados.js`) considera apenas os itens do checklist que importam para ele. O resultado do restaurante para o perfil segue esta prioridade:
+1. Algum item que bloqueia está "não": Tem barreira.
+2. Falta resposta num item que bloqueia, ou em 3 ou mais itens do perfil: Falta informação.
+3. Algum item que só importa está "não": Funciona com ressalva.
+4. Senão: Funciona.
 
-1. Se algum item relevante tem **barreira** → ◆ Tem barreira.
-2. Senão, se algum item relevante não tem informação → ■ Falta informação.
-3. Senão, se algum item relevante tem ressalva → ▲ Funciona com ressalva.
-4. Senão → ● Funciona.
-
-Cada item vira um resultado pela média das respostas: **Sim = 5**, **Parcialmente = 3**, **Não = 1**. "Não se aplica" e "Não consegui verificar" não entram na conta.
-
-- Média **4 ou mais**: funciona.
-- Média de **2,5 a 3,9**: ressalva.
-- Média **abaixo de 2,5**: barreira.
-- **Sem respostas**: falta informação.
-
-Quando há mais de um perfil selecionado, valem os itens de todos eles. A ordem das listas prioriza o resultado do perfil e depois a distância (essa prioridade pode ser desligada em **Configurações**).
-
-**Estrelas são só atendimento** e nunca entram no resultado de acessibilidade.
+As estrelas são só do atendimento e não entram no resultado.
 
 ---
 
-## Estrutura de arquivos
+## Privacidade
 
-```
-mobite/
-├── index.html              Todas as páginas (seções com data-page) e a ordem dos scripts
-├── README.md
-├── css/
-│   ├── style.css           Variáveis de cor, base, cabeçalho/menu, botões, cards e formulários
-│   ├── paginas.css         Estilos de cada página e responsividade
-│   └── temas.css           Tema escuro, alto contraste, campos, indicadores, mapa e configurações
-├── js/
-│   ├── dados.js            Dados fictícios: restaurantes, checklist (CRIT), perfis (NEC) e FAQ
-│   ├── app.js              Núcleo: estado, regras de acessibilidade, cards, páginas, rotas e ações
-│   ├── tema.js             Tema, tamanho da fonte, alto contraste, animações e preferências
-│   ├── mapa.js             Leaflet: mini mapa dos detalhes e página Mapa
-│   └── main.js             Inicialização (preenche listas e abre a página da URL)
-└── assets/
-    └── images/
-        ├── logo.png        Logotipo oficial (não alterar cores nem proporção)
-        └── restaurantes/   r1.svg … r10.svg (ilustrações dos restaurantes)
-```
-
-**A ordem dos scripts em `index.html` importa:** `dados.js` → `app.js` → `tema.js` → `mapa.js` → `main.js`.
-
-### Navegação
-
-A navegação usa o hash da URL, sem recarregar a página:
-
-`#inicio` · `#restaurantes` · `#detalhes-ID` · `#favoritos` · `#avaliacoes` · `#perfil` · `#sobre` · `#faq` · `#configuracoes` · `#mapa`
-
-Cada rota chama uma função em `PAGES`, em `app.js`. As páginas Configurações (`tema.js`) e Mapa (`mapa.js`) registram a sua própria função em `PAGES`.
+- O perfil de mobilidade fica só no aparelho e não vai para o servidor.
+- A foto da entrada é guardada sem metadados, e a localização usada para conferir a distância não é salva.
+- As avaliações são anônimas, a não ser que a pessoa escolha aparecer com apelido.
 
 ---
 
-## Como alterar
+## Publicar no PythonAnywhere
 
-| Quero… | Onde mexer |
-|---|---|
-| Mudar cores | Variáveis em `:root` no início de `css/style.css` (e o tema escuro em `css/temas.css`) |
-| Adicionar um restaurante | Novo objeto em `RESTAURANTES` (`js/dados.js`) e a imagem `assets/images/restaurantes/rID.svg` |
-| Trocar as ilustrações por fotos | Substitua os arquivos `r1.svg` … `r10.svg` (ou ajuste o campo `img` em `dados.js`) |
-| Alterar itens do checklist | `CRIT` em `dados.js` |
-| Alterar quais itens importam para cada perfil | `NEC` em `dados.js` |
-| Mudar as regras de resultado | Funções `status` e `resultado` em `js/app.js` |
-| Mudar textos de Sobre e Configurações | `index.html` |
-| Mudar perguntas frequentes | `FAQ` em `dados.js` |
+**Primeira vez**
 
-**Atenção ao campo `s` de cada restaurante.** É uma string de 10 dígitos, um por item de `CRIT`, **na mesma ordem**. O dígito `0` significa sem informação, `1` e `2` barreira, `3` ressalva, `4` e `5` funciona. Se você adicionar ou remover itens em `CRIT`, ajuste a string `s` de todos os restaurantes.
+1. Aba **Web**: *Add a new web app* > *Manual configuration* > Python 3.11.
+2. Aba **Files**: envie o `.zip` do projeto, sem `.venv`, `db.sqlite3`, `media/` e `.env`.
+3. Console **Bash**: `unzip -oq mobite-site.zip && bash mobite/deploy/pythonanywhere.sh`. O script instala tudo, cria o banco com os restaurantes e pede uma senha para `equipe@mobite.example`. As outras contas de teste ganham uma senha sorteada, que aparece no fim e fica no `.env`.
+4. Aba **Web**: Virtualenv `/home/<usuario>/mobite/.venv`; Static files `/static/` > `/home/<usuario>/mobite/staticfiles` e `/media/` > `/home/<usuario>/mobite/media`; ligue o **Force HTTPS** e clique em **Reload**.
 
----
+**Atualizar:** envie o `.zip` novo e rode o mesmo comando do passo 3. O banco, as fotos e o `.env` continuam como estão.
 
-## Dados, armazenamento e privacidade
+**Cuidados**
 
-- Somente o **tema e as configurações** são salvos no `localStorage` do navegador (chave `mobite_cfg`).
-- Perfil, favoritos, restaurantes ocultados e avaliações ficam **apenas na memória** e voltam ao começo ao recarregar a página.
-- A **localização** só é pedida quando você clica em "Usar minha localização" e **não é salva**. Sem ela, as distâncias aparecem como indisponíveis e o mapa usa o centro de São Paulo apenas como referência.
-- As avaliações feitas no protótipo atualizam os indicadores na tela, mas não representam avaliações reais de estabelecimentos.
+- A conta grátis desliga o site depois de 1 mês sem renovar. Renove na aba Web antes de cada apresentação.
+- Para criar conta sem confirmar o e-mail (numa feira, por exemplo), ponha `MOBITE_CONFIRMAR_EMAIL=0` no `.env` e clique em Reload.
 
----
-
-## O que depende de backend ou de serviços externos
-
-Estas funcionalidades não existem no protótipo e exigem implementação futura:
-
-| Funcionalidade | O que será necessário |
-|---|---|
-| Contas e login (avaliar, favoritar e ocultar exigem conta) | Autenticação e banco de dados de usuários |
-| Salvar perfil, favoritos e avaliações entre sessões | API e banco de dados |
-| Distância e busca por CEP | API de CEP (ex.: ViaCEP) e geocodificação |
-| Fotos reais dos estabelecimentos | Armazenamento de imagens e moderação |
-| Direito de resposta do restaurante | Perfil verificado de estabelecimento e moderação |
-| Contagem real de visitas ("Quem já foi") e datas de verificação | Registro de visitas e avaliações no servidor |
-| Proteção contra avaliação em massa | Regras antiabuso e verificação de contas |
-
----
-
-## Acessibilidade da interface
-
-- Navegação por teclado e link "Pular para o conteúdo".
-- Foco visível, botões grandes e descrições alternativas nas imagens.
-- Indicadores que não dependem apenas de cor.
-- Tema escuro, alto contraste, ajuste de fonte e redução de animações.
-- Layout responsivo para computador, tablet e celular.
+O branch `prototipo-supabase` guarda a versão do protótipo com Supabase.
 
 ---
 
@@ -158,11 +117,11 @@ Estas funcionalidades não existem no protótipo e exigem implementação futura
 | Gabriella Pereira Rodrigues | Qualidade e testes |
 | Diego Azevedo Dias Inacio | Dados e pesquisa |
 
-Contato (fictício): contato@mobite.example
-
 ---
 
-## Créditos e referências
+## Créditos
 
+- Feito com Django, SQLite e django-allauth.
 - Mapas: [Leaflet](https://leafletjs.com/) e [OpenStreetMap](https://www.openstreetmap.org/copyright) (© colaboradores do OpenStreetMap).
+- Ícones: [Lucide](https://lucide.dev).
 - Checklist baseado em pontos da **ABNT NBR 9050** que podem ser conferidos sem equipamento.

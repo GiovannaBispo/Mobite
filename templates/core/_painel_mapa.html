@@ -1,0 +1,9 @@
+{% load mobite %}{# Aba "Mapa": os mesmos restaurantes da lista, com os mesmos filtros (RF03 e RF04). #}
+<div role="tabpanel" id="painel-mapa" aria-labelledby="aba-mapa" class="painel-mapa" hidden>
+  <div class="zoom-btns"><button class="btn sec" data-localizar>{% icone "locate-fixed" %} Usar minha localização</button></div>
+  <div class="mapa-caixa">
+    <div id="mapa-lista" class="mapa-lista" role="region" aria-label="Mapa com os restaurantes da lista. A mesma informação está na aba Lista."></div>
+    {% include "core/_zoom.html" %}
+  </div>
+  <p class="legenda meta">{% indicador "ok" %} {% indicador "warn" %} {% indicador "bar" %} {% indicador "nd" %}</p>
+</div>

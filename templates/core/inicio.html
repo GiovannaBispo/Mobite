@@ -1,0 +1,79 @@
+{% extends "base.html" %}{% load static mobite %}
+{% block titulo %}Início{% endblock %}
+{% block css_extra %}<link rel="stylesheet" href="{% static 'vendor/leaflet/leaflet.css' %}">{% endblock %}
+{% block voltar %}{% endblock %}
+{% block conteudo %}
+{# A lista é a tela inicial: topo da Giovanna + lista completa com filtros e mapa ao lado. #}
+<section data-page="inicio">
+  {% include "core/_painel_dono.html" %}
+  <div class="hero">
+    <h1>Mais acessibilidade, mais liberdade para escolher onde aproveitar seus momentos.</h1>
+    <p class="hero-apoio">Descubra restaurantes e veja a resposta de acessibilidade para o seu perfil de mobilidade.</p>
+    {% include "core/_perfil_sel.html" %}
+    <form id="form-cep" action="{% url 'inicio' %}">
+      <label class="sr" for="cep">CEP</label>
+      <input id="cep" name="cep" inputmode="numeric" pattern="\d{5}-?\d{3}" placeholder="Digite seu CEP" autocomplete="postal-code" required>
+      <button class="btn"><span class="txt-longo">Encontrar restaurantes</span><span class="txt-curto">Encontrar</span></button>
+      <button type="button" class="btn sec" id="btn-loc" data-localizar>{% icone "locate-fixed" %} Usar minha localização</button>
+    </form>
+  </div>
+  {# A busca é o campo "Buscar" dos filtros (form="filtros"): filtra a lista na hora, sem trocar de página. #}
+  <div role="search" class="busca">
+    <label class="sr" for="busca">Buscar por nome ou endereço</label>
+    <input id="busca" form="filtros" name="q" type="search" placeholder="Buscar restaurantes ou endereço" value="{{ q }}">
+    <button type="button" class="btn" data-ir-lista aria-label="Buscar">{% icone "search" %}<span class="txt-longo"> Buscar</span></button>
+  </div>
+
+  <h2 id="titulo-lista">Descubra restaurantes</h2>
+  <div class="layout">
+    <details class="filtros" id="caixa-filtros" open>
+      <summary>Filtros</summary>
+      <form id="filtros">
+        <fieldset class="filtro-res"><legend>Resultado para o seu perfil</legend>
+          <label class="check"><input type="checkbox" name="res" value="ok" checked>{% forma "ok" %} Funciona</label>
+          <label class="check"><input type="checkbox" name="res" value="warn" checked>{% forma "warn" %} Funciona com ressalva</label>
+          <label class="check"><input type="checkbox" name="res" value="bar" checked>{% forma "bar" %} Tem barreira</label>
+          <label class="check"><input type="checkbox" name="res" value="nd" checked>{% forma "nd" %} Falta informação</label>
+          <p class="meta" id="sem-perfil-filtro" hidden>Escolha seu perfil para usar este filtro.</p>
+        </fieldset>
+        <label>Nota mínima de atendimento
+          <select name="nota"><option value="0">Qualquer</option><option value="4">4,0+</option><option value="4.5">4,5+</option></select></label>
+        <label>Distância (exige localização)
+          <select name="dist"><option value="0">Qualquer</option><option value="1">Até 1 km</option><option value="3">Até 3 km</option><option value="5">Até 5 km</option></select></label>
+        <label>Item do checklist que funciona<select name="acess"><option value="">Qualquer</option>{% for i in dados_publicos.itens %}<option value="{{ i.codigo }}">{{ i.nome }}</option>{% endfor %}</select></label>
+        {% if user.is_authenticated %}<label class="check"><input type="checkbox" name="fav">Só favoritos</label>{% endif %}
+        <button type="reset" class="btn sec">Limpar filtros</button>
+      </form>
+    </details>
+    <div class="vistas" data-vistas>
+      <div class="abas" role="tablist" aria-label="Forma de ver">
+        <button role="tab" id="aba-lista" aria-controls="painel-lista" aria-selected="true">{% icone "list" %} Lista</button>
+        <button role="tab" id="aba-mapa" aria-controls="painel-mapa" aria-selected="false" tabindex="-1">{% icone "map" %} Mapa</button>
+      </div>
+      <div class="chips" id="chips-h" role="group" aria-label="Ordem da lista">
+        <button class="chip" data-h="todos" aria-pressed="true">Todos</button>
+        <button class="chip" data-h="top" aria-pressed="false">Mais bem avaliados</button>
+        <button class="chip" data-h="perto" aria-pressed="false">Mais próximos</button>
+      </div>
+      <p id="aviso-loc" class="meta" hidden>Permita a localização ou informe o CEP para ordenar por distância.</p>
+      <p class="contador" id="contador" aria-live="polite"></p>
+      <div class="paineis">
+        <div role="tabpanel" id="painel-lista" aria-labelledby="aba-lista">
+          <div class="grid" id="lista-rest">
+            {% for c in cards %}{% include "core/_card.html" %}{% endfor %}
+          </div>
+          <p class="vazio" id="vazio-lista" {% if cards %}hidden{% endif %}>Nenhum restaurante por aqui ainda.</p>
+          <div id="ocultos" {% if not ocultos %}hidden{% endif %}><h2>Escondidos por você (<span id="n-ocultos">{{ ocultos|length }}</span>)</h2>
+            <div class="grid" id="lista-ocultos">{% for c in ocultos %}{% include "core/_card.html" %}{% endfor %}</div></div>
+        </div>
+        {% include "core/_painel_mapa.html" %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'vendor/leaflet/leaflet.js' %}"></script>
+<script src="{% static 'js/mapa.js' %}"></script>
+<script src="{% static 'js/lista.js' %}"></script>
+{% endblock %}

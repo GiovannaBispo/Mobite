@@ -1,0 +1,19 @@
+{% extends "base.html" %}{% load mobite %}
+{% block titulo %}Reivindicar {{ r.nome }}{% endblock %}
+{% block voltar %}<a id="voltar" class="btn sec voltar" href="{% url 'detalhes' r.pk %}">{% icone "arrow-left" %} Voltar ao restaurante</a>{% endblock %}
+{% block conteudo %}
+<section>
+  <h1>Reivindicar a página de {{ r.nome }}</h1>
+  {% if existente %}
+    <div class="caixa"><p>Você já pediu para administrar esta página. Situação: <b>{{ existente.get_status_display }}</b>.</p></div>
+  {% else %}
+  <form method="post" class="caixa">{% csrf_token %}
+    <p>Informe o CNPJ do restaurante. A equipe confere e libera o acesso.</p>
+    <label for="{{ form.cnpj.id_for_label }}">CNPJ</label>{{ form.cnpj }}
+    {% for e in form.cnpj.errors %}<p class="erro">{{ e }}</p>{% endfor %}
+    <p class="meta">Depois de aprovado, você pode atualizar telefone e horário e, com a assinatura, responder às avaliações.</p>
+    <div class="acoes"><button class="btn">Enviar pedido</button><a class="btn sec" href="{% url 'detalhes' r.pk %}">Cancelar</a></div>
+  </form>
+  {% endif %}
+</section>
+{% endblock %}

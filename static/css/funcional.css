@@ -1,0 +1,281 @@
+/* funcional.css – o que entrou com o back-end, no mesmo estilo da Giovanna (style/paginas/temas.css).
+   Carregado por último. Ícones, avisos, filtros por resultado, itens do restaurante, pendências,
+   avaliação, perfil, telas de conta, anúncios e marcadores do mapa. */
+
+/* ===== Ícones (Lucide) no lugar dos emojis ===== */
+.icone { width: 1.2em; height: 1.2em; vertical-align: -.22em; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round }
+.icone.cheia, .on > .icone.cheio-se-on, [aria-pressed=true] > .icone.cheio-se-on { fill: currentColor }
+.icone.est { color: var(--laranja) }
+.est .icone { width: 1.05em; height: 1.05em; margin-right: 1px }
+.forma { width: .8em; height: .8em; flex: none; fill: currentColor }
+.ic { display: inline-grid; place-items: center; padding: 0; color: var(--txt) }
+.ic .icone { width: 22px; height: 22px }
+#burger { display: grid; place-items: center }
+#burger .icone { width: 26px; height: 26px }
+html[data-tema=escuro] .so-claro, html:not([data-tema=escuro]) .so-escuro { display: none }
+.btn { gap: .45rem }
+main:focus { outline: none } /* o foco vai para o <main> ao abrir a página; não precisa da moldura */
+
+/* Menu: separador, entrar/sair */
+#menu a, .link-menu { display: flex; align-items: center; gap: .55rem }
+.menu-sep { border-top: 1px solid var(--borda); margin: .4rem .5rem }
+.link-menu { width: 100%; min-height: 48px; padding: .8rem 1rem; border: 0; border-radius: 12px; background: none; color: var(--azul); font: inherit; font-weight: 600; text-align: left; cursor: pointer }
+.link-menu:hover { background: var(--claro) }
+#menu form { margin: 0 }
+.logo img { height: 44px }
+/* O menu empilha e estica os itens; a logo não pode esticar junto (ficava achatada). */
+#menu .logo-menu { align-self: flex-start; width: auto; height: 44px; object-fit: contain; margin: 0 0 .6rem .5rem }
+/* Tema escuro: logo com o grafite clareado e sem a pílula branca atrás */
+.logo, .logo-menu { background: none; padding: 0 }
+.logo { border-radius: 8px }
+
+/* ===== Seletor "Do que você precisa?" ===== */
+.perfil-sel { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .7rem; margin: .4rem 0 1rem }
+.perfil-sel label { display: inline-flex; align-items: center; gap: .4rem; margin: 0; color: var(--azul); font-weight: 700 }
+.perfil-sel select { width: auto; max-width: 100%; flex: 0 1 22rem; border-color: var(--menta-t) }
+.perfil-sel small { flex-basis: 100% }
+.perfil-sel.compacto { margin: 0 0 .6rem }
+.hero .perfil-sel { margin: .9rem 0 }
+
+/* ===== Abas Lista | Mapa ===== */
+.abas { display: inline-flex; gap: .25rem; margin: 0 0 .8rem; padding: .25rem; border: 1px solid var(--borda); border-radius: 999px; background: var(--claro) }
+.abas [role=tab] { display: inline-flex; align-items: center; gap: .4rem; min-height: 44px; padding: .3rem 1.1rem; border: 0; border-radius: 999px; background: none; color: var(--azul); font: inherit; font-weight: 700; cursor: pointer }
+.abas [role=tab][aria-selected=true] { background: var(--menta); color: var(--on-menta) }
+.mapa-lista { height: 62vh; min-height: 380px; border-radius: var(--raio) }
+.painel-mapa .legenda { margin-top: .6rem }
+/* Lista e mapa em abas também no computador. */
+
+/* ===== Olhinho da senha ===== */
+.campo-senha { position: relative; display: block }
+.campo-senha input { padding-right: 3.4rem }
+.olho { position: absolute; top: 50%; right: 4px; transform: translateY(-50%); display: grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 10px; background: none; color: var(--suave); cursor: pointer }
+.olho:hover { background: var(--claro); color: var(--txt) }
+.olho .icone { width: 22px; height: 22px }
+
+/* ===== Topo do Início mais enxuto (computador) ===== */
+.hero { padding: 1.4rem 1.6rem 1.5rem }
+.hero h1 { max-width: 34ch; margin: 0 0 .4rem; font-size: clamp(1.5rem, 2.6vw, 2rem) }
+.hero-apoio { margin: 0 }
+.perfil-sel small { flex-basis: auto }
+
+/* ===== Início mais enxuto no celular ===== */
+.txt-curto { display: none }
+@media (max-width: 600px) {
+  .hero { padding: 1.1rem 1rem; border-radius: 18px }
+  .hero h1 { margin: 0 0 .2rem; font-size: 1.4rem }
+  .hero-apoio { display: none }
+  .hero .perfil-sel { margin: .7rem 0 }
+  .perfil-sel select { flex-basis: 100% }
+  .perfil-sel small { flex-basis: 100% }
+  #form-cep { display: grid; grid-template-columns: 1fr auto; gap: .5rem }
+  #form-cep input { min-width: 0 }
+  #form-cep #btn-loc { grid-column: 1 / -1; justify-self: start; min-height: 44px; padding: .4rem .9rem; font-size: .95rem }
+  .txt-longo { display: none }
+  .txt-curto { display: inline }
+  .busca input { min-width: 0 }
+  .busca .btn { padding: .6rem 1rem }
+  section > h2 { margin-top: 1.4rem }
+}
+
+/* ===== Avisos e erros ===== */
+.avisos { margin: .5rem 0 1rem }
+.aviso { margin: .4rem 0; padding: .8rem 1rem; border: 1px solid var(--borda); border-left: 5px solid var(--menta-t); border-radius: 12px; background: var(--claro) }
+.aviso p { margin: .2rem 0 }
+.aviso-error, .aviso-warning { border-left-color: #a12626 }
+.erro, .errorlist { color: #a12626; font-weight: 600 }
+.errorlist { margin: .3rem 0; padding-left: 1.1rem }
+html[data-tema=escuro] .erro, html[data-tema=escuro] .errorlist { color: #ff9d96 }
+.erro:empty { display: none }
+.btn.perigo { background: #a12626; color: #fff }
+.btn.sec.perigo { background: var(--claro); color: #a12626; border-color: #a12626 }
+html[data-tema=escuro] .btn.sec.perigo { color: #ff9d96; border-color: #ff9d96 }
+
+/* ===== Cards e listas ===== */
+.form-ic { display: contents }
+/* Card inteiro clicável: o link é o nome, e a área dele se estende pelo card todo.
+   Os botões (detalhes, favoritar, esconder) ficam por cima e continuam funcionando sozinhos. */
+.card { position: relative }
+.card:has(.link-card) { cursor: pointer }
+.link-card { color: inherit; text-decoration: none }
+.link-card::after { content: ""; position: absolute; inset: 0; z-index: 1 }
+.card .acoes > *, .card .acoes .ic { position: relative; z-index: 2 }
+.link-card:focus-visible { outline: none }
+.card:has(.link-card:focus-visible) { outline: 3px solid var(--menta-t); outline-offset: 2px }
+.card:has(.link-card):hover h3 { text-decoration: underline }
+.demo { padding: .1rem .5rem; border: 1px solid var(--borda); border-radius: 999px; background: var(--claro); color: var(--suave); font-size: .72rem; font-weight: 700; vertical-align: middle }
+.res-perfil small { display: inline-block; margin-top: .25rem }
+.ver-todos { margin: 1.5rem 0; text-align: center }
+.nota-privacidade { margin: .9rem 0 0; font-size: .92rem }
+.contador { margin: 0 0 .8rem; font-weight: 700 }
+.filtro-res { margin: 0 0 .4rem; padding: .4rem .8rem .6rem }
+.filtro-res legend { font-weight: 700; padding: 0 .3rem }
+.filtro-res .check { display: flex; margin: .4rem 0 }
+.check:has(input:disabled) { opacity: .55 }
+.legenda { display: flex; flex-wrap: wrap; gap: .5rem }
+
+/* ===== Detalhes do restaurante ===== */
+.foto-det { margin: 0 0 .5rem }
+.foto-det figcaption { margin-top: .4rem; font-size: .9rem }
+#res-det .ind { font-size: 1rem }
+h3.zona { margin: 1.4rem 0 .3rem; font-size: 1.05rem }
+/* Colunas de largura fixa: o botão "Continua igual"/"Você confirmou" não desalinha as linhas */
+.crit { grid-template-columns: minmax(0, 2fr) minmax(0, 1.3fr) minmax(0, 1.6fr) 12.5rem; scroll-margin-top: 90px }
+.crit-acoes { display: flex; flex-wrap: wrap; gap: .25rem; align-items: center; justify-content: flex-end }
+.crit-acoes:empty { display: none }
+.crit-acoes form { display: contents }
+.btn.mini { min-height: 44px; padding: .3rem .9rem; font-size: .92rem }
+.btn:disabled { opacity: .7; cursor: default; transform: none }
+.link-mini { display: inline-flex; align-items: center; gap: .3rem; min-height: 44px; padding: 0 .3rem; font-size: .9rem }
+.tag-perfil { color: var(--menta-t); font-weight: 700 }
+.resposta-rest { grid-column: 1 / -1; padding: .6rem .9rem; border-left: 4px solid var(--menta-t); border-radius: 8px; background: var(--card) }
+.resposta-rest p { margin: .3rem 0 }
+.pendencias { margin: 0; padding: 0; list-style: none }
+.pendencias li { display: flex; gap: .6rem; align-items: baseline; padding: .55rem 0; border-bottom: 1px solid var(--borda) }
+.pendencias li > .forma { color: #a12626 }
+.pendencias li > .forma:has(use[href="#f-ok"]) { color: #0f6b4a }
+html[data-tema=escuro] .pendencias li > .forma { color: #ff9d96 }
+html[data-tema=escuro] .pendencias li > .forma:has(use[href="#f-ok"]) { color: #7fe3b4 }
+.chip.selo { display: inline-flex; align-items: center; gap: .4rem; cursor: default }
+.caixa-resp { margin-top: 2rem }
+.caixa-equipe { margin-top: 2rem; border: 2px dashed var(--menta-t) }
+.caixa-equipe p { margin: 0 0 .6rem }
+.caixa-resp p { margin: .4rem 0 }
+
+/* ===== Avaliação (janela e página) ===== */
+.pergunta { padding: .5rem 1rem .8rem }
+.pergunta legend, .foto-campo legend, .estrelas-campo legend { padding: 0 .3rem; font-weight: 700 }
+.pergunta .meta { margin: .1rem 0 .5rem }
+.opcoes { display: flex; flex-wrap: wrap; gap: .5rem }
+.opcao { display: inline-flex; align-items: center; gap: .45rem; min-height: 48px; margin: 0; padding: .3rem 1rem; border: 2px solid var(--borda); border-radius: 999px; font-weight: 600; cursor: pointer }
+.opcao:has(input:checked) { border-color: var(--menta-t); background: var(--menta); color: var(--on-menta) }
+.opcao:has(input:focus-visible) { outline: 3px solid var(--menta-t); outline-offset: 2px }
+.opcao.pular { font-weight: 400 }
+.foto-campo, .estrelas-campo { padding: .5rem 1rem .8rem }
+.foto-campo input[type=file] { min-height: 48px; padding: .5rem }
+.estrelas-campo .check { min-height: 44px }
+dialog { color: var(--txt) }
+dialog form > .acoes { position: sticky; bottom: -1.5rem; margin: 0 -1.5rem -1.5rem; padding: .8rem 1.5rem; border-top: 1px solid var(--borda); background: var(--card) }
+.pagina-aval { max-width: 680px }
+
+/* ===== Perfil e conta ===== */
+#needs { display: grid; gap: .5rem }
+.perfil-opcao { display: flex; align-items: flex-start; gap: .7rem; margin: 0; padding: .6rem .8rem; border: 2px solid var(--borda); border-radius: 12px; background: var(--card); font-weight: 400; cursor: pointer }
+.perfil-opcao:has(input:checked) { border-color: var(--menta-t); outline: 2px solid var(--menta) }
+.perfil-opcao input { margin-top: .3rem }
+#form-perfil fieldset { margin: 0 0 1rem; border: 0; padding: 0 }
+#form-perfil legend { color: var(--azul); font-size: 1.15rem; font-weight: 700 }
+.pagina-conta { max-width: 640px }
+.form-conta p { margin: .5rem 0 }
+.form-conta label { margin-bottom: .25rem }
+.form-conta .helptext, .form-conta span[id$=_helptext] { display: block; color: var(--suave); font-size: .9rem }
+.form-conta input[type=checkbox] { margin-right: .5rem }
+.form-conta p:has(> input[type=checkbox]) { display: flex; flex-direction: row-reverse; justify-content: flex-end; align-items: center; gap: .6rem }
+.form-conta p:has(> input[type=checkbox]) label { margin: 0 }
+.zoom-btns .btn.sec { font-size: 1rem }
+.provedores { margin-top: .5rem }
+.sep { margin: 1.5rem 0; border: 0; border-top: 1px solid var(--borda) }
+
+/* ===== Anúncios: sempre com "Publicidade", sem cobrir conteúdo nem botões (RNF04) ===== */
+.faixa-anuncio { position: fixed; left: 0; right: 0; bottom: 0; z-index: 15; display: flex; align-items: center; gap: .8rem; min-height: 64px; padding: .5rem 1rem; border-top: 2px solid var(--borda); background: var(--card); box-shadow: 0 -4px 18px rgba(25, 61, 117, .10) }
+body.com-anuncio { padding-bottom: 96px } /* o fim da página nunca fica atrás da faixa, e sobra espaço até os botões */
+body.com-anuncio #toast { bottom: 88px }
+.selo-pub { flex: none; padding: .15rem .5rem; border: 1px solid var(--suave); border-radius: 6px; color: var(--suave); font-size: .75rem; font-weight: 700 }
+.anuncio { display: flex; align-items: center; gap: .7rem; min-height: 48px; color: var(--txt); text-decoration: none }
+.anuncio img { border-radius: 8px; object-fit: cover }
+.bloco-anuncio { display: grid; gap: .5rem; max-width: 520px; margin: 1.5rem 0; padding: 1rem; border: 1px solid var(--borda); border-radius: var(--raio); background: var(--card) }
+.bloco-anuncio .selo-pub { justify-self: start }
+
+/* ===== Mapa: marcador com a forma do resultado ===== */
+.leaflet-container { z-index: 0 } /* o mapa não passa por cima do cabeçalho nem da faixa de anúncio */
+.mapa-caixa { position: relative }
+.zoom-sobre { position: absolute; top: 12px; right: 12px; z-index: 1; display: grid; gap: 8px }
+.zoom-sobre button { display: grid; place-items: center; width: 48px; height: 48px; border: 2px solid var(--borda); border-radius: 12px; background: var(--card); color: var(--txt); box-shadow: 0 2px 8px rgba(0, 0, 0, .25); cursor: pointer }
+.zoom-sobre button:hover { background: var(--menta); color: var(--on-menta); border-color: var(--menta-t) }
+.zoom-sobre .icone { width: 26px; height: 26px; stroke-width: 2.5 }
+.pin span { display: grid !important; place-items: center }
+.pin span .forma { width: 13px; height: 13px; color: #fff; transform: rotate(45deg) }
+.pin.pin-ok span { background: #0f6b4a }
+.pin.pin-warn span { background: #8a5a00 }
+.pin.pin-bar span { background: #a12626 }
+.pin.pin-nd span { background: #5b6675 }
+.leaflet-popup-content .btn { margin-top: .4rem; min-height: 40px; color: var(--on-menta) }
+
+/* ===== Pessoas ajudadas (Minhas avaliações) ===== */
+.ajudadas { display: flex; align-items: flex-start; gap: .8rem; max-width: none; margin: 0 0 1rem }
+.ajudadas > .icone { width: 1.8rem; height: 1.8rem; color: #d6336c; margin-top: .2rem }
+.ajudadas p { margin: 0 }
+.ajudou { color: var(--menta-t); font-weight: 700 }
+
+/* ===== Agradecimento ===== */
+.obrigado .acoes { margin-top: 1rem }
+
+@media (max-width: 800px) {
+  .faixa-anuncio .anuncio .meta { display: none }
+  .crit { grid-template-columns: 1fr 1fr }
+  .crit-acoes { grid-column: 1 / -1; justify-content: flex-start }
+}
+
+/* ===== Conta no cabeçalho: dá para ver na hora se está conectado ===== */
+.conta-topo { display: inline-flex; align-items: center; gap: .45rem; min-height: 48px; padding: .3rem .9rem .3rem .35rem; border: 2px solid var(--borda); border-radius: 999px; background: var(--card); color: var(--azul); font-weight: 700; text-decoration: none }
+.conta-topo:not(.logado) { padding-left: .8rem }
+.conta-topo.logado { border-color: var(--menta-t) }
+.conta-topo:hover { background: var(--claro) }
+.avatar-mini { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--menta); color: var(--on-menta); font-weight: 800 }
+.menu-conta { display: flex; align-items: center; gap: .45rem; margin: 0 .5rem .6rem; color: var(--suave); font-size: .9rem }
+.menu-conta b { color: var(--txt) }
+@media (max-width: 600px) {
+  .conta-topo .conta-nome { display: none }
+  .conta-topo, .conta-topo:not(.logado) { padding: .3rem; min-width: 48px; justify-content: center }
+}
+
+/* ===== Toast: aviso no canto superior direito (no celular, no topo), some em 6 s ===== */
+#toast { top: 80px; right: 16px; bottom: auto; left: auto; transform: none; display: flex; align-items: flex-start; gap: .6rem;
+  width: auto; max-width: min(380px, calc(100vw - 32px)); padding: .8rem .6rem .8rem 1rem; border: 1px solid var(--borda);
+  border-left: 5px solid var(--menta-t); border-radius: 12px; background: var(--card); color: var(--txt);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .18); animation: entrar-toast .25s ease-out }
+#toast[hidden] { display: none }
+#toast > .icone { width: 22px; height: 22px; margin-top: .1rem; color: var(--menta-t) }
+#toast.toast-erro { border-left-color: #a12626 }
+#toast.toast-erro > .icone { color: #a12626 }
+.toast-msg { flex: 1; line-height: 1.4 }
+.toast-msg .btn { margin-left: .3rem }
+.toast-fechar { display: grid; place-items: center; width: 36px; height: 36px; margin: -.3rem 0 -.3rem .2rem; border: 0; border-radius: 8px; background: none; color: var(--suave); cursor: pointer }
+.toast-fechar:hover { background: var(--claro); color: var(--txt) }
+body.com-anuncio #toast { bottom: auto }
+@keyframes entrar-toast { from { opacity: 0; transform: translateX(24px) } }
+@media (max-width: 600px) {
+  #toast { top: 72px; left: 12px; right: 12px; max-width: none; animation-name: descer-toast }
+  @keyframes descer-toast { from { opacity: 0; transform: translateY(-12px) } }
+}
+
+/* ===== Fotos da entrada (galeria na página do restaurante) ===== */
+.galeria { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: .8rem; margin: .6rem 0 }
+.galeria figure { margin: 0 }
+.galeria .abre-foto { display: block; border-radius: 12px; overflow: hidden; cursor: zoom-in; position: relative }
+.selo-tempo { position: absolute; top: 8px; left: 8px; display: inline-flex; align-items: center; gap: .3rem; padding: .2rem .6rem; border-radius: 999px; background: rgba(20, 24, 31, .78); color: #fff; font-size: .8rem; font-weight: 700 }
+.selo-tempo .icone { width: 14px; height: 14px }
+.galeria img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; transition: transform .2s }
+.galeria .abre-foto:hover img { transform: scale(1.04) }
+.galeria figcaption { margin-top: .3rem; font-size: .85rem }
+.galeria figcaption .link-mini { min-height: 32px; font-size: .85rem }
+#dlg-foto img { display: block; width: 100%; max-height: 70vh; object-fit: contain; border-radius: 12px; background: var(--claro) }
+
+/* ===== Painel do restaurante (para quem administra) ===== */
+.painel-dono { margin: 0 0 1.2rem; padding: 1.2rem 1.4rem; border: 2px solid var(--menta-t); border-radius: var(--raio); background: var(--card) }
+.painel-topo { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: .8rem }
+.painel-topo h2 { margin: .1rem 0 0 }
+.painel-topo .meta { display: flex; align-items: center; gap: .4rem; margin: 0; font-weight: 700 }
+.painel-topo .acoes { margin: 0 }
+.painel-numeros { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: .8rem; margin: 1rem 0 }
+.painel-numeros p { margin: 0; padding: .8rem 1rem; border-radius: 12px; background: var(--claro) }
+.painel-numeros b { display: block; color: var(--azul); font-size: 1.6rem; line-height: 1.1 }
+.painel-numeros span { color: var(--suave); font-size: .92rem }
+.painel-dono h3 { margin: .6rem 0 .4rem; font-size: 1rem }
+.painel-perfis { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: .4rem 1rem; margin: 0; padding: 0; list-style: none }
+.painel-perfis li { display: flex; justify-content: space-between; align-items: center; gap: .6rem; padding: .35rem 0; border-bottom: 1px solid var(--borda) }
+.painel-perfis .ind { white-space: nowrap }
+
+/* Janela "Entrar" (templates/_entrar.html) */
+#dlg-entrar { max-width: 440px }
+#dlg-entrar h2 { margin-top: 0 }
+.entrar-links { display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; margin: .8rem 0 .2rem }

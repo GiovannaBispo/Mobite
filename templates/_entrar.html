@@ -1,0 +1,19 @@
+{% comment %}Janela "Entrar" para quem ainda não entrou na conta: entra sem sair da página.
+Abre pelo "Entrar" do topo e quando a pessoa tenta favoritar, esconder, avaliar ou confirmar.
+Sem JavaScript, os links continuam levando à página de login. O código está em static/js/comum.js (seção 11).{% endcomment %}
+<dialog id="dlg-entrar" aria-labelledby="entrar-titulo">
+  <form id="form-entrar" class="form-conta" method="post" action="{% url 'account_login' %}" data-depois="{% url 'manifest' %}">
+    {% csrf_token %}
+    <h2 id="entrar-titulo">Entrar</h2>
+    <p id="entrar-motivo" class="meta" hidden></p>
+    <p><label for="entrar-email">E-mail</label><input id="entrar-email" name="login" type="email" autocomplete="email" required></p>
+    <p><label for="entrar-senha">Senha</label><input id="entrar-senha" name="password" type="password" autocomplete="current-password" required></p>
+    <p id="entrar-erro" class="erro" role="alert"></p>
+    <p class="entrar-links">
+      <a href="{% url 'account_signup' %}" data-com-next>Criar conta</a>
+      <a href="{% url 'account_reset_password' %}">Esqueci a senha</a>
+      {% if GOOGLE_ATIVO %}<a href="{% url 'account_login' %}" data-com-next data-pagina>Entrar com o Google</a>{% endif %}
+    </p>
+    <div class="acoes"><button class="btn" type="submit">Entrar</button><button class="btn sec" type="button" data-fechar-entrar>Cancelar</button></div>
+  </form>
+</dialog>

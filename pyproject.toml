@@ -1,0 +1,9 @@
+[tool.pylint.main]
+ignore = [".venv", "migrations"]
+
+[tool.pylint.format]
+max-line-length = 120
+
+[tool.pylint."messages control"]
+disable = ["missing-module-docstring", "missing-class-docstring", "missing-function-docstring", "import-error",
+           "too-few-public-methods", "no-member", "too-many-locals", "too-many-arguments", "too-many-positional-arguments"]

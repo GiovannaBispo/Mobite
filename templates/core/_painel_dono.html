@@ -1,0 +1,22 @@
+{% load mobite %}
+{% for p in paineis %}{% with r=p.r %}
+<section class="painel-dono" aria-labelledby="painel-{{ r.pk }}">
+  <div class="painel-topo">
+    <div><p class="meta">{% icone "store" %} Seu restaurante</p>
+      <h2 id="painel-{{ r.pk }}">{{ r.nome }}</h2></div>
+    <div class="acoes">
+      <a class="btn" href="{% url 'detalhes' r.pk %}">Ver página</a>
+      {% if p.abertas %}<a class="btn sec" href="{% url 'detalhes' r.pk %}#pendencias">{% icone "message-square-reply" %} Responder pendências</a>{% endif %}
+      <a class="btn sec" href="{% url 'editar_dados' r.pk %}">{% icone "pencil" %} Telefone e horário</a>
+    </div>
+  </div>
+  <div class="painel-numeros">
+    <p><b>{{ p.consultas }}</b><span>pessoa{{ p.consultas|pluralize }} viram a página nos últimos 30 dias</span></p>
+    <p><b>{{ p.avaliacoes }}</b><span>avaliaç{{ p.avaliacoes|pluralize:"ão,ões" }} nos últimos 30 dias</span></p>
+    <p><b>{{ p.abertas|length }}</b><span>pendência{{ p.abertas|length|pluralize }} aberta{{ p.abertas|length|pluralize }}{% if p.abertas %}: {% for a in p.abertas %}{{ a.item.nome|lower }}{% if not forloop.last %}, {% endif %}{% endfor %}{% endif %}</span></p>
+    <p><b>{% if p.assinatura %}Ativa{% else %}Inativa{% endif %}</b><span>assinatura{% if p.assinatura and p.assinatura_fim %} até {{ p.assinatura_fim|date:"d/m" }}{% elif not p.assinatura %} · <a href="mailto:{{ CFG.CONTATO_EMAIL }}">falar com a equipe</a>{% endif %}</span></p>
+  </div>
+  <h3>Como o lugar aparece para cada perfil</h3>
+  <ul class="painel-perfis">{% for nome, css in p.resultados %}<li><span>{{ nome }}</span>{% indicador css %}</li>{% endfor %}</ul>
+</section>
+{% endwith %}{% endfor %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% load static %}
+{% block titulo %}Configurações{% endblock %}
+{% block conteudo %}
+<section data-page="configuracoes">
+  <h1>Configurações</h1>
+  <div class="cfg-grupo"><h2>Aparência</h2>
+    <div class="cfg-linha"><span>Tema: <b id="tema-val"></b></span><button class="btn sec" data-cfg="tema">Alternar claro/escuro</button></div>
+    <div class="cfg-linha"><span>Tamanho da fonte: <b id="fonte-val"></b></span>
+      <span class="acoes"><button class="btn sec" data-cfg="menos" aria-label="Diminuir fonte">A−</button><button class="btn sec" data-cfg="padrao">Restaurar</button><button class="btn sec" data-cfg="mais" aria-label="Aumentar fonte">A+</button></span></div></div>
+  <div class="cfg-grupo"><h2>Acessibilidade da interface</h2>
+    <div class="cfg-linha"><label for="p-contraste">Alto contraste</label><input id="p-contraste" type="checkbox" data-pref="contraste"></div>
+    <div class="cfg-linha"><label for="p-anim">Reduzir animações</label><input id="p-anim" type="checkbox" data-pref="anim"></div></div>
+  <div class="cfg-grupo"><h2>Preferências</h2>
+    <div class="cfg-linha"><label for="p-prio">Priorizar o meu perfil na ordem das listas</label><input id="p-prio" type="checkbox" data-pref="prio"></div>
+    <div class="cfg-linha"><label for="p-datas">Mostrar há quantos dias foi verificado nos cards</label><input id="p-datas" type="checkbox" data-pref="datas"></div></div>
+  <div class="cfg-grupo"><h2>Precisa de ajuda?</h2>
+    <p>Fale com a equipe: <a href="mailto:{{ CFG.CONTATO_EMAIL }}">{{ CFG.CONTATO_EMAIL }}</a></p>
+    <a class="btn" href="mailto:{{ CFG.CONTATO_EMAIL }}?subject=Ajuda%20com%20o%20MoBite">Entrar em contato</a></div>
+</section>
+{% endblock %}

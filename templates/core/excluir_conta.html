@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block titulo %}Excluir conta{% endblock %}
+{% block conteudo %}
+<section>
+  <h1>Excluir minha conta</h1>
+  <form method="post" class="caixa">{% csrf_token %}
+    <p>Vamos apagar seu e-mail, senha, apelido, favoritos e lugares escondidos.</p>
+    <p>Suas avaliações continuam no app, sem o seu nome. Se quiser apagá-las também, exclua antes em <a href="{% url 'avaliacoes' %}">Minhas avaliações</a>.</p>
+    <label class="check"><input type="checkbox" name="confirmo" value="sim" required> Entendi e quero excluir a minha conta.</label>
+    <div class="acoes"><button class="btn perigo">Excluir conta</button><a class="btn sec" href="{% url 'perfil' %}">Cancelar</a></div>
+  </form>
+</section>
+{% endblock %}

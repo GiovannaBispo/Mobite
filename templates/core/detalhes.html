@@ -1,0 +1,108 @@
+{% extends "base.html" %}{% load static mobite %}
+{% block titulo %}{{ r.nome }}{% endblock %}
+{% block css_extra %}<link rel="stylesheet" href="{% static 'vendor/leaflet/leaflet.css' %}">{% endblock %}
+{% block conteudo %}
+<section data-page="detalhes">
+<div id="det" data-id="{{ r.pk }}" data-lat="{{ r.latitude|stringformat:'f' }}" data-lng="{{ r.longitude|stringformat:'f' }}" data-nome="{{ r.nome }}">
+  <figure class="foto-det"><img class="foto grande" src="{% url 'fachada' r.pk %}" alt=""></figure>
+  <h1>{{ r.nome }}{% if r.demonstracao %} <small class="demo">demonstração</small>{% endif %}</h1>
+  <p class="meta">{% if r.endereco %}{% icone "map-pin" %} {{ r.endereco }} · {% endif %}<span class="dist">distância indisponível</span>{% if r.horario %} · {% icone "clock" %} {{ r.horario }}{% endif %}{% if r.telefone %} · {{ r.telefone }}{% endif %}</p>
+  <div class="acoes">
+    <a class="btn" href="{% url 'avaliar' r.pk %}" id="abrir-aval">Avaliar acessibilidade</a>
+    <form method="post" action="{% url 'preferencia' r.pk %}" class="form-ic">{% csrf_token %}<input type="hidden" name="tipo" value="FAVORITO">
+      <button class="btn sec {% if pref == 'FAVORITO' %}on{% endif %}" data-a="fav" data-id="{{ r.pk }}" aria-pressed="{% if pref == 'FAVORITO' %}true{% else %}false{% endif %}">{% icone "heart" "cheio-se-on" %} <span class="txt-fav">{% if pref == 'FAVORITO' %}Favoritado{% else %}Favoritar{% endif %}</span></button></form>
+    <a class="btn sec" href="https://www.google.com/maps/dir/?api=1&amp;destination={{ r.latitude|stringformat:'f' }},{{ r.longitude|stringformat:'f' }}" target="_blank" rel="noopener">{% icone "navigation" %} Como chegar</a>
+  </div>
+
+  <h2>Acessibilidade</h2>
+  {% include "core/_perfil_sel.html" with compacto=True %}
+  {{ resultados_json|json_script:"resultados-det" }}
+  <p id="res-det">Escolha seu perfil acima para ver se funciona para você.</p>
+  <p class="meta" id="motivo-det" hidden></p>
+  {% for z in zonas %}
+  <h3 class="zona">{{ z.nome }}</h3>
+  <ul class="lista-crit">{% for l in z.linhas %}
+    <li class="crit" id="item-{{ l.item.codigo }}" data-codigo="{{ l.item.codigo }}">
+      <span>{{ l.item.nome }} <small class="tag-perfil" hidden></small></span>
+      {% indicador l.estado True l.rotulo %}
+      <small class="verificacao">{% if l.duvida %}Antes: {{ l.duvida.antes }}, confirmado por {{ l.duvida.apoio }} pessoas · {{ l.duvida.dias|ha_dias|capfirst }}, 1 pessoa respondeu {{ l.duvida.novo }}{% elif l.dias is not None %}Verificado {{ l.dias|ha_dias }}{% if l.s.confirmacoes %} · {{ l.s.confirmacoes }} confirmaç{{ l.s.confirmacoes|pluralize:"ão,ões" }}{% endif %}{% if l.desatualizado %} · <b>desatualizado</b>{% endif %}{% else %}Sem respostas{% endif %}</small>
+      <div class="crit-acoes">
+        {% if l.s.tem_informacao %}<form method="post" action="{% url 'confirmar' r.pk l.item.codigo %}" class="form-confirmar">{% csrf_token %}
+          <button class="btn sec mini" {% if l.confirmei %}disabled{% endif %}>{% icone "check" %} {% if l.confirmei %}Você confirmou{% elif l.duvida %}Continua igual ({{ l.duvida.antes }}){% else %}Continua igual{% endif %}<span class="sr"> – {{ l.item.nome }}</span></button></form>{% endif %}
+        {% if l.avaliacao_origem and user.is_authenticated %}<a class="link-mini" href="{% url 'denunciar' 'avaliacao' l.avaliacao_origem %}">{% icone "flag" %} Informação errada?</a>{% endif %}
+        {% if responsavel and assinatura %}<a class="link-mini" href="{% url 'responder' r.pk l.item.codigo %}">{% icone "message-square-reply" %} {% if l.resposta_rest %}Editar resposta{% else %}Responder{% endif %}</a>{% endif %}
+      </div>
+      {% if l.resposta_rest %}<div class="resposta-rest"><b>{% icone "store" %} Resposta do restaurante</b> <span class="meta">({{ l.resposta_rest.data|ha_dias }})</span>
+        <p>{{ l.resposta_rest.texto }}</p>
+        {% if user.is_authenticated %}<a class="link-mini" href="{% url 'denunciar' 'resposta' l.resposta_rest.pk %}">{% icone "flag" %} Denunciar resposta</a>{% endif %}</div>{% endif %}
+    </li>{% endfor %}
+  </ul>
+  {% endfor %}
+
+  <h2>Fotos da entrada{% if total_fotos %} ({{ total_fotos }}){% endif %}</h2>
+  {% if galeria %}
+  <div class="galeria">{% for g in galeria %}
+    <figure>
+      <a href="{{ g.f.arquivo.url }}" class="abre-foto" data-legenda="Enviada do local {{ g.f.data_envio|ha_dias }}"><img src="{{ g.f.arquivo.url }}" alt="{{ g.alt }}" loading="lazy">
+        <span class="selo-tempo" aria-hidden="true">{% icone "clock" %} {{ g.f.data_envio|ha_dias|capfirst }}</span></a>
+      <figcaption class="meta">Enviada do local {{ g.f.data_envio|ha_dias }}{% if user.is_authenticated %} · <a class="link-mini" href="{% url 'denunciar' 'foto' g.f.pk %}">{% icone "flag" %} Não é daqui?</a>{% endif %}</figcaption>
+    </figure>{% endfor %}
+  </div>
+  {% if total_fotos > galeria|length %}<p class="meta">Mostrando as {{ galeria|length }} mais recentes.</p>{% endif %}
+  {% else %}<p class="meta">Ainda sem fotos. Esteve lá? Mande uma quando avaliar.</p>{% endif %}
+
+  <h2 id="pendencias">Pendências</h2>
+  {% if abertas or resolvidas %}
+    {% if abertas %}<h3 class="zona">Abertas ({{ abertas|length }})</h3>
+    <ul class="pendencias">{% for p in abertas %}<li>{% forma "bar" %} <span><b>{{ p.item.nome }}</b> <span class="meta">– aberta {{ p.dias_desde|ha_dias }}</span>
+      {% if p.resposta_rest %}<br><span class="meta">Resposta do restaurante: “{{ p.resposta_rest.texto|truncatechars:140 }}”</span>{% endif %}</span></li>{% endfor %}</ul>{% endif %}
+    {% if resolvidas %}<h3 class="zona">Resolvidas ({{ resolvidas|length }})</h3>
+    <ul class="pendencias">{% for p in resolvidas %}<li>{% forma "ok" %} <span><b>{{ p.item.nome }}</b> <span class="meta">– resolvida {{ p.dias_quando|ha_dias }} ({{ p.como }})</span></span></li>{% endfor %}</ul>{% endif %}
+  {% else %}<p class="meta">Nenhuma pendência registrada.</p>{% endif %}
+
+  <h2>Quem já foi ({{ contribuintes }})</h2>
+  <p class="meta">{{ contribuintes }} pessoa{{ contribuintes|pluralize }} já avali{{ contribuintes|pluralize:"ou,aram" }} este lugar.</p>
+  {% if publicos %}<p class="chips">{% for apelido, selo in publicos %}<span class="chip selo">{% icone "user-round" %} {{ apelido }} · {{ selo }}</span>{% endfor %}</p>{% endif %}
+
+  <h2>Atendimento</h2>
+  <p>{% if n_atend %}{% estrelas media %} {{ media|nota }} <span class="meta">({{ n_atend }} avaliaç{{ n_atend|pluralize:"ão,ões" }})</span>{% else %}Ainda sem avaliações de atendimento.{% endif %}</p>
+
+  <h2>Localização</h2><div class="mapa-caixa"><div id="mapa-mini" role="img" aria-label="Mapa com a localização de {{ r.nome }}"></div>{% include "core/_zoom.html" %}</div>
+
+  {% if user.is_staff and r.demonstracao %}
+  <form method="post" action="{% url 'mover_demo' r.pk %}" class="caixa caixa-equipe" id="form-mover">{% csrf_token %}
+    <p><b>{% icone "shield-check" %} Equipe – restaurante de demonstração</b><br>
+    <span class="meta">Para testar a foto aqui, traga este restaurante fictício para perto de você.</span></p>
+    <input type="hidden" name="lat"><input type="hidden" name="lon">
+    <button class="btn sec">{% icone "locate-fixed" %} Trazer este restaurante para onde estou</button>
+  </form>
+  {% endif %}
+  <div class="caixa caixa-resp">
+    {% if responsavel %}
+      <p><b>Você é responsável por este restaurante.</b> Assinatura: {% if assinatura %}ativa{% else %}inativa{% endif %}.</p>
+      {% if not assinatura %}<p class="meta">Para responder às avaliações, ative a assinatura mensal com a equipe: <a href="mailto:{{ CFG.CONTATO_EMAIL }}">{{ CFG.CONTATO_EMAIL }}</a>.</p>{% endif %}
+      <p><a class="btn sec" href="{% url 'editar_dados' r.pk %}">{% icone "pencil" %} Editar telefone e horário</a></p>
+    {% elif reivindicacao and reivindicacao.status == "PENDENTE" %}
+      <p>{% icone "clock" %} Seu pedido para administrar esta página está em análise.</p>
+    {% else %}
+      <p><b>É dono ou gerente deste restaurante?</b> Reivindique a página para responder às avaliações.</p>
+      <p><a class="btn sec" href="{% url 'reivindicar' r.pk %}">{% icone "store" %} Reivindicar esta página</a></p>
+    {% endif %}
+  </div>
+</div>
+</section>
+
+<!-- ===== FOTO AMPLIADA ===== -->
+<dialog id="dlg-foto" aria-label="Foto da entrada"><img src="" alt=""><p class="meta"></p>
+  <div class="acoes"><button type="button" class="btn sec" data-fechar-foto>Fechar</button></div></dialog>
+{% if user.is_authenticated %}
+<!-- ===== JANELA DE AVALIAÇÃO ===== -->
+<dialog id="dlg" aria-labelledby="titulo-aval">{% include "core/_form_avaliacao.html" with modal=True %}</dialog>
+{% endif %}
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'vendor/leaflet/leaflet.js' %}"></script>
+<script src="{% static 'js/mapa.js' %}"></script>
+<script src="{% static 'js/lista.js' %}"></script>
+<script src="{% static 'js/detalhes.js' %}"></script>
+{% endblock %}

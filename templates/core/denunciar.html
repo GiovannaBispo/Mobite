@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% load mobite %}
+{% block titulo %}Denunciar{% endblock %}
+{% block voltar %}<a id="voltar" class="btn sec voltar" href="{% url 'detalhes' r.pk %}">{% icone "arrow-left" %} Voltar ao restaurante</a>{% endblock %}
+{% block conteudo %}
+<section>
+  <h1>Denunciar {% if tipo == "foto" %}foto{% elif tipo == "resposta" %}resposta do restaurante{% else %}informação{% endif %} – {{ r.nome }}</h1>
+  <form method="post" class="caixa">{% csrf_token %}
+    <fieldset><legend>{{ form.motivo.label }}</legend>
+      {% for opcao in form.motivo %}<label class="check">{{ opcao.tag }} {{ opcao.choice_label }}</label><br>{% endfor %}
+      {% for e in form.motivo.errors %}<p class="erro">{{ e }}</p>{% endfor %}</fieldset>
+    <label for="{{ form.descricao.id_for_label }}">{{ form.descricao.label }}</label>{{ form.descricao }}
+    <p class="meta">A equipe vai analisar.</p>
+    <div class="acoes"><button class="btn">Enviar denúncia</button><a class="btn sec" href="{% url 'detalhes' r.pk %}">Cancelar</a></div>
+  </form>
+</section>
+{% endblock %}

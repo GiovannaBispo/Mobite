@@ -1,0 +1,19 @@
+{% load mobite %}{% with r=c.r %}
+<article class="card" data-id="{{ r.pk }}" data-nome="{{ r.nome }}" data-end="{{ r.endereco }}" data-url="{% url 'detalhes' r.pk %}"
+  data-busca="{{ r.nome }} {{ r.endereco }}" data-lat="{{ r.latitude|stringformat:'f' }}"
+  data-lng="{{ r.longitude|stringformat:'f' }}" data-nota="{{ c.media|default_if_none:0|stringformat:'f' }}"
+  data-res="{{ c.resultados }}" data-motivos="{{ c.motivos }}" data-itens-ok="{{ c.itens_ok }}"
+  data-fav="{{ c.fav|yesno:'1,0' }}">
+  <img class="foto" src="{% url 'fachada' r.pk %}" alt="" loading="lazy" width="400" height="240">
+  <div class="corpo"><h3><a class="link-card" href="{% url 'detalhes' r.pk %}">{{ r.nome }}</a>{% if r.demonstracao %} <small class="demo">demonstração</small>{% endif %}</h3>
+  <p class="meta">{% if r.endereco %}{{ r.endereco }} · {% endif %}<span class="dist">distância indisponível</span></p>
+  <p class="res-perfil"><span class="meta">Escolha seu perfil para ver a resposta de acessibilidade.</span></p>
+  {% if c.n_fotos %}<p class="meta">{% icone "camera" %} {{ c.n_fotos }} foto{{ c.n_fotos|pluralize }} da entrada</p>{% endif %}
+  <p class="meta">{% if c.dias is not None %}<span class="data-verif">Verificado {{ c.dias|ha_dias }} · </span>{% endif %}{% icone "star" "cheia est" %} {% if c.n_atend %}{{ c.media|nota }} atendimento{% else %}sem avaliação de atendimento{% endif %}</p>
+  <div class="acoes"><a class="btn" href="{% url 'detalhes' r.pk %}">Ver detalhes</a>
+  <form method="post" action="{% url 'preferencia' r.pk %}" class="form-ic">{% csrf_token %}<input type="hidden" name="tipo" value="FAVORITO"><input type="hidden" name="next" value="{{ request.get_full_path }}">
+    <button class="ic {% if c.fav %}on{% endif %}" data-a="fav" data-id="{{ r.pk }}" aria-pressed="{{ c.fav|yesno:'true,false' }}" aria-label="{% if c.fav %}Remover dos favoritos{% else %}Favoritar{% endif %}: {{ r.nome }}">{% icone "heart" "cheio-se-on" %}</button></form>
+  <form method="post" action="{% url 'preferencia' r.pk %}" class="form-ic">{% csrf_token %}<input type="hidden" name="tipo" value="ESCONDIDO"><input type="hidden" name="next" value="{{ request.get_full_path }}">
+    {% if c.escondido %}<button class="ic" data-a="esc" data-id="{{ r.pk }}" aria-label="Mostrar de novo na minha lista: {{ r.nome }}" title="Mostrar de novo">{% icone "undo-2" %}</button>
+    {% else %}<button class="ic" data-a="esc" data-id="{{ r.pk }}" aria-label="Esconder da minha lista: {{ r.nome }}" title="Esconder da minha lista">{% icone "eye-off" %}</button>{% endif %}</form>
+  </div></div></article>{% endwith %}

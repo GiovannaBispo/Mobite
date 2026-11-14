@@ -1,0 +1,24 @@
+{% extends "base.html" %}{% load mobite %}
+{% block titulo %}Obrigado{% endblock %}
+{% block voltar %}{% endblock %}
+{% block conteudo %}
+<section class="obrigado">
+  <div class="hero">
+    <h1>Obrigado pela contribuição!</h1>
+    <p>{% if info.n %}Sua avaliação de <b>{{ r.nome }}</b> já está no ar.{% endif %}
+      {% if info.foto %} A foto também.{% endif %}
+      {% if info.estrelas %} Você deu {{ info.estrelas }} estrela{{ info.estrelas|pluralize }} ao atendimento.{% endif %}</p>
+    <p class="meta">Você já fez {{ total }} avaliaç{{ total|pluralize:"ão,ões" }}.</p>
+    <div class="acoes"><a class="btn" href="{% url 'detalhes' r.pk %}">Ver o restaurante</a><a class="btn sec" href="{% url 'inicio' %}">Avaliar outro lugar</a></div>
+  </div>
+  {% if mostrar_anuncio and anuncios_obrigado %}
+  <!-- Bloco de anúncio para quem está logado, de vez em quando (RN06.3). Escolhido no aparelho pelo perfil. -->
+  <aside class="bloco-anuncio" aria-label="Publicidade" hidden>
+    <span class="selo-pub">Publicidade</span>
+    {% for a in anuncios_obrigado %}<a class="anuncio" href="{% url 'anuncio' a.pk %}" rel="sponsored noopener" target="_blank" data-perfis="{% for p in a.perfis.all %}{{ p.codigo }}{% if not forloop.last %},{% endif %}{% endfor %}" hidden>
+      {% if a.imagem %}<img src="{{ a.imagem.url }}" alt="" width="64" height="64">{% endif %}
+      <span><b>{{ a.titulo }}</b></span></a>{% endfor %}
+  </aside>
+  {% endif %}
+</section>
+{% endblock %}

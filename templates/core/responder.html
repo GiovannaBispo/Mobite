@@ -1,0 +1,19 @@
+{% extends "base.html" %}{% load mobite %}
+{% block titulo %}Responder – {{ r.nome }}{% endblock %}
+{% block voltar %}<a id="voltar" class="btn sec voltar" href="{% url 'detalhes' r.pk %}#item-{{ s.item.codigo }}">{% icone "arrow-left" %} Voltar ao restaurante</a>{% endblock %}
+{% block conteudo %}
+<section>
+  <h1>Responder sobre “{{ s.item.nome }}”</h1>
+  <p>Hoje o item aparece como: {% if s.resposta == "SIM" %}{% indicador "ok" True %}{% elif s.resposta == "NAO" %}{% indicador "bar" True %}{% else %}{% indicador "nd" True %}{% endif %}</p>
+  {% if sem_assinatura %}
+    <div class="caixa"><p>Para responder, ative a assinatura mensal com a equipe: <a href="mailto:{{ CFG.CONTATO_EMAIL }}">{{ CFG.CONTATO_EMAIL }}</a>.</p></div>
+  {% else %}
+  <form method="post" class="caixa">{% csrf_token %}
+    <label for="{{ form.texto.id_for_label }}">{{ form.texto.label }}</label>{{ form.texto }}
+    {% for e in form.texto.errors %}<p class="erro">{{ e }}</p>{% endfor %}
+    <p class="meta">Sua resposta aparece junto do item.</p>
+    <div class="acoes"><button class="btn">{% if atual %}Salvar resposta{% else %}Publicar resposta{% endif %}</button><a class="btn sec" href="{% url 'detalhes' r.pk %}">Cancelar</a></div>
+  </form>
+  {% endif %}
+</section>
+{% endblock %}

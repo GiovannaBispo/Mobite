@@ -1,0 +1,52 @@
+{% extends "base.html" %}{% load static mobite %}
+{% block titulo %}Meu perfil{% endblock %}
+{% block conteudo %}
+<section data-page="perfil">
+  <h1>Meu perfil</h1>
+
+  <!-- Perfil de mobilidade: salvo só no navegador (RN01.1). Este formulário não é enviado ao servidor. -->
+  <form id="form-perfil" class="caixa">
+    <fieldset><legend>Perfil de mobilidade</legend>
+      <p class="meta">Salvo só neste aparelho. Não fica na sua conta.</p>
+      <div id="needs">
+        {% for p in dados_publicos.perfis %}
+        <label class="check perfil-opcao"><input type="radio" name="perfil" value="{{ p.codigo }}"><span><b>{{ p.nome }}</b><br><span class="meta">{{ p.descricao }}</span></span></label>
+        {% endfor %}
+        <label class="check perfil-opcao"><input type="radio" name="perfil" value=""><span><b>Nenhum</b><br><span class="meta">Ver os lugares sem resposta personalizada</span></span></label>
+      </div>
+    </fieldset>
+    <button class="btn">Salvar perfil</button>
+  </form>
+
+  {% if user.is_authenticated %}
+  <h2>Minha conta</h2>
+  <form method="post" class="caixa">{% csrf_token %}
+    <p><b>E-mail:</b> {{ user.email }}</p>
+    <p class="meta">Você fez {{ total }} avaliaç{{ total|pluralize:"ão,ões" }} · selo <b>{{ selo.label }}</b> · suas avaliações ajudaram <b>{{ ajudadas }} pessoa{{ ajudadas|pluralize }}</b> (<a href="{% url 'avaliacoes' %}">ver por lugar</a>).</p>
+    {{ form.non_field_errors }}
+    <label for="{{ form.apelido.id_for_label }}">{{ form.apelido.label }}</label>{{ form.apelido }}
+    <p class="meta">{{ form.apelido.help_text }}</p>{% for e in form.apelido.errors %}<p class="erro">{{ e }}</p>{% endfor %}
+    <label class="check">{{ form.aparecer_publicamente }} {{ form.aparecer_publicamente.label }}</label>
+    <div class="acoes"><button class="btn">Salvar conta</button>
+      <a class="btn sec" href="{% url 'account_change_password' %}">Alterar senha</a>
+      <a class="btn sec" href="{% url 'account_email' %}">E-mails</a></div>
+  </form>
+
+  {% if meus_restaurantes %}<h2>Restaurantes que eu administro</h2>
+  <div class="chips">{% for r in meus_restaurantes %}<a class="chip" href="{% url 'detalhes' r.pk %}">{% icone "store" %} {{ r.nome }}</a>{% endfor %}</div>{% endif %}
+
+  <h2>Meus favoritos</h2>
+  <div class="chips" id="perfil-favs">{% for r in favs %}<a class="chip" href="{% url 'detalhes' r.pk %}">{% icone "heart" "cheia" %} {{ r.nome }}</a>{% empty %}Nenhum favorito ainda.{% endfor %}</div>
+
+  <h2>Excluir conta</h2>
+  <p>Suas avaliações continuam no app, sem o seu nome.</p>
+  <p><a class="btn sec perigo" href="{% url 'excluir_conta' %}">{% icone "trash-2" %} Excluir minha conta</a></p>
+  {% else %}
+  <div class="caixa">
+    <p><b>Entre para avaliar, favoritar e esconder lugares.</b></p>
+    <div class="acoes"><a class="btn" href="{% url 'account_login' %}?next={% url 'perfil' %}">Entrar</a><a class="btn sec" href="{% url 'account_signup' %}?next={% url 'perfil' %}">Criar conta</a></div>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}
+{% block scripts %}<script src="{% static 'js/perfil.js' %}"></script>{% endblock %}

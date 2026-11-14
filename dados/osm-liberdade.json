@@ -1,0 +1,978 @@
+{
+ "fonte": "© colaboradores do OpenStreetMap (ODbL), https://www.openstreetmap.org/copyright",
+ "area": "perto=-23.5612,-46.6366,500",
+ "consultado_em": "14/11/2026 20:45",
+ "elementos": [
+  {
+   "type": "node",
+   "id": 1004651487,
+   "lat": -23.558273,
+   "lon": -46.6372529,
+   "tags": {
+    "addr:city": "São Paulo",
+    "addr:housenumber": "638",
+    "addr:postcode": "01502-001",
+    "addr:street": "Avenida da Liberdade",
+    "addr:suburb": "Liberdade",
+    "amenity": "fast_food",
+    "cuisine": "italian",
+    "name": "Ragazzo",
+    "opening_hours": "09:00-02:00",
+    "source": "picture"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2961589538,
+   "lat": -23.5576837,
+   "lon": -46.6356457,
+   "tags": {
+    "addr:housenumber": "75",
+    "addr:street": "Rua Tomás Gonzaga",
+    "amenity": "restaurant",
+    "cuisine": "asian",
+    "name": "Porque Sim",
+    "source": "survey"
+   }
+  },
+  {
+   "type": "node",
+   "id": 2961589539,
+   "lat": -23.5576858,
+   "lon": -46.6355505,
+   "tags": {
+    "amenity": "restaurant",
+    "cuisine": "chinese",
+    "name": "Jardim Meio Hectare"
+   }
+  },
+  {
+   "type": "node",
+   "id": 3449922200,
+   "lat": -23.5621432,
+   "lon": -46.6389122,
+   "tags": {
+    "addr:city": "São Paulo",
+    "addr:housenumber": "1088",
+    "addr:postcode": "01502-001",
+    "addr:street": "Avenida da Liberdade",
+    "amenity": "restaurant",
+    "cuisine": "regional;grill",
+    "name": "Liberdade Grill"
+   }
+  },
+  {
+   "type": "node",
+   "id": 3449922201,
+   "lat": -23.5594552,
+   "lon": -46.6378987,
+   "tags": {
+    "addr:city": "São Paulo",
+    "addr:housenumber": "776",
+    "addr:postcode": "01502-001",
+    "addr:street": "Avenida da Liberdade",
+    "amenity": "fast_food",
+    "cuisine": "regional",
+    "name": "Lanchonete e Restaurante Maracangalha",
+    "restaurant": "yes"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4138893291,
+   "lat": -23.5578577,
+   "lon": -46.6356874,
+   "tags": {
+    "addr:housenumber": "66",
+    "addr:street": "Rua Tomás Gonzaga",
+    "amenity": "restaurant",
+    "check_date": "2024-09-21",
+    "cuisine": "japanese",
+    "name": "Restaurante Yamaga",
+    "name:ja": "山鹿レストラン"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4398192524,
+   "lat": -23.55768,
+   "lon": -46.635899,
+   "tags": {
+    "addr:city": "São Paulo",
+    "addr:housenumber": "51",
+    "addr:postcode": "01506-020",
+    "addr:street": "Rua Tomás Gonzaga",
+    "addr:suburb": "Liberdade",
+    "amenity": "restaurant",
+    "cuisine": "ramen",
+    "name": "Lamen Kazu",
+    "opening_hours": "Mo-Sa 11:00-15:00,18:00-22:30; Su,PH 11:00-15:00,18:00-21:00",
+    "phone": "+55 11 3277-4286",
+    "website": "https://lamenkazu.com.br/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4398192525,
+   "lat": -23.5578539,
+   "lon": -46.6355684,
+   "tags": {
+    "addr:housenumber": "84",
+    "addr:postcode": "01506-020",
+    "addr:street": "Rua Tomás Gonzaga",
+    "addr:suburb": "Liberdade",
+    "amenity": "restaurant",
+    "check_date": "2024-07-27",
+    "cuisine": "japanese",
+    "name": "Izakaya Kazu",
+    "opening_hours": "Tu-Sa 11:00-15:00,18:00-22:30; Su 11:00-15:00,18:00-21:00",
+    "website": "http://www.espacokazu.com.br/izakaya/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4398192526,
+   "lat": -23.5578544,
+   "lon": -46.6355054,
+   "tags": {
+    "addr:housenumber": "90",
+    "addr:postcode": "01506-020",
+    "addr:street": "Rua Tomás Gonzaga",
+    "addr:suburb": "Liberdade",
+    "amenity": "restaurant",
+    "cuisine": "udon",
+    "name": "Meu Udon",
+    "opening_hours": "Tu-Sa 11:00-15:00,18:00-22:30; Su 11:00-15:00,18:00-21:00"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4428077221,
+   "lat": -23.5636925,
+   "lon": -46.6326856,
+   "tags": {
+    "amenity": "restaurant",
+    "name": "Multibar"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4453413625,
+   "lat": -23.5583299,
+   "lon": -46.6330561,
+   "tags": {
+    "amenity": "restaurant",
+    "cuisine": "udon",
+    "name": "Udon Nakamura",
+    "wheelchair": "yes"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4756120622,
+   "lat": -23.5582855,
+   "lon": -46.6359355,
+   "tags": {
+    "addr:housenumber": "89",
+    "addr:postcode": "01507-001",
+    "addr:street": "Rua Barão de Iguape",
+    "amenity": "restaurant",
+    "cuisine": "japanese",
+    "name": "Izakaya Issa",
+    "opening_hours": "Mo-Fr 18:30-23:30; Sa-Su 11:30-15:30, 18:30-23:30",
+    "phone": "+55 11 3208 8819"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4810078920,
+   "lat": -23.5571562,
+   "lon": -46.6357991,
+   "tags": {
+    "addr:city": "São Paulo",
+    "addr:housenumber": "9",
+    "addr:postcode": "01506-010",
+    "addr:street": "Rua Américo de Campos",
+    "addr:suburb": "Liberdade",
+    "amenity": "restaurant",
+    "cuisine": "japanese",
+    "name": "Nandemoyá"
+   }
+  },
+  {
+   "type": "node",
+   "id": 4884207321,
+   "lat": -23.5580567,
+   "lon": -46.6367737,
+   "tags": {
+    "amenity": "fast_food",
+    "brand": "Burger King",
+    "brand:wikidata": "Q177054",
+    "brand:wikipedia": "en:Burger King",
+    "cuisine": "burger",
+    "name": "Burger King",
+    "name:ja": "バーガーキング",
+    "name:pt": "Burger King",
+    "takeaway": "yes"
+   }
+  },
+  {
+   "type": "node",
+   "id": 5000612822,
+   "lat": -23.5602197,
+   "lon": -46.6326571,
+   "tags": {
+    "amenity": "fast_food",
+    "name": "Estrela da Sorte"
+   }
+  },
+  {
+   "type": "node",
+   "id": 5016836028,
+   "lat": -23.5598233,
+   "lon": -46.6347856,
+   "tags": {
+    "amenity": "restaurant",
+    "cuisine": "japanese",
+    "name": "Restaurant New Mimatsu",
+    "name:pt": "Restaurant New Mimatsu"
+   }
+  },
+  {
+   "type": "node",
+   "id": 5016836126,
+   "lat": -23.5590569,
+   "lon": -46.6348666,
+   "tags": {
+    "amenity": "restaurant",
+    "cuisine": "japanese",
+    "name": "Go Go Bento",
+    "name:pt": "Go Go Bento"
+   }
+  },
+  {
+   "type": "node",
+   "id": 5016836224,
+   "lat": -23.5599576,
+   "lon": -46.6350391,
+   "tags": {
+    "amenity": "fast_food",
+    "name": "Esquina",
+    "name:pt": "Esquina"
+   }
+  },
+  {
+   "type": "node",
+   "id": 5225071321,
+   "lat": -23.5572554,
+   "lon": -46.6346601,
+   "tags": {
+    "addr:housenumber": "128",
+    "addr:street": "Rua Doutor Américo de Campos",
+    "amenity": "restaurant",
+    "cuisine": "korean",
+    "name": "Mi-Gá Korean Grill",
+    "opening_hours": "Mo-Su 11:00-16:00",
+    "phone": "+55 11 32711461"
+   }
+  },
+  {
+   "type": "node",
+   "id": 5288478793,
+   "lat": -23.5651746,
+   "lon": -46.6357678,
+   "tags": {
+    "amenity": "fast_food",
+    "brand": "Subway",
+    "brand:wikidata": "Q244457",
+    "brand:wikipedia": "en:Subway (restaurant)",
+    "cuisine": "sandwich",
+    "name": "Subway",
+    "takeaway": "yes"
+   }
+  },
+  {
+   "type": "node",
+   "id": 5371381151,
+   "lat": -23.5619189,
+   "lon": -46.6389164,
+   "tags": {
+    "amenity": "fast_food",
+    "brand": "Habib's",
+    "brand:wikidata": "Q2504930",
+    "brand:wikipedia": "en:Habib's",
+    "cuisine": "middle_eastern",
+    "name": "Habib's",
+    "opening_hours": "24/7",
+    "takeaway": "yes"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6463734785,
+   "lat": -23.5572203,
+   "lon": -46.6348948,
+   "tags": {
+    "amenity": "restaurant",
+    "name": "Restaurante Yamamoto",
+    "name:ja": "レストラン やまもと"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6557948387,
+   "lat": -23.5597844,
+   "lon": -46.6350703,
+   "tags": {
+    "addr:housenumber": "466",
+    "addr:street": "Rua Galvão Bueno",
+    "amenity": "restaurant",
+    "cuisine": "ramen",
+    "name": "Lamen ASKA"
+   }
+  },
+  {
+   "type": "node",
+   "id": 6693647942,
+   "lat": -23.5595672,
+   "lon": -46.6347333,
+   "tags": {
+    "amenity": "restaurant",
+    "cuisine": "japanese",
+    "level": "-1",
+    "name": "Nikkey Restaurante",
+    "source": "survey"
+   }
+  },
+  {
+   "type": "node",
+   "id": 8929671171,
+   "lat": -23.5596598,
+   "lon": -46.6348135,
+   "tags": {
+    "addr:city": "São Paulo",
+    "addr:housenumber": "451",
+    "addr:postcode": "01506-000",
+    "addr:street": "Rua Galvão Bueno",
+    "addr:suburb": "Liberdade",
+    "air_conditioning": "yes",
+    "amenity": "restaurant",
+    "bar": "no",
+    "check_date": "2026-05-23",
+    "cuisine": "asian;japanese",
+    "name": "Nandemoya",
+    "opening_hours": "Mo-Fr 11:30-15:00; Sa, Su 11:30-16:00",
+    "outdoor_seating": "no",
+    "payment:credit_cards": "yes",
+    "payment:debit_cards": "yes",
+    "phone": "+551132074822",
+    "smoking": "no",
+    "takeaway": "yes",
+    "toilets": "yes"
+   }
+  },
+  {
+   "type": "node",
+   "id": 9500700517,
+   "lat": -23.5581558,
+   "lon": -46.6332706,
+   "tags": {
+    "addr:city": "São Paulo",
+    "addr:housenumber": "373",
+    "addr:postcode": "01507-001",
+    "addr:street": "Rua Barão de Iguape",
+    "addr:suburb": "Liberdade",
+    "alcohol": "yes",
+    "amenity": "restaurant",
+    "brewery": "yes",
+    "cuisine": "thai;dessert",
+    "delivery": "yes",
+    "diet:vegan": "yes",
+    "diet:vegetarian": "yes",
+    "dinner": "yes",
+    "drink:beer": "yes",
+    "drink:distilled": "yes",
+    "drink:tea": "yes",
+    "indoor_seating": "yes",
+    "lunch": "yes",
+    "name": "Thai E-San Restaurante Tailandês",
+    "name:en": "Thai E-San Restaurant",
+    "opening_hours": "We-Mo 11:00-16:00, 18:00-21:30",
+    "outdoor_seating": "no",
+    "parking": "yes",
+    "parking:fee": "no",
+    "parking:wheelchair": "no",
+    "payment:credit_cards": "yes",
+    "payment:debit_cards": "yes",
+    "phone": "+55 11 95459 6188",
+    "takeaway": "yes",
+    "toilets": "yes",
+    "website": "https://www.facebook.com/Thai-E-san-Bar-E-Resturante-809788969218725/",
+    "wheelchair": "no"
+   }
+  },
+  {
+   "type": "node",
+   "id": 10200456717,
+   "lat": -23.5578944,
+   "lon": -46.6361906,
+   "tags": {
+    "addr:housenumber": "22",
+    "addr:street": "Rua Thomáz Gonzaga",
+    "amenity": "restaurant",
+    "contact:instagram": "kidoairaku_japanesecuisine",
+    "cuisine": "japanese",
+    "email": "administracao@kidoairaku.com.br",
+    "name": "Kidoairaku",
+    "opening_hours": "Tu-Sa 11:30-14:00, 18:30-21:30; Su 11:30-15:30",
+    "phone": "+55 11 3132 6083",
+    "website:menu": "https://menu.getinapp.com.br/store/3P4x3rPn/1",
+    "website:orders": "https://linktr.ee/Kidoairaku_delivery"
+   }
+  },
+  {
+   "type": "node",
+   "id": 10982980805,
+   "lat": -23.5576752,
+   "lon": -46.6362278,
+   "tags": {
+    "addr:city": "São Paulo",
+    "addr:housenumber": "45B",
+    "addr:postcode": "01506-020",
+    "addr:street": "Rua Thomáz Gonzaga",
+    "addr:suburb": "Liberdade",
+    "amenity": "restaurant",
+    "name": "Kyoto"
+   }
+  },
+  {
+   "type": "node",
+   "id": 10983230643,
+   "lat": -23.5578449,
+   "lon": -46.6354376,
+   "tags": {
+    "addr:housenumber": "98",
+    "addr:street": "Rua Tomás Gonzaga",
+    "amenity": "restaurant",
+    "check_date": "2023-06-17",
+    "cuisine": "japanese",
+    "diet:vegan": "yes",
+    "diet:vegetarian": "yes",
+    "name": "Sushi Yassuh Liberdade"
+   }
+  },
+  {
+   "type": "node",
+   "id": 11079535077,
+   "lat": -23.5576694,
+   "lon": -46.6357341,
+   "tags": {
+    "addr:housenumber": "65",
+    "addr:street": "Rua Tomás Gonzaga",
+    "amenity": "restaurant",
+    "check_date": "2023-07-27",
+    "cuisine": "japanese",
+    "name": "Komei"
+   }
+  },
+  {
+   "type": "node",
+   "id": 11782092634,
+   "lat": -23.5576767,
+   "lon": -46.6361078,
+   "tags": {
+    "addr:city": "São Paulo",
+    "addr:housenumber": "45E",
+    "addr:postcode": "01506-020",
+    "addr:street": "Rua Thomáz Gonzaga",
+    "addr:suburb": "Liberdade",
+    "amenity": "restaurant",
+    "cuisine": "ramen",
+    "name": "Ikkousha Tonkotsu Ramen"
+   }
+  },
+  {
+   "type": "node",
+   "id": 11782092635,
+   "lat": -23.5576767,
+   "lon": -46.6360688,
+   "tags": {
+    "addr:city": "São Paulo",
+    "addr:housenumber": "45F",
+    "addr:postcode": "01506-020",
+    "addr:street": "Rua Thomáz Gonzaga",
+    "addr:suburb": "Liberdade",
+    "amenity": "restaurant",
+    "cuisine": "japanese",
+    "name": "Sushi Kenzo Liberdade"
+   }
+  },
+  {
+   "type": "node",
+   "id": 11782093597,
+   "lat": -23.5576756,
+   "lon": -46.6361841,
+   "tags": {
+    "addr:city": "São Paulo",
+    "addr:housenumber": "45C",
+    "addr:postcode": "01506-020",
+    "addr:street": "Rua Thomáz Gonzaga",
+    "addr:suburb": "Liberdade",
+    "alcohol": "yes",
+    "amenity": "restaurant",
+    "brewery": "yes",
+    "cuisine": "indian;dessert",
+    "delivery": "yes",
+    "diet:halal": "yes",
+    "diet:vegan": "yes",
+    "diet:vegetarian": "yes",
+    "dinner": "yes",
+    "dog": "yes",
+    "drink:beer": "yes",
+    "drink:coffee": "yes",
+    "drink:distilled": "yes",
+    "drink:tea": "yes",
+    "indoor_seating": "yes",
+    "lunch": "yes",
+    "name": "Curry's Culinária Indiana",
+    "opening_hours": "Tu-Fr 11:00-16:00, 18:00-21:30; Sa 11:00-16:00, 18:00-22:00; Su 11:00-18:00",
+    "outdoor_seating": "yes",
+    "parking": "yes",
+    "parking:fee": "no",
+    "parking:wheelchair": "no",
+    "payment:credit_cards": "yes",
+    "payment:debit_cards": "yes",
+    "phone": "+55 11 3132 0111",
+    "reservation": "yes",
+    "takeaway": "yes",
+    "toilets": "yes",
+    "wheelchair": "yes"
+   }
+  },
+  {
+   "type": "node",
+   "id": 11782093598,
+   "lat": -23.5576762,
+   "lon": -46.6361472,
+   "tags": {
+    "addr:city": "São Paulo",
+    "addr:housenumber": "45D",
+    "addr:postcode": "01506-020",
+    "addr:street": "Rua Thomáz Gonzaga",
+    "addr:suburb": "Liberdade",
+    "alcohol": "yes",
+    "amenity": "restaurant",
+    "bar": "yes",
+    "brewery": "yes",
+    "changing_table": "yes",
+    "cuisine": "thai;dessert",
+    "delivery": "yes",
+    "diet:vegan": "yes",
+    "diet:vegetarian": "yes",
+    "dinner": "yes",
+    "drink:beer": "yes",
+    "drink:cocktail": "yes",
+    "drink:distilled": "yes",
+    "drink:tea": "yes",
+    "indoor_seating": "yes",
+    "internet_access": "yes",
+    "internet_access:fee": "no",
+    "lgbtq": "welcome",
+    "lunch": "yes",
+    "name": "Restaurante Thai Chef",
+    "opening_hours": "Mo-Fr 11:30-15:30, 18:30-21:45; Sa 11:30-15:45, 18:30-21:45; Su 11:30-16:45",
+    "outdoor_seating": "no",
+    "parking:wheelchair": "no",
+    "payment:credit_cards": "yes",
+    "payment:debit_cards": "yes",
+    "phone": "+55 11 95999 4884",
+    "reservation": "yes",
+    "takeaway": "yes",
+    "toilets": "yes",
+    "wheelchair": "yes"
+   }
+  },
+  {
+   "type": "node",
+   "id": 11782113561,
+   "lat": -23.5582494,
+   "lon": -46.6366447,
+   "tags": {
+    "addr:city": "São Paulo",
+    "addr:housenumber": "25",
+    "addr:postcode": "01502-001",
+    "addr:street": "Rua Barão de Iguape",
+    "addr:suburb": "Liberdade",
+    "alcohol": "yes",
+    "amenity": "restaurant",
+    "brewery": "yes",
+    "changing_table": "yes",
+    "check_date": "2026-07-25",
+    "cuisine": "filipino;asian;dessert",
+    "delivery": "yes",
+    "diet:vegan": "yes",
+    "diet:vegetarian": "yes",
+    "dinner": "yes",
+    "drink:beer": "yes",
+    "drink:cocktail": "yes",
+    "drink:coffee": "yes",
+    "drink:distilled": "yes",
+    "drink:wine": "yes",
+    "indoor_seating": "yes",
+    "lgbtq": "welcome",
+    "lunch": "yes",
+    "mobile": "+55 11 99429 0648",
+    "name": "Filipinas Restaurante Oriental",
+    "opening_hours": "Mo 11:30-20:30; Tu-Th 10:30-20:30; Fr 10:30-21:00; Sa 10:30-21:30; Su 10:30-22:00",
+    "outdoor_seating": "no",
+    "parking": "yes",
+    "parking:fee": "no",
+    "parking:wheelchair": "no",
+    "payment:credit_cards": "yes",
+    "payment:debit_cards": "yes",
+    "phone": "+55 11 93416 1947",
+    "reservation": "yes",
+    "self_service": "yes",
+    "takeaway": "yes",
+    "toilets": "yes",
+    "website": "https://www.facebook.com/profile.php?id=100094451743954",
+    "wheelchair": "no"
+   }
+  },
+  {
+   "type": "node",
+   "id": 11782218911,
+   "lat": -23.5584377,
+   "lon": -46.6363872,
+   "tags": {
+    "amenity": "restaurant",
+    "cuisine": "chinese",
+    "name": "Lao Bei Jing Tong Huo Guo",
+    "name:zh": "老北京铜火锅"
+   }
+  },
+  {
+   "type": "node",
+   "id": 11782245396,
+   "lat": -23.5584211,
+   "lon": -46.6364956,
+   "tags": {
+    "amenity": "restaurant",
+    "cuisine": "beef_soup",
+    "name": "Sopa de Carne do Senhor Li",
+    "name:zh": "李老爷牛肉汤"
+   }
+  },
+  {
+   "type": "node",
+   "id": 11782248449,
+   "lat": -23.5582752,
+   "lon": -46.6364645,
+   "tags": {
+    "amenity": "restaurant",
+    "cuisine": "yakisoba",
+    "name": "Yakissoba Guioza House",
+    "name:zh": "炒面吉奥扎之家"
+   }
+  },
+  {
+   "type": "node",
+   "id": 12137166095,
+   "lat": -23.5572034,
+   "lon": -46.6344004,
+   "tags": {
+    "addr:city": "São Paulo",
+    "addr:housenumber": "154",
+    "addr:postcode": "01506-010",
+    "addr:street": "Rua Doutor Américo de Campos",
+    "addr:suburb": "Liberdade",
+    "alcohol": "yes",
+    "alt_name": "Thai Food Restaurant",
+    "amenity": "restaurant",
+    "brewery": "yes",
+    "cuisine": "thai;dessert",
+    "delivery": "yes",
+    "diet:vegetarian": "yes",
+    "dinner": "yes",
+    "drink:beer": "yes",
+    "female_owner": "yes",
+    "highchair": "yes",
+    "indoor_seating": "yes",
+    "internet_access": "yes",
+    "internet_access:fee": "no",
+    "lgbtq": "welcome",
+    "lunch": "yes",
+    "name": "Thai Food Restaurante",
+    "opening_hours": "Th-Sa 11:00-15:30, 18:00-21:30; Su 11:00-15:30, 18:00-21:00; Mo-Tu 11:00-15:30, 18:00-21:30",
+    "outdoor_seating": "no",
+    "parking:wheelchair": "no",
+    "payment:credit_cards": "yes",
+    "payment:debit_cards": "yes",
+    "phone": "+55 11 98394 6988",
+    "reservation": "yes",
+    "self_service": "yes",
+    "short_name": "Thai Food",
+    "takeaway": "yes",
+    "toilets": "yes",
+    "website": "https://www.facebook.com/Tailandesa/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 12189755067,
+   "lat": -23.5578456,
+   "lon": -46.6357885,
+   "tags": {
+    "addr:housenumber": "62",
+    "addr:street": "Rua Tomás Gonzaga",
+    "amenity": "restaurant",
+    "bar": "yes",
+    "brewery": "various",
+    "check_date": "2024-09-21",
+    "cuisine": "japanese",
+    "name": "HINODÊ",
+    "name:pt": "HINODÊ",
+    "opening_hours": "Mo,We-Fr 12:00-14:30,18:30-21:30; Tu off; Sa 12:00-15:30,18:30-21:30; Su 12:00-15:30,18:30-21:00",
+    "payment:cash": "yes",
+    "payment:credit_cards": "yes",
+    "payment:debit_cards": "yes",
+    "source": "survey",
+    "takeaway": "yes",
+    "toilets": "yes",
+    "toilets:wheelchair": "no",
+    "wheelchair": "no"
+   }
+  },
+  {
+   "type": "node",
+   "id": 12207957903,
+   "lat": -23.5572532,
+   "lon": -46.6350385,
+   "tags": {
+    "amenity": "fast_food",
+    "cuisine": "juice",
+    "name": "Bom Suco",
+    "shop": "beverages"
+   }
+  },
+  {
+   "type": "node",
+   "id": 12250569803,
+   "lat": -23.561218,
+   "lon": -46.634725,
+   "tags": {
+    "amenity": "restaurant",
+    "name": "Nagoia"
+   }
+  },
+  {
+   "type": "node",
+   "id": 12444706101,
+   "lat": -23.5584436,
+   "lon": -46.6354444,
+   "tags": {
+    "addr:housenumber": "158",
+    "addr:street": "Rua Barão de Iguape",
+    "amenity": "restaurant",
+    "cuisine": "japanese",
+    "name": "Takoyaki8",
+    "opening_hours": "We-Sa, Su 11:00-19:00, 11:30-19:00",
+    "website": "https://takoyaki8.com.br",
+    "website:menu": "https://takoyaki8.com.br/cardapio/"
+   }
+  },
+  {
+   "type": "node",
+   "id": 12989988983,
+   "lat": -23.5581329,
+   "lon": -46.6368236,
+   "tags": {
+    "amenity": "restaurant",
+    "cuisine": "japanese",
+    "name": "Sushi Amigo"
+   }
+  },
+  {
+   "type": "node",
+   "id": 13141283269,
+   "lat": -23.5588741,
+   "lon": -46.6330212,
+   "tags": {
+    "addr:city": "São Paulo",
+    "addr:housenumber": "668",
+    "addr:street": "Rua Conselheiro Furtado",
+    "addr:suburb": "Liberdade",
+    "amenity": "restaurant",
+    "cuisine": "japanese;chinese",
+    "name": "Yakisoba Lucky Liberdade",
+    "opening_hours": "Mo-Sa 11:00-21:40; Su 11:00-20:45"
+   }
+  },
+  {
+   "type": "node",
+   "id": 13278114003,
+   "lat": -23.5606331,
+   "lon": -46.6380929,
+   "tags": {
+    "amenity": "fast_food",
+    "brand": "Subway",
+    "brand:wikidata": "Q244457",
+    "cuisine": "sandwich",
+    "name": "Subway",
+    "takeaway": "yes"
+   }
+  },
+  {
+   "type": "node",
+   "id": 13471408610,
+   "lat": -23.5632116,
+   "lon": -46.638787,
+   "tags": {
+    "amenity": "restaurant",
+    "bar": "yes",
+    "check_date": "2026-01-20",
+    "diet:vegetarian": "yes",
+    "name": "Divino's Vergueiro",
+    "wheelchair": "limited"
+   }
+  },
+  {
+   "type": "node",
+   "id": 13895030581,
+   "lat": -23.5578346,
+   "lon": -46.6360477,
+   "tags": {
+    "addr:floor": "EG",
+    "addr:housenumber": "36",
+    "addr:street": "Rua Thomáz Gonzaga",
+    "air_conditioning": "yes",
+    "amenity": "restaurant",
+    "bar": "no",
+    "brewery": "yes",
+    "check_date": "2026-05-29",
+    "cuisine": "sushi",
+    "level": "0",
+    "name": "Fuji",
+    "outdoor_seating": "no",
+    "payment:cash": "yes",
+    "payment:credit_cards": "yes",
+    "payment:debit_cards": "yes",
+    "smoking": "no",
+    "toilets": "yes",
+    "wheelchair": "yes"
+   }
+  },
+  {
+   "type": "node",
+   "id": 14050067335,
+   "lat": -23.5617001,
+   "lon": -46.6362039,
+   "tags": {
+    "amenity": "restaurant",
+    "check_date": "2026-07-25",
+    "cuisine": "chinese",
+    "name": "Lucky",
+    "wheelchair": "no"
+   }
+  },
+  {
+   "type": "way",
+   "id": 431397800,
+   "center": {
+    "lat": -23.5588416,
+    "lon": -46.6341744
+   },
+   "tags": {
+    "addr:city": "São Paulo",
+    "addr:housenumber": "622",
+    "addr:postcode": "01507-000",
+    "addr:street": "Rua da Glória",
+    "addr:suburb": "Liberdade",
+    "amenity": "restaurant",
+    "building": "yes",
+    "cuisine": "chinese",
+    "delivery": "yes",
+    "height": "7.46",
+    "name": "Rong He",
+    "opening_hours": "Mo-Fr 11:30-15:00, 18:00-22:30; Sa-Su 11:30-22:30",
+    "outdoor_seating": "no",
+    "smoking": "no",
+    "source": "pmsp;local knowledge;restaurant website",
+    "takeaway": "yes"
+   }
+  },
+  {
+   "type": "way",
+   "id": 431413727,
+   "center": {
+    "lat": -23.5593189,
+    "lon": -46.6379514
+   },
+   "tags": {
+    "addr:city": "São Paulo",
+    "addr:housenumber": "774",
+    "addr:postcode": "01502-001",
+    "addr:street": "Avenida da Liberdade",
+    "amenity": "fast_food",
+    "brand": "McDonald's",
+    "brand:wikidata": "Q38076",
+    "brand:wikipedia": "en:McDonald's",
+    "building": "yes",
+    "cuisine": "burger",
+    "height": "6.323",
+    "name": "McDonald's",
+    "opening_hours": "07:00-23:00",
+    "source": "pmsp",
+    "takeaway": "yes"
+   }
+  },
+  {
+   "type": "way",
+   "id": 1150798260,
+   "center": {
+    "lat": -23.5584091,
+    "lon": -46.6341298
+   },
+   "tags": {
+    "addr:city": "São Paulo",
+    "addr:housenumber": "319",
+    "addr:street": "Rua Barão de Iguape",
+    "amenity": "fast_food",
+    "name": "Lanchonete Sucesso",
+    "source": "survey",
+    "wheelchair": "limited"
+   }
+  },
+  {
+   "type": "way",
+   "id": 1568049124,
+   "center": {
+    "lat": -23.5638751,
+    "lon": -46.638854
+   },
+   "tags": {
+    "addr:city": "São Paulo",
+    "addr:housenumber": "205",
+    "addr:postcode": "01504-001",
+    "addr:street": "Rua Vergueiro",
+    "addr:suburb": "Liberdade",
+    "amenity": "fast_food",
+    "brand": "McDonald's",
+    "brand:wikidata": "Q38076",
+    "cuisine": "burger",
+    "drive_through": "no",
+    "layer": "1",
+    "name": "McDonald's",
+    "takeaway": "yes"
+   }
+  }
+ ],
+ "retirados": [
+  {
+   "type": "way",
+   "id": 544532950,
+   "nome": "Break externo da Atento",
+   "motivo": "área de descanso de funcionários de uma empresa, não é restaurante aberto ao público"
+  }
+ ]
+}

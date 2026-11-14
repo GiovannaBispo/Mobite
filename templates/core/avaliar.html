@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% load static mobite %}
+{% block titulo %}Avaliar {{ r.nome }}{% endblock %}
+{% block voltar %}<a id="voltar" class="btn sec voltar" href="{% url 'detalhes' r.pk %}">{% icone "arrow-left" %} Voltar ao restaurante</a>{% endblock %}
+{% block conteudo %}
+<section class="pagina-aval" id="det" data-id="{{ r.pk }}">{% include "core/_form_avaliacao.html" %}</section>
+{% endblock %}
+{% block scripts %}<script src="{% static 'js/detalhes.js' %}"></script>{% endblock %}

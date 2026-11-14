@@ -1,0 +1,9 @@
+{% load static %}<link rel="stylesheet" href="{% static 'css/carregando.css' %}">
+<script>/* animação de carregamento: continua a da página anterior{% if abertura %} ou abre a primeira página da visita{% endif %} (static/js/carregando.js) */
+  try { const h = document.documentElement, s = sessionStorage, t = +s.getItem("mobite_carregando") || 0, agora = Date.now();
+    if (t && agora - t < 30000) { h.classList.add("carregando-ativo"); h.style.setProperty("--cg-atraso", (t - agora) + "ms") }
+    {% if abertura %}else if (!s.getItem("mobite_aberto")) h.classList.add("carregando-ativo", "carregando-splash");
+    s.setItem("mobite_aberto", "1");{% endif %}
+    window.cgDesde = performance.now() } catch (e) { }
+</script>
+<script src="{% static 'js/carregando.js' %}" defer></script>

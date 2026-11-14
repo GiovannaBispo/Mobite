@@ -1,0 +1,16 @@
+{% extends "admin/base.html" %}{% load static %}
+{% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | Equipe MoBite{% endblock %}
+{% block extrastyle %}{{ block.super }}
+<link rel="icon" href="{% static 'img/favicon.ico' %}" sizes="48x48">
+<link rel="stylesheet" href="{% static 'css/admin-mobite.css' %}">
+{% include "_carregando_head.html" %}
+{% endblock %}
+{% block branding %}
+<a class="marca-admin" href="{% url 'admin:index' %}">
+  <img class="logo-claro" src="{% static 'img/logo-mobite.png' %}" alt="MoBite" height="40">
+  <img class="logo-escuro" src="{% static 'img/logo-mobite-escuro.png' %}" alt="MoBite" height="40">
+  <span>Painel da equipe</span>
+</a>
+{% endblock %}
+{% block nav-global %}{% endblock %}
+{% block footer %}{{ block.super }}{% include "_carregando.html" %}{% endblock %}

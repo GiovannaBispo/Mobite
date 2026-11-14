@@ -1,0 +1,44 @@
+{% extends "base.html" %}{% load mobite %}
+{% block titulo %}Sobre o MoBite{% endblock %}
+{% block conteudo %}
+<section data-page="sobre">
+  <h1>Sobre o MoBite</h1>
+  <p class="lead"><em>Um mapa colaborativo para responder uma pergunta só: dá para chegar, entrar e usar o banheiro deste restaurante com a minha mobilidade?</em></p>
+  <p>A lei já garante o acesso. O que falta é a informação chegar antes da pessoa sair de casa. Hoje isso se resolve por telefone, por foto do Google ou descobrindo na porta.</p>
+  <h2>Para quem é</h2>
+  <p>Cinco perfis, e a resposta de cada lugar muda conforme o que você escolhe lá em cima, em “Do que você precisa?”:</p>
+  <ul><li>Cadeira de rodas.</li><li>Muleta, andador ou bengala.</li><li>Carrinho de bebê.</li><li>Dificuldade com escada.</li><li>Assento largo ou sem braço.</li><li>E quem acompanha essas pessoas: família, cuidador, amigo que escolhe o lugar.</li></ul>
+  <h2>Como funciona</h2>
+  <ol><li><b>Você escolhe o seu perfil.</b> Fica guardado só no seu aparelho, porque é informação de saúde. Ninguém precisa contar isso para a gente.</li>
+  <li><b>A lista mostra os lugares mais perto primeiro.</b> Cada um já vem com a resposta para o seu perfil: funciona, funciona com ressalva, tem barreira ou falta informação.</li>
+  <li><b>Quem vai confere até cinco itens.</b> Perguntas de sim, não ou não sei, sem trena e sem laudo. Dá para pular qualquer uma. É assim que o bairro fica completo.</li></ol>
+  <p class="legenda">{% indicador "ok" %} {% indicador "warn" %} {% indicador "bar" %} {% indicador "nd" %}</p>
+  <h2>O que a gente confere</h2>
+  <p>Dez itens, retirados dos pontos da ABNT NBR 9050 que dá para conferir a olho. Nem mais, nem menos, para a avaliação não virar um formulário que ninguém termina.</p>
+  <p><b>Chegada</b></p><ul><li>Vaga reservada.</li></ul>
+  <p><b>Entrada</b></p><ul><li>Entrada sem degrau.</li><li>Porta larga.</li><li>Corrimão.</li></ul>
+  <p><b>Interior</b></p><ul><li>Circulação entre mesas.</li><li>Mesa que encaixa.</li><li>Tudo no térreo.</li><li>Cadeira sem braço.</li></ul>
+  <p><b>Banheiro</b></p><ul><li>Banheiro acessível.</li><li>Banheiro sem escada.</li></ul>
+  <h2>Duas notas que não se misturam</h2>
+  <p><b>Acessibilidade é fato.</b></p><p>Vem dos dez itens conferidos no lugar, com há quantos dias foi visto, e muda de resposta conforme o perfil de quem está olhando.</p>
+  <p><b>Estrela é atendimento.</b></p><p>Opinião sobre como as pessoas do lugar trataram você. Fica num bloco à parte e não entra no resultado de acessibilidade.</p>
+  <h2>Foto da entrada</h2>
+  <p>Quem está na porta do restaurante pode mandar uma foto da entrada. Para isso, o app pede a localização só na hora do envio e não guarda. Da foto, apagamos as informações escondidas no arquivo, como o local e o modelo do celular.</p>
+  <h2>Comunidade e direito de resposta</h2>
+  <p>Consultar não pede conta. Avaliar, favoritar e esconder um lugar da sua lista, sim: é o que evita que um lugar seja premiado ou afundado por avaliação em massa. Por padrão, as avaliações são anônimas; quem quiser aparece com um apelido e o selo de avaliador.</p>
+  <p>O restaurante pode responder a um item, e a resposta aparece junto dele. Serve para os dois lados: se a rampa foi feita depois da avaliação, é o lugar que avisa; e a gente não fica publicando algo que o dono não teve chance de corrigir. O restaurante não apaga nem edita avaliação.</p>
+  <h2>Quanto custa</h2>
+  <p>Para quem usa, nada, sempre. Cobrar de quem já é excluído contradiz o projeto. Quem paga é o restaurante: a assinatura mensal libera a resposta aos itens avaliados. E o restaurante nunca paga por nada que mude o resultado ou a posição dele na lista.</p>
+  <p>Para manter o app no ar, mostramos anúncios: uma faixa no rodapé para quem não entrou na conta e, de vez em quando, um anúncio depois de avaliar. Nada de pop-up, som ou vídeo. O anúncio é escolhido no seu aparelho, e o seu perfil não sai dele.</p>
+  <h2>Equipe</h2>
+  <div class="grid equipe">
+    <div class="card corpo"><div class="avatar" aria-hidden="true">JG</div><h3>José Henrique Guimarães Galvão Silva</h3><p class="meta">Produto e desenvolvimento</p></div>
+    <div class="card corpo"><div class="avatar" aria-hidden="true">GB</div><h3>Giovanna Bispo Da Silva</h3><p class="meta">Front-end e design</p></div>
+    <div class="card corpo"><div class="avatar" aria-hidden="true">GP</div><h3>Gabriella Pereira Rodrigues</h3><p class="meta">Qualidade e testes</p></div>
+    <div class="card corpo"><div class="avatar" aria-hidden="true">DA</div><h3>Diego Azevedo Dias Inacio</h3><p class="meta">Dados e pesquisa</p></div>
+  </div>
+  <h2>Perguntas frequentes</h2>
+  <p>Veja as respostas na página <a href="{% url 'faq' %}">Perguntas frequentes</a>.</p>
+  <p><b>Contato:</b> <a href="mailto:{{ CFG.CONTATO_EMAIL }}">{{ CFG.CONTATO_EMAIL }}</a></p>
+</section>
+{% endblock %}

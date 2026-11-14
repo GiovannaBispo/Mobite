@@ -1,0 +1,30 @@
+{% extends "admin/index.html" %}{% load mobite %}
+{% block content %}
+{% fila_equipe as fila %}
+<div class="para-fazer">
+  <h2>Para fazer agora</h2>
+  <div class="cartoes-fila">
+    <a class="cartao-fila{% if fila.denuncias %} tem{% endif %}" href="{% url 'admin:core_denuncia_changelist' %}?status__exact=PENDENTE">
+      <b>{{ fila.denuncias }}</b><span>denúncia{{ fila.denuncias|pluralize }} para analisar</span></a>
+    <a class="cartao-fila{% if fila.reivindicacoes %} tem{% endif %}" href="{% url 'admin:core_reivindicacao_changelist' %}?status__exact=PENDENTE">
+      <b>{{ fila.reivindicacoes }}</b><span>pedido{{ fila.reivindicacoes|pluralize }} de restaurante para aprovar</span></a>
+    <a class="cartao-fila{% if fila.vencendo %} tem{% endif %}" href="{% url 'admin:core_assinatura_changelist' %}?status__exact=ATIVA">
+      <b>{{ fila.vencendo }}</b><span>assinatura{{ fila.vencendo|pluralize }} vencendo em 7 dias</span></a>
+    <a class="cartao-fila" href="{% url 'admin:core_auditoria_add' %}">
+      <b>+</b><span>Registrar visita do Concierge ({{ fila.sem_auditoria }} restaurante{{ fila.sem_auditoria|pluralize }} sem visita)</span></a>
+  </div>
+</div>
+{% if fila.n_demo or fila.n_anuncios_exemplo %}
+<form class="chave-demo{% if fila.config.mostrar_demonstracao %} ligada{% endif %}" method="post" action="{% url 'admin:alternar_demonstracao' %}">{% csrf_token %}
+  <div>
+    <h2>Restaurantes fictícios</h2>
+    <p>{% if fila.config.mostrar_demonstracao %}<b>Aparecendo no app.</b>{% else %}<b>Escondidos do público.</b>{% endif %}
+      São {{ fila.n_demo }} restaurante{{ fila.n_demo|pluralize }} de demonstração{% if fila.n_anuncios_exemplo %} e {{ fila.n_anuncios_exemplo }} anúncio{{ fila.n_anuncios_exemplo|pluralize }} de exemplo{% endif %}.
+      {% if fila.config.mostrar_demonstracao %}Esconda quando os restaurantes reais já tiverem visita do Concierge.{% else %}Eles continuam guardados, e a equipe ainda abre cada um pelo painel.{% endif %}
+      {% if fila.config.alterado_em %}<br><span class="quando">Última mudança: {{ fila.config.alterado_em|date:"d/m/Y H:i" }}{% if fila.config.alterado_por %}, por {{ fila.config.alterado_por }}{% endif %}.</span>{% endif %}</p>
+  </div>
+  <button type="submit" class="button">{% if fila.config.mostrar_demonstracao %}Esconder do público{% else %}Mostrar no app{% endif %}</button>
+</form>
+{% endif %}
+{{ block.super }}
+{% endblock %}

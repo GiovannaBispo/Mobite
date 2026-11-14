@@ -1,0 +1,10 @@
+# Ambiente e segredos
+.venv/
+.env
+__pycache__/
+*.pyc
+
+# Banco e arquivos enviados ficam fora do Git (fotos têm dados de pessoas)
+db.sqlite3
+media/
+staticfiles/

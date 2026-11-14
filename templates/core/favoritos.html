@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% load static %}
+{% block titulo %}Favoritos{% endblock %}
+{% block conteudo %}
+<section data-page="favoritos">
+  <h1>Favoritos</h1>
+  <div class="grid" id="lista-favs">
+    {% for c in cards %}{% include "core/_card.html" %}{% empty %}<p class="vazio">Você ainda não favoritou nenhum lugar. Use o coração nos cards.</p>{% endfor %}
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}<script src="{% static 'js/lista.js' %}"></script>{% endblock %}

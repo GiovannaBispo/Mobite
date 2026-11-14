@@ -1,0 +1,31 @@
+{% extends "base.html" %}{% load mobite %}
+{% block titulo %}Minhas avaliações{% endblock %}
+{% block conteudo %}
+<section data-page="avaliacoes">
+  <h1>Minhas avaliações</h1>
+  {% if lista %}<div class="caixa ajudadas">{% icone "heart" "cheia" %}
+    <p><b>Suas avaliações ajudaram {{ ajudadas }} pessoa{{ ajudadas|pluralize }}</b></p></div>{% endif %}
+  <div class="grid" id="lista-av">
+    {% for x in lista %}{% with a=x.a %}
+    <article class="card corpo">
+      <h3>{{ a.restaurante.nome }}</h3>
+      <p class="meta">Avaliado em {{ a.data|date:"d/m/Y" }}{% if not a.visivel %} · <b>ocultada pela moderação</b>{% endif %}</p>
+      <p class="ajudou">{% icone "user-round" %} {{ x.ajudou }} pessoa{{ x.ajudou|pluralize }} v{{ x.ajudou|pluralize:"iu,iram" }} este lugar depois da sua avaliação</p>
+      <ul>{% for resp in a.respostas.all %}<li>{{ resp.item.pergunta }} <b>{{ resp.get_resposta_display }}</b></li>{% endfor %}</ul>
+      {% if x.foto %}<p class="meta">{% icone "camera" %} Com foto da entrada{% if not x.foto.visivel %} (ocultada){% endif %}</p>{% endif %}
+      {% if x.atendimento %}<p>Atendimento: {% estrelas x.atendimento.estrelas %}</p>{% endif %}
+      <div class="acoes"><a class="btn sec" href="{% url 'detalhes' a.restaurante.pk %}">Avaliar de novo</a>
+        <form method="post" action="{% url 'excluir_avaliacao' a.pk %}" onsubmit="return confirm('Excluir esta avaliação? O resultado do lugar será recalculado.')">{% csrf_token %}
+          <button class="btn sec">{% icone "trash-2" %} Excluir</button></form></div>
+    </article>{% endwith %}
+    {% empty %}{% if not soltas %}<p class="vazio">Você ainda não avaliou nenhum local.</p>{% endif %}{% endfor %}
+    {% for at in soltas %}
+    <article class="card corpo">
+      <h3>{{ at.restaurante.nome }}</h3>
+      <p class="meta">Avaliado em {{ at.data|date:"d/m/Y" }}</p>
+      <p>Atendimento: {% estrelas at.estrelas %}</p>
+      <div class="acoes"><form method="post" action="{% url 'excluir_atendimento' at.pk %}">{% csrf_token %}<button class="btn sec">{% icone "trash-2" %} Excluir</button></form></div>
+    </article>{% endfor %}
+  </div>
+</section>
+{% endblock %}

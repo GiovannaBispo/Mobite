@@ -1,0 +1,16 @@
+{% load static %}{
+  "name": "MoBite – restaurantes acessíveis",
+  "short_name": "MoBite",
+  "description": "Veja se dá para chegar, entrar e usar o banheiro de um restaurante com a sua mobilidade.",
+  "lang": "pt-BR",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#5fd6a0",
+  "icons": [
+    {"src": "{% static 'img/icone-192.png' %}", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "{% static 'img/icone-512.png' %}", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "{% static 'img/icone-maskable-512.png' %}", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
