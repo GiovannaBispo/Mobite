@@ -71,7 +71,9 @@ for f in dados/osm-*.json; do  # restaurantes reais guardados no PC com importar
 done
 
 echo "4/5 Arquivos do site"
-python manage.py collectstatic --noinput -v 0
+# --clear copia tudo de novo: o unzip pode deixar os arquivos com data mais antiga que a da cópia anterior,
+# e sem ele o collectstatic pula o arquivo achando que não mudou.
+python manage.py collectstatic --noinput --clear -v 0
 
 if [ "$NOVO" = 1 ]; then
   echo "   Criando a demonstração"

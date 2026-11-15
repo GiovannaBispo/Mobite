@@ -2,7 +2,7 @@
 {% block title %}{% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | Equipe MoBite{% endblock %}
 {% block extrastyle %}{{ block.super }}
 <link rel="icon" href="{% static 'img/favicon.ico' %}" sizes="48x48">
-<link rel="stylesheet" href="{% static 'css/admin-mobite.css' %}">
+<link rel="stylesheet" href="{% static 'css/admin-mobite.css' %}?v={{ CFG.VERSAO }}">
 {% include "_carregando_head.html" %}
 {% endblock %}
 {% block branding %}

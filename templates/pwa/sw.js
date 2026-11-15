@@ -16,8 +16,9 @@ const ARQUIVOS = [
   "{% static 'css/carregando.css' %}", "{% static 'js/carregando.js' %}"
 ];
 
+// cache "reload": busca no servidor, não numa cópia antiga guardada pelo navegador
 self.addEventListener("install", e => {
-  e.waitUntil(caches.open(VERSAO).then(c => c.addAll(ARQUIVOS)).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(VERSAO).then(c => c.addAll(ARQUIVOS.map(u => new Request(u, {cache: "reload"})))).then(() => self.skipWaiting()));
 });
 self.addEventListener("activate", e => {
   e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== VERSAO).map(k => caches.delete(k))))
