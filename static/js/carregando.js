@@ -12,6 +12,9 @@
   const texto = t => { const el = document.querySelector("#carregando .cg-texto"); if (el) el.textContent = t };
 
   function ativar() {
+    // Janela aberta (<dialog>) fica numa camada acima de tudo e esconderia a animação. Como a página vai
+    // trocar, ela fecha (o que já foi enviado não se perde).
+    document.querySelectorAll("dialog[open]").forEach(d => d.close());
     h.style.setProperty("--cg-atraso", "0ms");        // começa do início do ciclo
     h.classList.remove("carregando-splash");
     h.classList.add("carregando-ativo");

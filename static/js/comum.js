@@ -207,7 +207,8 @@ $("#form-entrar")?.addEventListener("submit", async e => {
   e.preventDefault();
   const f = e.target, erro = $("#entrar-erro"), botao = $("button[type=submit]", f), dados = new FormData(f);
   dados.set("next", f.dataset.depois);   // resposta leve; quem mostra a página conectada é o recarregar abaixo
-  botao.disabled = true; erro.textContent = "";
+  const rotulo = botao.textContent;
+  botao.disabled = true; botao.textContent = "Entrando…"; erro.textContent = "";
   try {
     const r = await fetch(f.action, { method: "POST", body: dados, credentials: "same-origin" });
     const destino = new URL(r.url).pathname;
@@ -222,5 +223,5 @@ $("#form-entrar")?.addEventListener("submit", async e => {
     erro.textContent = aviso || "E-mail ou senha incorretos.";
   } catch {
     erro.textContent = "Não deu para entrar agora. Confira a conexão e tente de novo.";
-  } finally { botao.disabled = false }
+  } finally { botao.disabled = false; botao.textContent = rotulo }
 });
