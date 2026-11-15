@@ -59,13 +59,12 @@ def fila_equipe():
     """Contagens do "Para fazer agora" do painel da equipe."""
     from datetime import timedelta
 
-    from core.models import (LINK_EXEMPLO, Anuncio, Assinatura, ConfiguracaoSite, Denuncia, Reivindicacao, Restaurante,
-                             StatusAnalise, StatusAssinatura)
+    from core.models import (Assinatura, ConfiguracaoSite, Denuncia, Reivindicacao, Restaurante, StatusAnalise,
+                             StatusAssinatura)
     hoje = timezone.localdate()
     return {
         "config": ConfiguracaoSite.atual(),
         "n_demo": Restaurante.objects.filter(demonstracao=True).count(),
-        "n_anuncios_exemplo": Anuncio.objects.filter(link__startswith=LINK_EXEMPLO).count(),
         "denuncias": Denuncia.objects.filter(status=StatusAnalise.PENDENTE).count(),
         "reivindicacoes": Reivindicacao.objects.filter(status=StatusAnalise.PENDENTE).count(),
         "vencendo": Assinatura.objects.filter(status=StatusAssinatura.ATIVA, data_fim__gte=hoje,

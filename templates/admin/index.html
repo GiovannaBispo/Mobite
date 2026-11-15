@@ -14,12 +14,12 @@
       <b>+</b><span>Registrar visita do Concierge ({{ fila.sem_auditoria }} restaurante{{ fila.sem_auditoria|pluralize }} sem visita)</span></a>
   </div>
 </div>
-{% if fila.n_demo or fila.n_anuncios_exemplo %}
+{% if fila.n_demo %}
 <form class="chave-demo{% if fila.config.mostrar_demonstracao %} ligada{% endif %}" method="post" action="{% url 'admin:alternar_demonstracao' %}">{% csrf_token %}
   <div>
     <h2>Restaurantes fictícios</h2>
     <p>{% if fila.config.mostrar_demonstracao %}<b>Aparecendo no app.</b>{% else %}<b>Escondidos do público.</b>{% endif %}
-      São {{ fila.n_demo }} restaurante{{ fila.n_demo|pluralize }} de demonstração{% if fila.n_anuncios_exemplo %} e {{ fila.n_anuncios_exemplo }} anúncio{{ fila.n_anuncios_exemplo|pluralize }} de exemplo{% endif %}.
+      São {{ fila.n_demo }} restaurante{{ fila.n_demo|pluralize }} de demonstração. Os anúncios continuam aparecendo.
       {% if fila.config.mostrar_demonstracao %}Esconda quando os restaurantes reais já tiverem visita do Concierge.{% else %}Eles continuam guardados, e a equipe ainda abre cada um pelo painel.{% endif %}
       {% if fila.config.alterado_em %}<br><span class="quando">Última mudança: {{ fila.config.alterado_em|date:"d/m/Y H:i" }}{% if fila.config.alterado_por %}, por {{ fila.config.alterado_por }}{% endif %}.</span>{% endif %}</p>
   </div>

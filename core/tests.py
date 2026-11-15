@@ -408,7 +408,7 @@ class EntrarEConfirmacaoTest(TestCase):
 
 
 class ChaveDemonstracaoTest(TestCase):
-    """Botão do painel que mostra ou esconde os restaurantes fictícios (e os anúncios de exemplo) do público."""
+    """Botão do painel que mostra ou esconde os restaurantes fictícios do público (os anúncios continuam)."""
 
     def setUp(self):
         self.demo = Restaurante.objects.create(nome="Fictício da Silva", latitude=-23.56, longitude=-46.63,
@@ -435,7 +435,7 @@ class ChaveDemonstracaoTest(TestCase):
         resp = self.client.get(reverse("inicio"))
         self.assertContains(resp, "Real de Verdade")
         self.assertNotContains(resp, "Fictício da Silva")
-        self.assertNotContains(resp, "Anúncio de exemplo")
+        self.assertContains(resp, "Anúncio de exemplo")
         self.assertEqual(self.client.get(reverse("detalhes", args=[self.demo.pk])).status_code, 404)
         self.assertEqual(self.client.get(reverse("detalhes", args=[self.real.pk])).status_code, 200)
 

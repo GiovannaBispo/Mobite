@@ -617,11 +617,8 @@ class Anuncio(models.Model):
     @classmethod
     def ativos(cls):
         hoje = timezone.localdate()
-        qs = cls.objects.filter(data_inicio__lte=hoje).filter(
+        return cls.objects.filter(data_inicio__lte=hoje).filter(
             models.Q(data_fim__isnull=True) | models.Q(data_fim__gte=hoje)).prefetch_related("perfis")
-        if not ConfiguracaoSite.demonstracao_visivel():  # some junto com os restaurantes fictícios
-            qs = qs.exclude(link__startswith=LINK_EXEMPLO).exclude(restaurante__demonstracao=True)
-        return qs
 
 
 # ---------------------------------------------------------------- equipe
@@ -722,7 +719,7 @@ class ConsultaDiaria(models.Model):  # [fora da UML] base do "pessoas ajudadas" 
 class ConfiguracaoSite(models.Model):  # [fora da UML] chaves que a equipe liga e desliga no painel (uma linha só)
     mostrar_demonstracao = models.BooleanField(
         "mostrar a demonstração", default=True,
-        help_text="Desligado, os restaurantes fictícios e os anúncios de exemplo somem do app para o público.")
+        help_text="Desligado, os restaurantes fictícios somem do app para o público.")
     alterado_por = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL,
                                      related_name="+")
     alterado_em = models.DateTimeField(null=True, blank=True)

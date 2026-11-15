@@ -69,6 +69,13 @@
 
   <h2>Localização</h2><div class="mapa-caixa"><div id="mapa-mini" role="img" aria-label="Mapa com a localização de {{ r.nome }}"></div>{% include "core/_zoom.html" %}</div>
 
+  {% if user.is_staff %}
+  <div class="caixa caixa-equipe">
+    <p><b>{% icone "shield-check" %} Equipe</b><br>
+    <span class="meta">Está no restaurante? Registre a visita do Concierge: o restaurante é atualizado na hora.</span></p>
+    <a class="btn" href="{% url 'admin:core_auditoria_add' %}?restaurante={{ r.pk }}">{% icone "check" %} Registrar visita aqui</a>
+  </div>
+  {% endif %}
   {% if user.is_staff and r.demonstracao %}
   <form method="post" action="{% url 'mover_demo' r.pk %}" class="caixa caixa-equipe" id="form-mover">{% csrf_token %}
     <p><b>{% icone "shield-check" %} Equipe – restaurante de demonstração</b><br>
