@@ -74,6 +74,6 @@
 {% endblock %}
 {% block scripts %}
 <script src="{% static 'vendor/leaflet/leaflet.js' %}"></script>
-<script src="{% static 'js/mapa.js' %}"></script>
-<script src="{% static 'js/lista.js' %}"></script>
+<script src="{% static 'js/mapa.js' %}?v={{ CFG.VERSAO }}"></script>
+<script src="{% static 'js/lista.js' %}?v={{ CFG.VERSAO }}"></script>
 {% endblock %}

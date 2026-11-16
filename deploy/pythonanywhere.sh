@@ -51,10 +51,12 @@ else
   echo "   .env já existe (mantido)"
 fi
 # Senha das contas de teste neste site: sorteada uma vez, diferente da mobite2026 que está no código
+SENHA_NOVA=0
 if ! grep -q '^MOBITE_SENHA_DEMO=.' .env; then
   sed -i '/^MOBITE_SENHA_DEMO=/d' .env
   echo "MOBITE_SENHA_DEMO=mobite-$(python -c "import secrets; print(secrets.token_hex(4))")" >> .env
   echo "   Senha nova sorteada para as contas de teste"
+  SENHA_NOVA=1
 fi
 SENHA_DEMO=$(grep '^MOBITE_SENHA_DEMO=' .env | cut -d= -f2-)
 
@@ -63,7 +65,8 @@ NOVO=0
 
 echo "3/5 Banco de dados"
 python manage.py migrate --noinput
-python manage.py dados_demo --trocar-senha
+# Só quando a senha acabou de ser sorteada. Nas outras atualizações, senha trocada depois continua valendo.
+if [ "$SENHA_NOVA" = 1 ]; then python manage.py dados_demo --trocar-senha; fi
 mkdir -p media
 
 for f in dados/osm-*.json; do  # restaurantes reais guardados no PC com importar_osm --salvar
@@ -106,7 +109,7 @@ else
 fi
 
 echo
-echo "Senha das outras contas de teste neste site: $SENHA_DEMO (guardada em mobite/.env)"
+echo "Senha sorteada para as outras contas de teste: $SENHA_DEMO (guardada em mobite/.env; não vale para conta que teve a senha trocada)"
 echo "Pronto. Na aba Web, confira:"
 echo "  Virtualenv:   $APP/.venv"
 echo "  Static files: /static/ -> $APP/staticfiles"

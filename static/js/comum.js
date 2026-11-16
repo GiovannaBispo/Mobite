@@ -84,17 +84,33 @@ async function buscarCep(cep) {
 }
 
 /* ===== 5. Avisos (toast) ===== */
+const TOAST_MS = 6000;
 function toast(msg, acao, tipo = "ok") {
   const t = $("#toast");
   t.className = "toast-" + tipo;
   t.innerHTML = `${icone(tipo == "erro" ? "triangle-alert" : "circle-check")}<span class="toast-msg">${esc(msg)}</span>`;
   if (acao) { const b = document.createElement("button"); b.className = "btn sec mini"; b.textContent = acao.rotulo; b.onclick = () => { acao.fazer(); t.hidden = true }; $(".toast-msg", t).append(" ", b) }
   const x = document.createElement("button"); x.className = "toast-fechar"; x.setAttribute("aria-label", "Fechar aviso"); x.innerHTML = icone("x");
-  x.onclick = () => t.hidden = true; t.append(x);
+  x.onclick = () => t.hidden = true;
+  const barra = document.createElement("span"); barra.className = "toast-tempo"; barra.setAttribute("aria-hidden", "true");
+  barra.style.animationDuration = TOAST_MS + "ms";
+  t.append(x, barra);
   t.hidden = false;
-  const agendar = () => { clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 6000) };
-  t.onmouseenter = () => clearTimeout(toast.t); t.onmouseleave = agendar; // não some enquanto o mouse estiver em cima
-  agendar();
+  // Some sozinho em 6 s; a barra embaixo vai diminuindo até lá. Com o mouse em cima ou o foco
+  // dentro do aviso, o tempo para (e a barra também).
+  let resta = TOAST_MS, desde = 0;
+  const rodar = () => {
+    clearTimeout(toast.t); desde = Date.now(); t.classList.remove("pausado");
+    toast.t = setTimeout(() => t.hidden = true, resta);
+  };
+  const pausar = () => {
+    if (t.classList.contains("pausado")) return;
+    clearTimeout(toast.t); resta -= Date.now() - desde; t.classList.add("pausado");
+  };
+  t.onmouseenter = t.onfocusin = pausar;
+  t.onmouseleave = () => { if (!t.contains(document.activeElement)) rodar() };
+  t.onfocusout = e => { if (!t.contains(e.relatedTarget) && !t.matches(":hover")) rodar() };
+  rodar();
 }
 
 /* Avisos do servidor: sucesso e informação viram o aviso flutuante (some em 6 s);
@@ -209,19 +225,26 @@ $("#form-entrar")?.addEventListener("submit", async e => {
   dados.set("next", f.dataset.depois);   // resposta leve; quem mostra a página conectada é o recarregar abaixo
   const rotulo = botao.textContent;
   botao.disabled = true; botao.textContent = "Entrando…"; erro.textContent = "";
+  // Conferir a senha leva alguns segundos no servidor: a animação de carregamento aparece por cima
+  // (e fecha esta janela). Se não der certo, a janela volta com o aviso.
+  window.Carregando?.mostrar();
+  const avisar = texto => {
+    window.Carregando?.esconder();
+    if (!dlgEntrar.open) dlgEntrar.showModal();
+    erro.textContent = texto;
+    $("#entrar-senha").focus();
+  };
   try {
     const r = await fetch(f.action, { method: "POST", body: dados, credentials: "same-origin" });
     const destino = new URL(r.url).pathname;
     if (r.ok && destino == f.dataset.depois) { window.Carregando?.mostrar(0); location.reload(); return }
-    if (destino.includes("confirm-email")) {
-      erro.textContent = "Falta confirmar o seu e-mail. Mandamos o link de novo para a sua caixa de entrada.";
-      return;
-    }
-    if (r.status == 429) { erro.textContent = "Muitas tentativas. Espere alguns minutos e tente de novo."; return }
+    if (destino.includes("confirm-email"))
+      return avisar("Falta confirmar o seu e-mail. Mandamos o link de novo para a sua caixa de entrada.");
+    if (r.status == 429) return avisar("Muitas tentativas. Espere alguns minutos e tente de novo.");
     const pagina = new DOMParser().parseFromString(await r.text(), "text/html");
     const aviso = ($(".errorlist", pagina) || $("form .aviso", pagina))?.textContent.trim();
-    erro.textContent = aviso || "E-mail ou senha incorretos.";
+    avisar(aviso || "E-mail ou senha incorretos.");
   } catch {
-    erro.textContent = "Não deu para entrar agora. Confira a conexão e tente de novo.";
+    avisar("Não deu para entrar agora. Confira a conexão e tente de novo.");
   } finally { botao.disabled = false; botao.textContent = rotulo }
 });

@@ -45,7 +45,8 @@
     const u = new URL(a.href, location.href);
     if (u.origin !== location.origin) return;                                   // outro site, e-mail, telefone
     if (u.pathname === location.pathname && u.search === location.search && u.hash) return;  // só muda a âncora
-    mostrar(ATRASO, () => !e.defaultPrevented);                                 // o JS da página não tratou o clique
+    if (e.defaultPrevented) return;  // o JS da página já tratou o clique (e pode ter chamado Carregando.mostrar)
+    mostrar(ATRASO, () => !e.defaultPrevented);
   });
 
   // Formulários enviados de verdade (não os tratados por JS nem os de fechar diálogo)
@@ -54,6 +55,9 @@
     const metodo = ((quem && quem.getAttribute("formmethod")) || f.getAttribute("method") || "get").toLowerCase();
     const alvo = (quem && quem.getAttribute("formtarget")) || f.getAttribute("target");
     if (metodo === "dialog" || (alvo && alvo !== "_self")) return;
+    // Já tratado pelo JS da página (ex.: o login, que envia por fetch e chama Carregando.mostrar):
+    // não mexe, senão cancelaria a animação que ele pediu.
+    if (e.defaultPrevented) return;
     mostrar(ATRASO, () => !e.defaultPrevented);
   });
 

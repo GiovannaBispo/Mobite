@@ -1,6 +1,6 @@
 /* detalhes.js – página do restaurante e formulário de avaliação.
    - mostra o resultado do perfil local e marca os itens que importam para ele;
-   - escolhe até 5 perguntas começando pelas que mudam o resultado do perfil (o perfil não é enviado);
+   - escolhe até 5 perguntas começando pelo que falta saber para o perfil (o perfil não é enviado);
    - pede a localização só quando há foto, para o servidor conferir os 150 m e descartar. */
 
 const det = $("#det");
@@ -35,10 +35,13 @@ function montarFila() {
   const max = 5, perfil = Perfil.dados(), pesos = perfil?.pesos || {};
   const perguntas = $$(".pergunta", form);
   const respondidas = perguntas.filter(f => $("input:checked", f)?.value);
-  const peso = c => ({ BLOQUEIA: 0, IMPORTA: 1 }[pesos[c]] ?? 2);
+  const peso = f => ({ BLOQUEIA: 0, IMPORTA: 1 }[pesos[f.dataset.codigo]] ?? 2);
   const falta = f => ({ sem: 0, antigo: 1 }[f.dataset.estado] ?? 2);
-  const fila = respondidas.length ? respondidas : [...perguntas].sort((a, b) =>
-    peso(a.dataset.codigo) - peso(b.dataset.codigo) || falta(a) - falta(b)).slice(0, max);
+  // Primeiro o que ainda falta saber (sem resposta, em dúvida ou desatualizado), começando pelo que importa
+  // para o perfil e, nele, pelo que bloqueia. O que já tem resposta só entra se sobrar lugar.
+  const chave = f => [falta(f) == 2, peso(f) == 2, falta(f), peso(f)].map(Number);
+  const comparar = (a, b) => { const x = chave(a), y = chave(b); return x.reduce((d, v, i) => d || v - y[i], 0) };
+  const fila = respondidas.length ? respondidas : [...perguntas].sort(comparar).slice(0, max);
   perguntas.forEach(f => { const v = fila.includes(f); f.hidden = !v; f.disabled = !v });
   fila.forEach(f => form.insertBefore(f, $(".foto-campo", form))); // na ordem da fila: as que bloqueiam primeiro
 }

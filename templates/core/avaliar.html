@@ -4,4 +4,4 @@
 {% block conteudo %}
 <section class="pagina-aval" id="det" data-id="{{ r.pk }}">{% include "core/_form_avaliacao.html" %}</section>
 {% endblock %}
-{% block scripts %}<script src="{% static 'js/detalhes.js' %}"></script>{% endblock %}
+{% block scripts %}<script src="{% static 'js/detalhes.js' %}?v={{ CFG.VERSAO }}"></script>{% endblock %}

@@ -8,12 +8,12 @@ self.addEventListener("activate", e => e.waitUntil(caches.keys().then(ks => Prom
 {% else %}const VERSAO = "mobite-{{ CFG.VERSAO }}";
 const ARQUIVOS = [
   "{% url 'offline' %}",
-  "{% static 'css/style.css' %}", "{% static 'css/paginas.css' %}", "{% static 'css/temas.css' %}",
-  "{% static 'css/funcional.css' %}", "{% static 'js/comum.js' %}", "{% static 'js/tema.js' %}",
-  "{% static 'js/lista.js' %}", "{% static 'js/detalhes.js' %}", "{% static 'js/mapa.js' %}", "{% static 'js/perfil.js' %}",
+  "{% static 'css/style.css' %}?v={{ CFG.VERSAO }}", "{% static 'css/paginas.css' %}?v={{ CFG.VERSAO }}", "{% static 'css/temas.css' %}?v={{ CFG.VERSAO }}",
+  "{% static 'css/funcional.css' %}?v={{ CFG.VERSAO }}", "{% static 'js/comum.js' %}?v={{ CFG.VERSAO }}", "{% static 'js/tema.js' %}?v={{ CFG.VERSAO }}",
+  "{% static 'js/lista.js' %}?v={{ CFG.VERSAO }}", "{% static 'js/detalhes.js' %}?v={{ CFG.VERSAO }}", "{% static 'js/mapa.js' %}?v={{ CFG.VERSAO }}", "{% static 'js/perfil.js' %}?v={{ CFG.VERSAO }}",
   "{% static 'vendor/leaflet/leaflet.js' %}", "{% static 'vendor/leaflet/leaflet.css' %}",
   "{% static 'img/logo-mobite.png' %}", "{% static 'img/logo-mobite-escuro.png' %}", "{% static 'img/icone-192.png' %}",
-  "{% static 'css/carregando.css' %}", "{% static 'js/carregando.js' %}"
+  "{% static 'css/carregando.css' %}?v={{ CFG.VERSAO }}", "{% static 'js/carregando.js' %}?v={{ CFG.VERSAO }}"
 ];
 
 // cache "reload": busca no servidor, não numa cópia antiga guardada pelo navegador

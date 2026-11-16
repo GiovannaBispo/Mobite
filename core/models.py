@@ -186,13 +186,14 @@ class Conta(AbstractUser):
         return Selo.INICIANTE
 
     def contar_pessoas_ajudadas(self):
-        """RF19: consultas aos lugares que a pessoa avaliou, contadas a partir da 1ª avaliação dela em cada um."""
+        """RF19: consultas aos lugares que a pessoa avaliou, contadas a partir do dia seguinte à 1ª avaliação dela
+        em cada um (a contagem é por dia: uma consulta do mesmo dia pode ter vindo antes da avaliação)."""
         total = 0
         primeiras = (self.avaliacoes.filter(visivel=True).values("restaurante")
                      .annotate(primeira=models.Min("data")))
         for p in primeiras:
             total += (ConsultaDiaria.objects.filter(restaurante_id=p["restaurante"],
-                                                    data__gte=timezone.localdate(p["primeira"]))
+                                                    data__gt=timezone.localdate(p["primeira"]))
                       .aggregate(t=models.Sum("total"))["t"] or 0)
         return total
 

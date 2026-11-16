@@ -17,10 +17,10 @@
   </script>
   {% include "_carregando_head.html" with abertura=True %}
   {% block css_extra %}{% endblock %}
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
-  <link rel="stylesheet" href="{% static 'css/paginas.css' %}">
-  <link rel="stylesheet" href="{% static 'css/temas.css' %}">
-  <link rel="stylesheet" href="{% static 'css/funcional.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v={{ CFG.VERSAO }}">
+  <link rel="stylesheet" href="{% static 'css/paginas.css' %}?v={{ CFG.VERSAO }}">
+  <link rel="stylesheet" href="{% static 'css/temas.css' %}?v={{ CFG.VERSAO }}">
+  <link rel="stylesheet" href="{% static 'css/funcional.css' %}?v={{ CFG.VERSAO }}">
 </head>
 <body data-logado="{{ user.is_authenticated|yesno:'1,0' }}" data-login="{% url 'account_login' %}" data-dev="{{ MODO_DEV|yesno:'1,0' }}"
       class="{% block classe_body %}{% endblock %}{% if anuncios_rodape %} com-anuncio{% endif %}">
@@ -90,8 +90,8 @@
 {{ dados_publicos|json_script:"dados-mobite" }}
 {{ prefs_js|json_script:"prefs-mobite" }}
 {% csrf_token %}
-<script src="{% static 'js/comum.js' %}"></script>
-<script src="{% static 'js/tema.js' %}"></script>
+<script src="{% static 'js/comum.js' %}?v={{ CFG.VERSAO }}"></script>
+<script src="{% static 'js/tema.js' %}?v={{ CFG.VERSAO }}"></script>
 {% block scripts %}{% endblock %}
 </body>
 </html>

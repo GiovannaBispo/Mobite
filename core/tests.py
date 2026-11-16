@@ -266,7 +266,8 @@ class PessoasAjudadasTest(TestCase):
     def setUp(self):
         self.r = Restaurante.objects.create(nome="Bistrô", latitude=-23.56, longitude=-46.65)
         self.autor = conta("autor@teste.com")
-        av = AvaliacaoAcessibilidade.objects.create(autor=self.autor, restaurante=self.r)
+        av = AvaliacaoAcessibilidade.objects.create(autor=self.autor, restaurante=self.r,
+                                                    data=timezone.now() - timedelta(days=1))
         RespostaItem.objects.create(avaliacao=av, item=ItemChecklist.objects.get(codigo="E2"), resposta=Resposta.SIM)
 
     def test_consulta_de_outra_pessoa_conta_e_a_do_autor_nao(self):
@@ -276,6 +277,14 @@ class PessoasAjudadasTest(TestCase):
         self.client.get(url)                      # o próprio autor: não conta
         self.assertEqual(self.autor.contar_pessoas_ajudadas(), 1)
         self.assertContains(self.client.get(reverse("avaliacoes")), "ajudaram 1 pessoa")
+
+    def test_consulta_do_mesmo_dia_da_avaliacao_nao_conta(self):
+        outra = conta("outra@teste.com")
+        self.client.force_login(outra)
+        self.client.get(reverse("detalhes", args=[self.r.pk]))      # abriu antes de avaliar, no mesmo dia
+        self.client.post(reverse("avaliar", args=[self.r.pk]), {"r_E2": "SIM"})
+        self.assertEqual(outra.contar_pessoas_ajudadas(), 0)          # não ajudou a si mesma
+        self.assertEqual(self.autor.contar_pessoas_ajudadas(), 1)     # quem avaliou ontem foi útil para ela
 
 
 class MoverDemoTest(TestCase):
@@ -517,3 +526,43 @@ class SenhasTest(TestCase):
         equipe.refresh_from_db(); teste.refresh_from_db()
         self.assertTrue(teste.check_password("outra-senha-123"))
         self.assertTrue(equipe.check_password("senha-forte-123"))
+
+
+class ExcluirNoPainelTest(TestCase):
+    """Excluir avaliação ou auditoria pelo painel refaz o resultado do restaurante."""
+
+    def setUp(self):
+        self.r = Restaurante.objects.create(nome="Bistrô", latitude=-23.56, longitude=-46.65)
+        self.client.force_login(conta("equipe@teste.com", papel=Papel.EQUIPE_MOBITE))
+
+    def avaliar(self):
+        av = AvaliacaoAcessibilidade.objects.create(autor=conta(f"p{Conta.objects.count()}@teste.com"), restaurante=self.r)
+        RespostaItem.objects.create(avaliacao=av, item=ItemChecklist.objects.get(codigo="E2"), resposta=S)
+        regras.recalcular(self.r)
+        return av
+
+    def tem_resposta(self):
+        return SituacaoItem.objects.get(restaurante=self.r, item__codigo="E2").tem_informacao
+
+    def test_excluir_uma_avaliacao(self):
+        av = self.avaliar()
+        self.assertTrue(self.tem_resposta())
+        self.client.post(reverse("admin:core_avaliacaoacessibilidade_delete", args=[av.pk]), {"post": "yes"})
+        self.assertFalse(AvaliacaoAcessibilidade.objects.exists())
+        self.assertFalse(self.tem_resposta())
+
+    def test_excluir_varias_pela_lista(self):
+        ids = [self.avaliar().pk, self.avaliar().pk]
+        self.client.post(reverse("admin:core_avaliacaoacessibilidade_changelist"),
+                         {"action": "delete_selected", "_selected_action": ids, "post": "yes"})
+        self.assertFalse(AvaliacaoAcessibilidade.objects.exists())
+        self.assertFalse(self.tem_resposta())
+
+    def test_excluir_auditoria(self):
+        from .models import Auditoria, RespostaAuditoria
+        aud = Auditoria.objects.create(restaurante=self.r, data=timezone.now())
+        RespostaAuditoria.objects.create(auditoria=aud, item=ItemChecklist.objects.get(codigo="E2"), resposta=S)
+        regras.recalcular(self.r)
+        self.assertTrue(self.tem_resposta())
+        self.client.post(reverse("admin:core_auditoria_delete", args=[aud.pk]), {"post": "yes"})
+        self.assertFalse(self.tem_resposta())

@@ -158,8 +158,23 @@ class AuditoriaForm(forms.ModelForm):
                 choices=[(NAO_CONFERIDO, "Não conferido")] + list(Resposta.choices), widget=forms.RadioSelect)
 
 
+class RecalculaAoExcluir:
+    """Excluir uma auditoria ou avaliação pelo painel (uma ou várias) refaz o resultado do restaurante."""
+
+    def delete_model(self, request, obj):
+        restaurante = obj.restaurante
+        super().delete_model(request, obj)
+        regras.recalcular(restaurante)
+
+    def delete_queryset(self, request, queryset):
+        restaurantes = list(Restaurante.objects.filter(pk__in=queryset.values("restaurante")))
+        super().delete_queryset(request, queryset)
+        for r in restaurantes:
+            regras.recalcular(r)
+
+
 @admin.register(Auditoria)
-class AuditoriaAdmin(admin.ModelAdmin):
+class AuditoriaAdmin(RecalculaAoExcluir, admin.ModelAdmin):
     form = AuditoriaForm
     list_display = ("restaurante", "data", "autor")
     autocomplete_fields = ("restaurante",)
@@ -196,7 +211,7 @@ class RespostaItemInline(admin.TabularInline):
 
 
 @admin.register(AvaliacaoAcessibilidade)
-class AvaliacaoAdmin(admin.ModelAdmin):
+class AvaliacaoAdmin(RecalculaAoExcluir, admin.ModelAdmin):
     list_display = ("restaurante", "data", "visivel", "tem_foto")
     list_filter = ("visivel",)
     search_fields = ("restaurante__nome",)

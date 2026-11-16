@@ -243,6 +243,16 @@ body.com-anuncio #toast { bottom: 88px }
 .toast-fechar:hover { background: var(--claro); color: var(--txt) }
 body.com-anuncio #toast { bottom: auto }
 @keyframes entrar-toast { from { opacity: 0; transform: translateX(24px) } }
+/* Barra do tempo até o aviso sumir (comum.js); para junto com o tempo quando o mouse ou o foco está no aviso */
+#toast { overflow: hidden }
+.toast-tempo { position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: var(--menta-t);
+  transform-origin: left; animation: tempo-toast 6s linear forwards }
+#toast.toast-erro .toast-tempo { background: #a12626 }
+#toast.pausado .toast-tempo { animation-play-state: paused }
+@keyframes tempo-toast { to { transform: scaleX(0) } }
+/* Sem animação, a barra ficaria parada cheia: melhor não mostrar */
+html[data-anim=true] .toast-tempo { display: none }
+@media (prefers-reduced-motion: reduce) { .toast-tempo { display: none } }
 @media (max-width: 600px) {
   #toast { top: 72px; left: 12px; right: 12px; max-width: none; animation-name: descer-toast }
   @keyframes descer-toast { from { opacity: 0; transform: translateY(-12px) } }

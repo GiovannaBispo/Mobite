@@ -429,8 +429,9 @@ def minhas_avaliacoes(request):
 
 
 def consultas_desde(restaurante_id, data):
-    """RF19: quantas vezes o lugar foi consultado desde o dia da avaliação (sem saber por quem)."""
-    return (ConsultaDiaria.objects.filter(restaurante_id=restaurante_id, data__gte=timezone.localdate(data))
+    """RF19: quantas vezes o lugar foi consultado depois do dia da avaliação (sem saber por quem).
+    A contagem é por dia, então o próprio dia fica de fora: não dá para saber se a consulta veio antes ou depois."""
+    return (ConsultaDiaria.objects.filter(restaurante_id=restaurante_id, data__gt=timezone.localdate(data))
             .aggregate(t=Sum("total"))["t"] or 0)
 
 
