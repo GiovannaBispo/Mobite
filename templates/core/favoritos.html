@@ -3,6 +3,7 @@
 {% block conteudo %}
 <section data-page="favoritos">
   <h1>Favoritos</h1>
+  {% if cards %}<p class="aviso" id="aviso-sem-perfil" hidden>Escolha seu perfil em <a href="{% url 'perfil' %}">Meu perfil</a> para ver o resultado de cada lugar.</p>{% endif %}
   <div class="grid" id="lista-favs">
     {% for c in cards %}{% include "core/_card.html" %}{% empty %}<p class="vazio">Você ainda não favoritou nenhum lugar. Use o coração nos cards.</p>{% endfor %}
   </div>

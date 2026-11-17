@@ -6,25 +6,26 @@
 {# A lista é a tela inicial: topo da Giovanna + lista completa com filtros e mapa ao lado. #}
 <section data-page="inicio">
   {% include "core/_painel_dono.html" %}
+  {# Topo em dois passos: o perfil e onde a pessoa está. #}
   <div class="hero">
-    <h1>Mais acessibilidade, mais liberdade para escolher onde aproveitar seus momentos.</h1>
-    <p class="hero-apoio">Descubra restaurantes e veja a resposta de acessibilidade para o seu perfil de mobilidade.</p>
-    {% include "core/_perfil_sel.html" %}
-    <form id="form-cep" action="{% url 'inicio' %}">
+    <h1>Encontre restaurantes acessíveis para você</h1>
+    {% include "core/_perfil_sel.html" with passo="1" %}
+    <p class="passo-titulo" id="passo-onde"><span class="passo">2</span> Onde você está?</p>
+    <form id="form-cep" action="{% url 'inicio' %}" aria-labelledby="passo-onde">
       <label class="sr" for="cep">CEP</label>
       <input id="cep" name="cep" inputmode="numeric" pattern="\d{5}-?\d{3}" placeholder="Digite seu CEP" autocomplete="postal-code" required>
       <button class="btn"><span class="txt-longo">Encontrar restaurantes</span><span class="txt-curto">Encontrar</span></button>
       <button type="button" class="btn sec" id="btn-loc" data-localizar>{% icone "locate-fixed" %} Usar minha localização</button>
     </form>
   </div>
+
+  <h2 id="titulo-lista">Restaurantes</h2>
   {# A busca é o campo "Buscar" dos filtros (form="filtros"): filtra a lista na hora, sem trocar de página. #}
   <div role="search" class="busca">
-    <label class="sr" for="busca">Buscar por nome ou endereço</label>
-    <input id="busca" form="filtros" name="q" type="search" placeholder="Buscar restaurantes ou endereço" value="{{ q }}">
-    <button type="button" class="btn" data-ir-lista aria-label="Buscar">{% icone "search" %}<span class="txt-longo"> Buscar</span></button>
+    <label class="sr" for="busca">Procurar restaurante pelo nome</label>
+    <input id="busca" form="filtros" name="q" type="search" placeholder="Procurar pelo nome" value="{{ q }}">
+    <button type="button" class="btn" data-ir-lista aria-label="Procurar">{% icone "search" %}<span class="txt-longo"> Procurar</span></button>
   </div>
-
-  <h2 id="titulo-lista">Descubra restaurantes</h2>
   <div class="layout">
     <details class="filtros" id="caixa-filtros" open>
       <summary>Filtros</summary>
@@ -57,14 +58,16 @@
       </div>
       <p id="aviso-loc" class="meta" hidden>Permita a localização ou informe o CEP para ordenar por distância.</p>
       <p class="contador" id="contador" aria-live="polite"></p>
+      <p class="aviso" id="aviso-sem-perfil" hidden>Escolha seu perfil no <a href="#perfil-topo">passo 1</a> para ver o resultado de cada lugar.</p>
       <div class="paineis">
         <div role="tabpanel" id="painel-lista" aria-labelledby="aba-lista">
           <div class="grid" id="lista-rest">
             {% for c in cards %}{% include "core/_card.html" %}{% endfor %}
           </div>
           <p class="vazio" id="vazio-lista" {% if cards %}hidden{% endif %}>Nenhum restaurante por aqui ainda.</p>
-          <div id="ocultos" {% if not ocultos %}hidden{% endif %}><h2>Escondidos por você (<span id="n-ocultos">{{ ocultos|length }}</span>)</h2>
-            <div class="grid" id="lista-ocultos">{% for c in ocultos %}{% include "core/_card.html" %}{% endfor %}</div></div>
+          {# Fechado: o que a pessoa escondeu some da lista e fica guardado aqui para desfazer #}
+          <details id="ocultos" {% if not ocultos %}hidden{% endif %}><summary>Escondidos por você (<span id="n-ocultos">{{ ocultos|length }}</span>)</summary>
+            <div class="grid" id="lista-ocultos">{% for c in ocultos %}{% include "core/_card.html" %}{% endfor %}</div></details>
         </div>
         {% include "core/_painel_mapa.html" %}
       </div>

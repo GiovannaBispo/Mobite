@@ -54,16 +54,28 @@ main:focus { outline: none } /* o foco vai para o <main> ao abrir a página; nã
 
 /* ===== Topo do Início mais enxuto (computador) ===== */
 .hero { padding: 1.4rem 1.6rem 1.5rem }
-.hero h1 { max-width: 34ch; margin: 0 0 .4rem; font-size: clamp(1.5rem, 2.6vw, 2rem) }
-.hero-apoio { margin: 0 }
+.hero h1 { max-width: none; margin: 0 0 .4rem; font-size: clamp(1.5rem, 2.6vw, 2rem); text-wrap: balance }
 .perfil-sel small { flex-basis: auto }
+/* O topo em dois passos (perfil e lugar) e a busca pelo nome junto da lista */
+.passo { display: inline-grid; place-items: center; flex: none; width: 1.6rem; height: 1.6rem; border-radius: 50%;
+  background: var(--azul); color: var(--fundo); font-size: .9rem; font-weight: 700 }
+.passo-titulo { display: flex; align-items: center; gap: .4rem; margin: .2rem 0 .5rem; color: var(--azul); font-weight: 700 }
+#titulo-lista + .busca { margin-bottom: .9rem }
+/* Endereço · distância · horário: o ponto só aparece entre os itens que existem */
+.itens-meta > span:empty { display: none }
+.itens-meta > span:not(:empty) ~ span:not(:empty)::before { content: " · " }
+.itens-meta:not(:has(> span:not(:empty))) { display: none }
+/* O que a pessoa escondeu fica fechado no fim da lista, para desfazer */
+#ocultos { margin-top: 1.5rem }
+#ocultos > summary { min-height: 44px; padding: .6rem 0; color: var(--azul); font-weight: 700; cursor: pointer }
+#ocultos[open] > summary { margin-bottom: .6rem }
 
 /* ===== Início mais enxuto no celular ===== */
 .txt-curto { display: none }
 @media (max-width: 600px) {
+  .card .foto { height: 120px }
   .hero { padding: 1.1rem 1rem; border-radius: 18px }
   .hero h1 { margin: 0 0 .2rem; font-size: 1.4rem }
-  .hero-apoio { display: none }
   .hero .perfil-sel { margin: .7rem 0 }
   .perfil-sel select { flex-basis: 100% }
   .perfil-sel small { flex-basis: 100% }
@@ -276,7 +288,9 @@ html[data-anim=true] .toast-tempo { display: none }
 .painel-topo h2 { margin: .1rem 0 0 }
 .painel-topo .meta { display: flex; align-items: center; gap: .4rem; margin: 0; font-weight: 700 }
 .painel-topo .acoes { margin: 0 }
-.painel-numeros { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: .8rem; margin: 1rem 0 }
+/* Os 4 números em 2 colunas já no celular (um embaixo do outro ocupavam a tela inteira) */
+.painel-numeros { display: grid; grid-template-columns: repeat(auto-fit, minmax(135px, 1fr)); gap: .6rem; margin: 1rem 0 }
+@media (max-width: 600px) { .painel-dono { padding: 1rem } .painel-numeros p { padding: .7rem .8rem } }
 .painel-numeros p { margin: 0; padding: .8rem 1rem; border-radius: 12px; background: var(--claro) }
 .painel-numeros b { display: block; color: var(--azul); font-size: 1.6rem; line-height: 1.1 }
 .painel-numeros span { color: var(--suave); font-size: .92rem }
@@ -284,6 +298,9 @@ html[data-anim=true] .toast-tempo { display: none }
 .painel-perfis { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: .4rem 1rem; margin: 0; padding: 0; list-style: none }
 .painel-perfis li { display: flex; justify-content: space-between; align-items: center; gap: .6rem; padding: .35rem 0; border-bottom: 1px solid var(--borda) }
 .painel-perfis .ind { white-space: nowrap }
+
+/* Telas de conta: o "Esqueci a senha" embaixo da senha com área de toque grande */
+.form-conta .helptext a { display: inline-block; min-height: 44px; padding: .6rem 0 0; font-size: 1rem }
 
 /* Janela "Entrar" (templates/_entrar.html) */
 #dlg-entrar { max-width: 440px }

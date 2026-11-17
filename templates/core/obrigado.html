@@ -8,6 +8,7 @@
     <p>{% if info.n %}Sua avaliação de <b>{{ r.nome }}</b> já está no ar.{% endif %}
       {% if info.foto %} A foto também.{% endif %}
       {% if info.estrelas %} Você deu {{ info.estrelas }} estrela{{ info.estrelas|pluralize }} ao atendimento.{% endif %}</p>
+    {% if info.n %}<p id="res-obrigado" hidden></p>{% endif %}
     <p class="meta">Você já fez {{ total }} avaliaç{{ total|pluralize:"ão,ões" }}.</p>
     <div class="acoes"><a class="btn" href="{% url 'detalhes' r.pk %}">Ver o restaurante</a><a class="btn sec" href="{% url 'inicio' %}">Avaliar outro lugar</a></div>
   </div>
@@ -22,3 +23,13 @@
   {% endif %}
 </section>
 {% endblock %}
+{% block scripts %}{{ resultado|json_script:"resultado-obrigado" }}
+<script>
+/* Mostra na hora o efeito da avaliação: o resultado novo para o perfil guardado neste aparelho */
+(() => {
+  const caixa = $("#res-obrigado"), p = Perfil.dados(); if (!caixa || !p) return;
+  const res = JSON.parse($("#resultado-obrigado").textContent)[p.codigo] || "nd";
+  caixa.innerHTML = `Agora, para o seu perfil (${esc(p.nome.toLowerCase())}): ${ind(res)}`;
+  caixa.hidden = false;
+})();
+</script>{% endblock %}

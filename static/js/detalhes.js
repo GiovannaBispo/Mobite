@@ -26,7 +26,10 @@ function pintarDetalhes() {
       t.textContent = peso == "BLOQUEIA" ? "(essencial para você)" : "(importa para você)";
     });
   }
-  if (det?.dataset.lat) $$(".dist", det).forEach(x => x.textContent = fmtKm(distKm(+det.dataset.lat, +det.dataset.lng)));
+  if (det?.dataset.lat) {
+    const km = distKm(+det.dataset.lat, +det.dataset.lng);
+    $$(".dist", det).forEach(x => x.textContent = km == null ? "" : fmtKm(km));
+  }
 }
 
 /* ===== 2. Fila de até 5 perguntas ===== */

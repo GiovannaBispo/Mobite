@@ -6,7 +6,7 @@
 <div id="det" data-id="{{ r.pk }}" data-lat="{{ r.latitude|stringformat:'f' }}" data-lng="{{ r.longitude|stringformat:'f' }}" data-nome="{{ r.nome }}">
   <figure class="foto-det"><img class="foto grande" src="{% url 'fachada' r.pk %}" alt=""></figure>
   <h1>{{ r.nome }}{% if r.demonstracao %} <small class="demo">demonstração</small>{% endif %}</h1>
-  <p class="meta">{% if r.endereco %}{% icone "map-pin" %} {{ r.endereco }} · {% endif %}<span class="dist">distância indisponível</span>{% if r.horario %} · {% icone "clock" %} {{ r.horario }}{% endif %}{% if r.telefone %} · {{ r.telefone }}{% endif %}</p>
+  <p class="meta itens-meta"><span>{% if r.endereco %}{% icone "map-pin" %} {{ r.endereco }}{% endif %}</span><span class="dist"></span><span>{% if r.horario %}{% icone "clock" %} {{ r.horario }}{% endif %}</span><span>{{ r.telefone }}</span></p>
   <div class="acoes">
     <a class="btn" href="{% url 'avaliar' r.pk %}" id="abrir-aval">Avaliar acessibilidade</a>
     <form method="post" action="{% url 'preferencia' r.pk %}" class="form-ic">{% csrf_token %}<input type="hidden" name="tipo" value="FAVORITO">

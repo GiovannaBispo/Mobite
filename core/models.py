@@ -186,15 +186,12 @@ class Conta(AbstractUser):
         return Selo.INICIANTE
 
     def contar_pessoas_ajudadas(self):
-        """RF19: consultas aos lugares que a pessoa avaliou, contadas a partir do dia seguinte à 1ª avaliação dela
-        em cada um (a contagem é por dia: uma consulta do mesmo dia pode ter vindo antes da avaliação)."""
-        total = 0
-        primeiras = (self.avaliacoes.filter(visivel=True).values("restaurante")
-                     .annotate(primeira=models.Min("data")))
-        for p in primeiras:
-            total += (ConsultaDiaria.objects.filter(restaurante_id=p["restaurante"],
-                                                    data__gt=timezone.localdate(p["primeira"]))
-                      .aggregate(t=models.Sum("total"))["t"] or 0)
+        """RF19: consultas aos lugares que a pessoa avaliou, contadas depois da 1ª avaliação dela em cada um."""
+        total, vistos = 0, set()
+        for av in self.avaliacoes.filter(visivel=True).order_by("data"):
+            if av.restaurante_id not in vistos:
+                vistos.add(av.restaurante_id)
+                total += av.consultas_depois()
         return total
 
     def bloquear(self, motivo, por=None):
@@ -405,6 +402,9 @@ class AvaliacaoAcessibilidade(models.Model):
     restaurante = models.ForeignKey(Restaurante, on_delete=models.CASCADE, related_name="avaliacoes")
     data = models.DateTimeField(default=timezone.now)
     visivel = models.BooleanField("visível", default=True)
+    # [fora da UML] consultas do lugar no dia, contadas até o momento da avaliação. A contagem é por dia (sem
+    # saber quem consultou); com isso, as consultas do mesmo dia que vieram depois da avaliação também contam.
+    consultas_no_dia = models.PositiveIntegerField(default=0, editable=False)
 
     class Meta:
         ordering = ["-data"]
@@ -413,6 +413,15 @@ class AvaliacaoAcessibilidade(models.Model):
 
     def __str__(self):
         return f"Avaliação de {self.restaurante} ({self.data:%d/%m/%Y})"
+
+    def consultas_depois(self):
+        """RF19: consultas ao lugar depois desta avaliação: as dos dias seguintes e as do mesmo dia que vieram
+        depois dela. Quem avaliou e a equipe não entram na contagem (views.contar_consulta)."""
+        dia = timezone.localdate(self.data)
+        consultas = ConsultaDiaria.objects.filter(restaurante_id=self.restaurante_id)
+        depois = consultas.filter(data__gt=dia).aggregate(t=models.Sum("total"))["t"] or 0
+        no_dia = consultas.filter(data=dia).values_list("total", flat=True).first() or 0
+        return depois + max(0, no_dia - self.consultas_no_dia)
 
     def ocultar(self, motivo="", por=None):
         """Ao ocultar, SituacaoItem e ResultadoPerfil do restaurante são recalculados."""

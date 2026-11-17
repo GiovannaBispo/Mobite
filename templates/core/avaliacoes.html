@@ -10,7 +10,7 @@
     <article class="card corpo">
       <h3>{{ a.restaurante.nome }}</h3>
       <p class="meta">Avaliado em {{ a.data|date:"d/m/Y" }}{% if not a.visivel %} · <b>ocultada pela moderação</b>{% endif %}</p>
-      <p class="ajudou">{% icone "user-round" %} {{ x.ajudou }} pessoa{{ x.ajudou|pluralize }} v{{ x.ajudou|pluralize:"iu,iram" }} este lugar depois da sua avaliação</p>
+      <p class="ajudou">{% icone "user-round" %} {% if x.ajudou %}{{ x.ajudou }} pessoa{{ x.ajudou|pluralize }} v{{ x.ajudou|pluralize:"iu,iram" }} este lugar depois da sua avaliação{% else %}Ninguém viu este lugar depois da sua avaliação ainda{% endif %}</p>
       <ul>{% for resp in a.respostas.all %}<li>{{ resp.item.pergunta }} <b>{{ resp.get_resposta_display }}</b></li>{% endfor %}</ul>
       {% if x.foto %}<p class="meta">{% icone "camera" %} Com foto da entrada{% if not x.foto.visivel %} (ocultada){% endif %}</p>{% endif %}
       {% if x.atendimento %}<p>Atendimento: {% estrelas x.atendimento.estrelas %}</p>{% endif %}

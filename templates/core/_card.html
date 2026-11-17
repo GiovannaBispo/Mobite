@@ -6,8 +6,8 @@
   data-fav="{{ c.fav|yesno:'1,0' }}">
   <img class="foto" src="{% url 'fachada' r.pk %}" alt="" loading="lazy" width="400" height="240">
   <div class="corpo"><h3><a class="link-card" href="{% url 'detalhes' r.pk %}">{{ r.nome }}</a>{% if r.demonstracao %} <small class="demo">demonstração</small>{% endif %}</h3>
-  <p class="meta">{% if r.endereco %}{{ r.endereco }} · {% endif %}<span class="dist">distância indisponível</span></p>
-  <p class="res-perfil"><span class="meta">Escolha seu perfil para ver a resposta de acessibilidade.</span></p>
+  <p class="meta itens-meta"><span>{{ r.endereco }}</span><span class="dist"></span></p>
+  <p class="res-perfil" hidden></p>
   {% if c.n_fotos %}<p class="meta">{% icone "camera" %} {{ c.n_fotos }} foto{{ c.n_fotos|pluralize }} da entrada</p>{% endif %}
   <p class="meta">{% if c.dias is not None %}<span class="data-verif">Verificado {{ c.dias|ha_dias }} · </span>{% endif %}{% icone "star" "cheia est" %} {% if c.n_atend %}{{ c.media|nota }} atendimento{% else %}sem avaliação de atendimento{% endif %}</p>
   <div class="acoes"><a class="btn" href="{% url 'detalhes' r.pk %}">Ver detalhes</a>

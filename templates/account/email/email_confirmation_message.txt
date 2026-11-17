@@ -1,9 +1,9 @@
 {% extends "account/email/base_message.txt" %}
-{% block content %}{% autoescape off %}Alguém (provavelmente você) criou uma conta no MoBite com este e-mail.
+{% block content %}{% autoescape off %}Você criou uma conta no MoBite com este e-mail. Confirme para poder avaliar, favoritar e esconder restaurantes.
 
 {% if code %}Digite este código na janela do MoBite que está aberta:
 
-{{ code }}{% else %}Para confirmar e poder avaliar, favoritar e esconder lugares, abra este link:
+{{ code }}{% else %}Para confirmar, abra este link:
 {{ activate_url }}{% endif %}
 
-Se não foi você, ignore este e-mail: nenhuma conta será ativada.{% endautoescape %}{% endblock content %}
+Se não foi você que criou a conta, é só ignorar este e-mail.{% endautoescape %}{% endblock content %}

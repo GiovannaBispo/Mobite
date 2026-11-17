@@ -15,6 +15,16 @@ def icone(nome, classe=""):
                        classe, nome)
 
 
+@register.simple_tag(takes_context=True)
+def endereco_site(context):
+    """Começo do endereço do site (https://mobite.pythonanywhere.com). No e-mail só funciona endereço completo."""
+    from django.conf import settings
+    request = context.get("request")
+    if request:
+        return f"{settings.ACCOUNT_DEFAULT_HTTP_PROTOCOL}://{request.get_host()}"
+    return f"https://{settings.ALLOWED_HOSTS[0]}" if settings.ALLOWED_HOSTS else ""
+
+
 @register.simple_tag
 def forma(css):
     """Forma do resultado: círculo, triângulo, losango ou quadrado (forma além da cor)."""

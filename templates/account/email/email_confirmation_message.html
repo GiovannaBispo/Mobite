@@ -1,0 +1,8 @@
+{% extends "account/email/base_message.html" %}
+{% block previa %}Falta só confirmar o seu e-mail.{% endblock %}
+{% block titulo %}Confirme seu e-mail{% endblock %}
+{% block texto %}<p style="margin:0">Você criou uma conta no MoBite com este e-mail. Confirme para poder avaliar, favoritar e esconder restaurantes.</p>{% endblock %}
+{% block acao %}{% if code %}<p style="margin:20px 0 6px">Digite este código na janela do MoBite que está aberta:</p>
+<p style="margin:0;font-size:30px;font-weight:bold;letter-spacing:6px;color:#193D75">{{ code }}</p>
+{% else %}{% include "account/email/_botao.html" with url=activate_url rotulo="Confirmar e-mail" %}{% endif %}{% endblock %}
+{% block depois %}Se não foi você que criou a conta, é só ignorar este e-mail.{% endblock %}

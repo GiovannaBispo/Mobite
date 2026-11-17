@@ -15,12 +15,15 @@ function pintarCards() {
   $$(".card[data-res]").forEach(c => {
     const d = dadosCard(c), res = resDo(d, p), motivo = p && d.motivos[p];
     const pre = { bar: "Barreira: ", warn: "Ressalva: ", nd: "Falta saber: " }[res] || "";
-    $(".res-perfil", c).innerHTML = res
+    const caixa = $(".res-perfil", c);
+    caixa.innerHTML = res
       ? `<span class="meta">Para o seu perfil:</span><br>${ind(res)}${motivo ? `<br><small>${esc(pre + motivo)}</small>` : ""}`
-      : '<span class="meta">Escolha seu perfil para ver a resposta de acessibilidade.</span>';
-    const dist = $(".dist", c); if (dist) dist.textContent = fmtKm(distKm(d.lat, d.lng));
+      : "";
+    caixa.hidden = !res; // sem perfil, um aviso só acima da lista (#aviso-sem-perfil)
+    const km = distKm(d.lat, d.lng), dist = $(".dist", c); if (dist) dist.textContent = km == null ? "" : fmtKm(km);
     $$(".data-verif", c).forEach(x => x.hidden = !S.cfg.datas);
   });
+  const aviso = $("#aviso-sem-perfil"); if (aviso) aviso.hidden = !!p;
 }
 
 /* Ordem: resultado para o perfil (se a preferência estiver ligada), depois distância, depois nome.
@@ -150,10 +153,22 @@ document.addEventListener("click", async e => {
   } else {
     const escondido = estado == "ESCONDIDO";
     moverEscondido(id, escondido);
-    toast(escondido ? "Restaurante escondido da sua lista." : "Restaurante de volta na sua lista.",
+    const onde = $("#lista-ocultos") ? " Ele fica em “Escondidos por você”, no fim da lista." : "";
+    toast(escondido ? "Restaurante escondido da sua lista." + onde : "Restaurante de volta na sua lista.",
       escondido && { rotulo: "Desfazer", fazer: async () => { if (await preferencia(id, "ESCONDIDO") !== undefined) moverEscondido(id, false) } });
   }
 });
 
 atualizarListas();
 if (new URLSearchParams(location.search).get("vista") == "mapa") abrirAba("mapa");
+
+/* Quem tocou em favoritar ou esconder antes de entrar na conta: depois do login, a ação é feita aqui
+   (o pedido fica guardado por 5 minutos pela função preferencia, em comum.js). */
+(() => {
+  let p = null;
+  try { p = JSON.parse(sessionStorage.getItem("mobite_pendente")); sessionStorage.removeItem("mobite_pendente") } catch { }
+  if (!LOGADO || !p || Date.now() - p.t > 5 * 60000) return;
+  const fav = p.tipo == "FAVORITO";
+  if ((fav ? PREFS.favoritos : PREFS.escondidos).includes(p.id)) return; // já estava feito
+  $(`button[data-a="${fav ? "fav" : "esc"}"][data-id="${p.id}"]`)?.click();
+})();

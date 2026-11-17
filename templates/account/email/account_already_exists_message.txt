@@ -1,0 +1,5 @@
+{% extends "account/email/base_message.txt" %}
+{% block content %}{% autoescape off %}Alguém tentou criar uma conta com o e-mail {{ email }}, mas ele já está cadastrado. Se você esqueceu a senha, crie uma nova neste link:
+{{ password_reset_url }}
+
+Se não foi você, é só ignorar este e-mail.{% endautoescape %}{% endblock content %}

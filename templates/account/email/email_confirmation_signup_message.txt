@@ -1,9 +1,1 @@
-{% extends "account/email/base_message.txt" %}
-{% block content %}{% autoescape off %}Alguém (provavelmente você) criou uma conta no MoBite com este e-mail.
-
-{% if code %}Digite este código na janela do MoBite que está aberta:
-
-{{ code }}{% else %}Para confirmar e poder avaliar, favoritar e esconder lugares, abra este link:
-{{ activate_url }}{% endif %}
-
-Se não foi você, ignore este e-mail: nenhuma conta será ativada.{% endautoescape %}{% endblock content %}
+{% extends "account/email/email_confirmation_message.txt" %}

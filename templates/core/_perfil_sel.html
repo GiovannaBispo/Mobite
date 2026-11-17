@@ -1,6 +1,6 @@
 {% load mobite %}{# Seletor do perfil de mobilidade. Fica só no aparelho (localStorage) e nunca é enviado: não tem name nem form. #}
 <div class="perfil-sel{% if compacto %} compacto{% endif %}">
-  <label for="perfil-{{ id_sel|default:'topo' }}">{% icone "accessibility" %} Do que você precisa?</label>
+  <label for="perfil-{{ id_sel|default:'topo' }}">{% if passo %}<span class="passo">{{ passo }}</span>{% else %}{% icone "accessibility" %}{% endif %} Do que você precisa?</label>
   <select id="perfil-{{ id_sel|default:'topo' }}" data-perfil-sel aria-describedby="perfil-{{ id_sel|default:'topo' }}-nota">
     <option value="">Escolha seu perfil</option>
     {% for p in dados_publicos.perfis %}<option value="{{ p.codigo }}">{{ p.descricao }}</option>{% endfor %}

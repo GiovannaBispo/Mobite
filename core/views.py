@@ -305,7 +305,10 @@ def avaliar(request, pk):
             with transaction.atomic():
                 respostas = form.respostas()
                 if respostas:
-                    av = AvaliacaoAcessibilidade.objects.create(autor=request.user, restaurante=r, data=agora)
+                    no_dia = (ConsultaDiaria.objects.filter(restaurante=r, data=timezone.localdate(agora))
+                              .values_list("total", flat=True).first() or 0)
+                    av = AvaliacaoAcessibilidade.objects.create(autor=request.user, restaurante=r, data=agora,
+                                                                consultas_no_dia=no_dia)
                     RespostaItem.objects.bulk_create(
                         [RespostaItem(avaliacao=av, item=i, resposta=v) for i, v in respostas.items()])
                     if form.foto_tratada:
@@ -338,7 +341,9 @@ def obrigado(request, pk):
     total = request.user.total_avaliacoes()
     # Bloco de anúncio "de vez em quando": 1 a cada N avaliações (RN06.3).
     mostrar_anuncio = info["n"] > 0 and total % CFG["ANUNCIO_A_CADA_AVALIACOES"] == 1
-    return render(request, "core/obrigado.html", {"r": r, "info": info, "total": total,
+    # Resultado novo dos 5 perfis: o navegador mostra só o do perfil guardado nele
+    resultado = {res.perfil.codigo: CSS[res.classificacao] for res in r.resultados.select_related("perfil")}
+    return render(request, "core/obrigado.html", {"r": r, "info": info, "total": total, "resultado": resultado,
                                                   "mostrar_anuncio": mostrar_anuncio,
                                                   "anuncios_obrigado": list(Anuncio.ativos()) if mostrar_anuncio else []})
 
@@ -422,17 +427,10 @@ def minhas_avaliacoes(request):
              .select_related("restaurante").prefetch_related("respostas__item"))
     atend = {(a.restaurante_id, a.data): a for a in AvaliacaoAtendimento.objects.filter(autor=request.user)}
     lista = [{"a": a, "atendimento": atend.pop((a.restaurante_id, a.data), None),
-              "foto": getattr(a, "foto", None), "ajudou": consultas_desde(a.restaurante_id, a.data)} for a in avals]
+              "foto": getattr(a, "foto", None), "ajudou": a.consultas_depois()} for a in avals]
     soltas = sorted(atend.values(), key=lambda a: a.data, reverse=True)  # só estrelas, sem perguntas
     return render(request, "core/avaliacoes.html", {"lista": lista, "soltas": soltas,
                                                     "ajudadas": request.user.contar_pessoas_ajudadas()})
-
-
-def consultas_desde(restaurante_id, data):
-    """RF19: quantas vezes o lugar foi consultado depois do dia da avaliação (sem saber por quem).
-    A contagem é por dia, então o próprio dia fica de fora: não dá para saber se a consulta veio antes ou depois."""
-    return (ConsultaDiaria.objects.filter(restaurante_id=restaurante_id, data__gt=timezone.localdate(data))
-            .aggregate(t=Sum("total"))["t"] or 0)
 
 
 @require_POST

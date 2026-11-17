@@ -135,6 +135,8 @@ document.addEventListener("click", e => { if ($("#menu").classList.contains("abe
 /* ===== 7. Favoritar e esconder (exige conta) ===== */
 async function preferencia(id, tipo) {
   if (!LOGADO) {
+    // Guarda o pedido: depois do login, lista.js termina o que a pessoa tinha pedido
+    try { sessionStorage.setItem("mobite_pendente", JSON.stringify({ id, tipo, t: Date.now() })) } catch { }
     if (abrirEntrar("Para favoritar ou esconder um lugar, entre na sua conta.")) return undefined;
     window.Carregando?.mostrar();
     location.href = `${document.body.dataset.login}?next=${encodeURIComponent(location.pathname)}`;
@@ -218,7 +220,9 @@ document.addEventListener("click", e => {
   if (e.button || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
   if (abrirEntrar(a.dataset.motivo)) e.preventDefault();
 });
-document.addEventListener("click", e => { if (e.target.closest("[data-fechar-entrar]")) dlgEntrar?.close() });
+document.addEventListener("click", e => { if (e.target.closest("[data-fechar-entrar]")) { esquecerPendente(); dlgEntrar?.close() } });
+dlgEntrar?.addEventListener("cancel", esquecerPendente); // fechou com Esc: não faz depois o que tinha pedido
+function esquecerPendente() { try { sessionStorage.removeItem("mobite_pendente") } catch { } }
 $("#form-entrar")?.addEventListener("submit", async e => {
   e.preventDefault();
   const f = e.target, erro = $("#entrar-erro"), botao = $("button[type=submit]", f), dados = new FormData(f);

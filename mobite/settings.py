@@ -120,7 +120,14 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # ---------- Contas (django-allauth) ----------
 # RF08–RF10: e-mail e senha ou Google; e-mail confirmado antes de avaliar; recuperação de senha.
 ACCOUNT_LOGIN_METHODS = {"email"}
-ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
+ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*"]  # senha uma vez só: o olhinho mostra o que foi digitado
+ACCOUNT_SESSION_REMEMBER = True  # continua conectado, sem a caixa "Lembrar de mim"
+# Textos do MoBite nas telas de conta ("E-mail", regra da senha numa frase)
+ACCOUNT_FORMS = {
+    "signup": "core.forms_conta.CadastroForm", "login": "core.forms_conta.EntrarForm",
+    "reset_password": "core.forms_conta.EsqueciSenhaForm", "reset_password_from_key": "core.forms_conta.NovaSenhaForm",
+    "change_password": "core.forms_conta.AlterarSenhaForm", "add_email": "core.forms_conta.NovoEmailForm",
+}
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_UNIQUE_EMAIL = True
 # Confirmar o e-mail antes de avaliar (RN03.1). Enquanto o envio de e-mail não estiver configurado no servidor

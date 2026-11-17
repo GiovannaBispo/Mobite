@@ -1,0 +1,5 @@
+{% extends "account/email/base_message.txt" %}
+{% block content %}{% autoescape off %}Alguém pediu para trocar a senha de uma conta do MoBite com o e-mail {{ email }}, mas não existe conta com ele. Se foi você, pode criar uma neste link:
+{{ signup_url }}
+
+Se não foi você, é só ignorar este e-mail.{% endautoescape %}{% endblock content %}

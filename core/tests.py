@@ -286,6 +286,19 @@ class PessoasAjudadasTest(TestCase):
         self.assertEqual(outra.contar_pessoas_ajudadas(), 0)          # não ajudou a si mesma
         self.assertEqual(self.autor.contar_pessoas_ajudadas(), 1)     # quem avaliou ontem foi útil para ela
 
+    def test_consulta_do_mesmo_dia_depois_da_avaliacao_conta(self):
+        avaliou = conta("avaliou@teste.com")
+        self.client.force_login(avaliou)
+        self.client.get(reverse("detalhes", args=[self.r.pk]))      # abriu e avaliou hoje
+        self.client.post(reverse("avaliar", args=[self.r.pk]), {"r_E2": "SIM"})
+        self.client.get(reverse("detalhes", args=[self.r.pk]))      # voltar à página não conta
+        self.assertEqual(avaliou.contar_pessoas_ajudadas(), 0)
+        self.client.force_login(conta("viu-depois@teste.com"))
+        self.client.get(reverse("detalhes", args=[self.r.pk]))      # outra pessoa, no mesmo dia, depois
+        self.assertEqual(avaliou.contar_pessoas_ajudadas(), 1)
+        self.client.force_login(avaliou)
+        self.assertContains(self.client.get(reverse("avaliacoes")), "1 pessoa viu este lugar depois da sua avaliação")
+
 
 class MoverDemoTest(TestCase):
     """Ferramenta da equipe: só restaurante de demonstração, só equipe."""
@@ -566,3 +579,64 @@ class ExcluirNoPainelTest(TestCase):
         self.assertTrue(self.tem_resposta())
         self.client.post(reverse("admin:core_auditoria_delete", args=[aud.pk]), {"post": "yes"})
         self.assertFalse(self.tem_resposta())
+
+
+class EmailsTest(TestCase):
+    """E-mails da conta saem com versão em texto e versão com a logo e o botão."""
+
+    def html(self, m):
+        return dict((tipo, corpo) for corpo, tipo in m.alternatives)["text/html"]
+
+    def test_confirmacao_e_nova_senha(self):
+        from django.core import mail
+        self.client.post(reverse("account_signup"), {"email": "nova@teste.com", "password1": "Senha-forte-123",
+                                                     "password2": "Senha-forte-123"})
+        self.client.logout()
+        self.client.post(reverse("account_reset_password"), {"email": "nova@teste.com"})
+        confirmar, senha = mail.outbox
+        self.assertEqual(confirmar.subject, "[MoBite] Confirme seu e-mail")
+        self.assertIn("/contas/confirm-email/", confirmar.body)
+        self.assertIn("http://testserver/static/img/logo-mobite.png", self.html(confirmar))
+        self.assertIn("Confirmar e-mail", self.html(confirmar))
+        self.assertEqual(senha.subject, "[MoBite] Crie uma nova senha")
+        self.assertIn("/contas/password/reset/key/", self.html(senha))
+
+
+class InicioTest(TestCase):
+    """Topo do início em dois passos e o que a pessoa escondeu guardado num bloco fechado."""
+
+    def test_passos_e_escondidos(self):
+        from .models import PreferenciaRestaurante, TipoPreferencia
+        r = Restaurante.objects.create(nome="Bistrô Escondido", latitude=-23.56, longitude=-46.65)
+        pessoa = conta()
+        PreferenciaRestaurante.objects.create(conta=pessoa, restaurante=r, tipo=TipoPreferencia.ESCONDIDO)
+        self.client.force_login(pessoa)
+        html = self.client.get(reverse("inicio")).content.decode()
+        self.assertIn("Do que você precisa?", html)
+        self.assertIn("Onde você está?", html)
+        self.assertIn('placeholder="Procurar pelo nome"', html)
+        self.assertNotIn("distância indisponível", html)
+        fechado = html[html.index('<details id="ocultos"'):]
+        self.assertIn("Bistrô Escondido", fechado[:fechado.index("</details>")])
+
+
+class TelasDeContaTest(TestCase):
+    """Cadastro e login com os textos do MoBite, e o resultado novo na tela de agradecimento."""
+
+    def test_cadastro_e_login(self):
+        cadastro = self.client.get(reverse("account_signup")).content.decode()
+        self.assertNotIn("sign in", cadastro)
+        self.assertIn(">E-mail</label>", cadastro)
+        self.assertNotIn("password2", cadastro)  # senha uma vez só
+        login = self.client.get(reverse("account_login")).content.decode()
+        self.assertIn("Esqueci a senha", login)
+        self.assertNotIn("remember", login)
+        self.client.post(reverse("account_signup"), {"email": "nova@teste.com", "password1": "Senha-forte-123"})
+        self.assertTrue(Conta.objects.filter(email="nova@teste.com").exists())
+
+    def test_obrigado_traz_o_resultado_dos_perfis(self):
+        r = Restaurante.objects.create(nome="Bistrô", latitude=-23.56, longitude=-46.65)
+        self.client.force_login(conta())
+        resp = self.client.post(reverse("avaliar", args=[r.pk]), {"r_E2": "SIM"}, follow=True)
+        self.assertContains(resp, 'id="resultado-obrigado"')
+        self.assertContains(resp, '"cadeira": "nd"')

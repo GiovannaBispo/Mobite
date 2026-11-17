@@ -1,0 +1,23 @@
+{% extends "account/base_entrance.html" %}
+{% load allauth %}
+{% block head_title %}Confirmar e-mail{% endblock head_title %}
+{% block content %}
+<h1>Confirmar e-mail</h1>
+{% if confirmation %}
+  {% if can_confirm %}
+  <p>Toque no botão para confirmar o e-mail <b>{{ confirmation.email_address.email }}</b>.</p>
+  {% url 'account_confirm_email' confirmation.key as action_url %}
+  {% element form method="post" action=action_url %}
+    {% slot actions %}
+      {% csrf_token %}
+      {{ redirect_field }}
+      {% element button type="submit" %}Confirmar e-mail{% endelement %}
+    {% endslot %}
+  {% endelement %}
+  {% else %}
+  <p>Este e-mail já foi confirmado por outra conta.</p>
+  {% endif %}
+{% else %}
+  <p>Este link já foi usado ou venceu. <a href="{% url 'account_email' %}">Peça um link novo</a>.</p>
+{% endif %}
+{% endblock content %}

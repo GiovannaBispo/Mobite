@@ -74,3 +74,7 @@ html[data-tema=escuro] .leaflet-tile { filter: invert(1) hue-rotate(180deg) brig
 .cfg-linha:first-of-type { border-top: 0 }
 .cfg-linha .acoes { margin: 0 }
 .cfg-linha input[type=checkbox] { width: 26px; min-height: 26px }
+/* Linha com caixa de marcar: o texto ocupa o espaço e a caixa fica sempre à direita, como em "Alto contraste" */
+.cfg-linha:has(> input[type=checkbox]) { flex-wrap: nowrap }
+.cfg-linha > label { flex: 1 }
+.cfg-linha > input[type=checkbox] { flex: none }

@@ -1,0 +1,6 @@
+{% extends "account/email/base_message.html" %}
+{% block previa %}Não existe conta no MoBite com este e-mail.{% endblock %}
+{% block titulo %}Não achamos sua conta{% endblock %}
+{% block texto %}<p style="margin:0">Alguém pediu para trocar a senha de uma conta do MoBite com o e-mail {{ email }}, mas não existe conta com ele. Se foi você, pode criar uma agora.</p>{% endblock %}
+{% block acao %}{% include "account/email/_botao.html" with url=signup_url rotulo="Criar conta" %}{% endblock %}
+{% block depois %}Se não foi você, é só ignorar este e-mail.{% endblock %}

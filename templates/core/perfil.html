@@ -36,7 +36,8 @@
   <div class="chips">{% for r in meus_restaurantes %}<a class="chip" href="{% url 'detalhes' r.pk %}">{% icone "store" %} {{ r.nome }}</a>{% endfor %}</div>{% endif %}
 
   <h2>Meus favoritos</h2>
-  <div class="chips" id="perfil-favs">{% for r in favs %}<a class="chip" href="{% url 'detalhes' r.pk %}">{% icone "heart" "cheia" %} {{ r.nome }}</a>{% empty %}Nenhum favorito ainda.{% endfor %}</div>
+  {% if favs %}<p><a class="btn sec" href="{% url 'favoritos' %}">{% icone "heart" "cheia" %} Ver meus favoritos ({{ favs|length }})</a></p>
+  {% else %}<p>Nenhum favorito ainda. Use o coração nos restaurantes.</p>{% endif %}
 
   <h2>Excluir conta</h2>
   <p>Suas avaliações continuam no app, sem o seu nome.</p>

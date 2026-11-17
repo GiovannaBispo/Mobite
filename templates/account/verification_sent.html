@@ -1,0 +1,7 @@
+{% extends "account/base_entrance.html" %}
+{% block head_title %}Confirme seu e-mail{% endblock head_title %}
+{% block content %}
+<h1>Confirme seu e-mail</h1>
+<p>Mandamos um link para o seu e-mail. Abra o link para terminar o cadastro. Se não chegar em alguns minutos, olhe também no spam.</p>
+<p class="meta">Não chegou? Fale com a equipe: <a href="mailto:{{ CFG.CONTATO_EMAIL }}">{{ CFG.CONTATO_EMAIL }}</a></p>
+{% endblock content %}
