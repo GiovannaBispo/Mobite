@@ -73,9 +73,26 @@ class DadosFixosTest(TestCase):
     def test_migracao_cria_checklist_perfis_e_matriz(self):
         self.assertEqual(ItemChecklist.objects.count(), 10)
         self.assertEqual(PerfilMobilidade.objects.count(), 5)
-        self.assertTrue(ItemChecklist.objects.get(codigo="E1").invertida)
+        e1 = ItemChecklist.objects.get(codigo="E1")
+        self.assertFalse(e1.invertida)  # "Dá para entrar sem subir degrau?": Sim é o que atende
+        self.assertEqual(e1.pergunta, "Dá para entrar sem subir degrau ou escada?")
         cadeira = PerfilMobilidade.objects.get(codigo="cadeira")
         self.assertEqual(cadeira.pesos.get(item__codigo="E1").peso, B)
+
+    def test_vaga_conta_so_para_quem_tem_direito(self):
+        # LBI, art. 47: a vaga com espaço ao lado é de pessoa com deficiência com comprometimento de mobilidade
+        com_vaga = set(PerfilMobilidade.objects.filter(pesos__item__codigo="C3").values_list("codigo", flat=True))
+        self.assertEqual(com_vaga, {"cadeira", "muleta"})
+
+    def test_textos_cobrem_os_casos_da_rua(self):
+        itens = {i.codigo: i for i in ItemChecklist.objects.all()}
+        self.assertIn("não tem degrau nem rampa, responda Sim", itens["E3"].ajuda)    # entrada plana
+        for codigo in ("B1", "B2"):                                                     # sem banheiro
+            self.assertIn("Se não tem banheiro para clientes, responda Não", itens[codigo].ajuda)
+        self.assertIn("só uma abre", itens["E2"].ajuda)                                # porta de duas folhas
+        for i in itens.values():                                                        # cabe no campo
+            self.assertLessEqual(len(i.ajuda), 160, i.codigo)
+            self.assertLessEqual(len(i.pergunta), 160, i.codigo)
 
     def test_restaurante_nasce_com_10_situacoes_e_5_resultados(self):
         r = Restaurante.objects.create(nome="Teste", latitude=-23.56, longitude=-46.65)
@@ -101,8 +118,14 @@ class SituacaoEPendenciaTest(TestCase):
         return SituacaoItem.objects.get(restaurante=self.r, item=self.itens[cod])
 
     def test_pergunta_invertida(self):
-        self.avaliar({"E1": S})  # "A entrada tem degrau?" Sim -> o item "entrada sem degrau" NÃO atende
-        self.assertEqual(self.situacao("E1").resposta, N)
+        # Nenhum item é invertido hoje, mas a regra continua: com "invertida", Sim quer dizer que não atende
+        ItemChecklist.objects.filter(codigo="E3").update(invertida=True)
+        self.avaliar({"E3": S})
+        self.assertEqual(self.situacao("E3").resposta, N)
+
+    def test_entrada_sem_degrau_sim_atende(self):
+        self.avaliar({"E1": S})  # "Dá para entrar sem subir degrau ou escada?" Sim (pode ser pela rampa)
+        self.assertEqual(self.situacao("E1").resposta, S)
 
     def test_vale_a_resposta_mais_recente_e_vira_pendencia_resolvida(self):
         self.avaliar({"B1": N}, dias_atras=30)

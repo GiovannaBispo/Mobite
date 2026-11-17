@@ -39,7 +39,7 @@ ORDEM = ["C3", "E1", "E2", "E3", "I1", "I2", "I3", "I4", "B1", "B2"]
 
 
 def resposta_crua(item, atende):
-    """O que a pessoa marcaria na pergunta (a do E1 é invertida: "tem degrau?")."""
+    """O que a pessoa marcaria na pergunta (numa pergunta invertida, "Sim" é o que não atende)."""
     if item.invertida:
         return Resposta.NAO if atende == Resposta.SIM else Resposta.SIM
     return atende
